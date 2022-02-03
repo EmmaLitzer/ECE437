@@ -1,0 +1,400 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Feb  3 11:21:48 2022
+# Process ID: 15504
+# Current directory: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/impl_1
+# Command line: vivado.exe -log lab2_example.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source lab2_example.tcl -notrace
+# Log file: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/impl_1/lab2_example.vdi
+# Journal file: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source lab2_example.tcl -notrace
+Command: link_design -top lab2_example -part xc7a75tfgg484-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7a75tfgg484-1
+INFO: [Netlist 29-17] Analyzing 172 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc]
+WARNING: [Constraints 18-96] Setting input delay on a clock pin 'okUH[0]' is not supported, ignoring it [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:72]
+WARNING: [Constraints 18-96] Setting input delay on a clock pin 'okUH[0]' is not supported, ignoring it [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:73]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:97]
+INFO: [Timing 38-2] Deriving generated clocks [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:97]
+get_clocks: Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1337.570 ; gain = 570.316
+WARNING: [Vivado 12-4702] SLEW is not a supported property on input port(s). Setting is ignored. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:104]
+WARNING: [Vivado 12-584] No ports matched 'CVM300_LVDS_CLK_P'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:108]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:108]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300-LVDS_CLK_P'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:109]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:109]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_LVDS_CLK_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:111]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:111]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_LVDS_CLK_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:112]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:112]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_CLK_IN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:115]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:115]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_CLK_IN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:116]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:116]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_CLK_OUT'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:119]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:119]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_CLK_OUT'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:120]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:120]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SYS_RES_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:124]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:124]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SYS_RES_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:125]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:125]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Enable_LVDS'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:127]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:127]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Enable_LVDS'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:128]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:128]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_EN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:131]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:131]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_EN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:132]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:132]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_IN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:134]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:134]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_IN'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:135]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:135]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_OUT'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:137]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:137]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_OUT'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:138]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:138]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_CLK'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:140]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:140]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_SPI_CLK'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:141]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:141]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_FRAME_REQ'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:152]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:152]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_FRAME_REQ'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:153]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:153]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:198]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:198]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:199]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:199]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:201]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:201]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:202]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:202]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:204]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:204]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:205]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:205]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:207]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:207]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:208]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:208]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:210]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:210]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:211]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:211]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:213]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:213]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:214]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:214]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:216]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:216]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:217]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:217]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:219]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:219]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:220]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:220]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[8]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:222]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:222]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[8]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:223]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:223]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[9]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:225]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:225]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_D[9]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:226]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:226]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Line_valid'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:229]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:229]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Line_valid'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:230]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:230]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Data_valid'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:232]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:232]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'CVM300_Data_valid'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:233]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:233]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:239]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:239]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:240]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:240]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:242]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:242]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:243]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:243]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:245]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:245]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:246]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:246]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:248]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:248]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:249]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:249]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:251]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:251]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:252]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:252]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:254]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:254]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:255]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:255]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:257]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:257]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:258]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:258]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:260]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:260]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_33[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:261]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:261]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_SRCC_P'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:264]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:264]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_SRCC_P'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:265]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:265]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_SRCC_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:267]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:267]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_SRCC_N'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:268]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:268]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:273]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:273]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[0]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:274]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:274]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:276]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:276]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[1]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:277]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:277]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:279]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:279]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[2]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:280]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:280]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:282]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:282]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[3]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:283]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:283]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:285]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:285]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[4]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:286]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:286]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:288]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:288]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[5]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:289]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:289]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:291]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:291]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[6]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:292]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:292]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:294]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:294]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'USER_25[7]'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:295]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:295]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A1'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:300]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:300]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A1'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:301]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:301]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A2'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:303]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:303]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A2'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:304]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:304]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A3'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:306]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:306]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A3'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:307]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:307]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A4'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:309]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:309]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A4'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:310]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:310]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A7'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:312]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:312]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A7'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:313]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:313]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A8'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:315]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:315]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A8'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:316]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:316]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A9'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:318]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:318]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A9'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:319]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:319]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A10'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:321]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:321]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_A10'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:322]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:322]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_B1'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:327]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:327]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+WARNING: [Vivado 12-584] No ports matched 'PMOD_B1'. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:328]
+INFO: [Common 17-14] Message 'Vivado 12-584' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:328]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:328]
+Resolution: If [get_<value>] was used to populate the object, check to make sure this command returns at least one valid object.
+INFO: [Common 17-14] Message 'Common 17-55' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings. [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc:328]
+Finished Parsing XDC File [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/constrs_1/imports/Lab2/xem7310_v1.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1337.570 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 95 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 33 instances
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 50 instances
+  RAM128X1S => RAM128X1S (MUXF7, RAMS64E, RAMS64E): 8 instances
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 4 instances
+
+11 Infos, 103 Warnings, 100 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:23 . Memory (MB): peak = 1337.570 ; gain = 978.348
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a75t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a75t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[0] has multiple drivers: counter_reg[0]__0/Q, and counter_reg[0]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[1] has multiple drivers: counter_reg[1]__0/Q, and counter_reg[1]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[2] has multiple drivers: counter_reg[2]__0/Q, and counter_reg[2]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[3] has multiple drivers: counter_reg[3]__0/Q, and counter_reg[3]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[4] has multiple drivers: counter_reg[4]/Q, and counter_reg[4]__0/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[5] has multiple drivers: counter_reg[5]__0/Q, and counter_reg[5]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[6] has multiple drivers: counter_reg[6]/Q, and counter_reg[6]__0/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net counter[7] has multiple drivers: counter_reg[7]__0/Q, and counter_reg[7]/Q.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[0] has multiple drivers: wire22/okEH[0]_INST_0/O, and wire21/okEH[0]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[10] has multiple drivers: wire22/okEH[10]_INST_0/O, and wire21/okEH[10]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[11] has multiple drivers: wire22/okEH[11]_INST_0/O, and wire21/okEH[11]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[12] has multiple drivers: wire22/okEH[12]_INST_0/O, and wire21/okEH[12]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[13] has multiple drivers: wire22/okEH[13]_INST_0/O, and wire21/okEH[13]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[14] has multiple drivers: wire22/okEH[14]_INST_0/O, and wire21/okEH[14]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[15] has multiple drivers: wire22/okEH[15]_INST_0/O, and wire21/okEH[15]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[16] has multiple drivers: wire22/okEH[16]_INST_0/O, and wire21/okEH[16]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[17] has multiple drivers: wire22/okEH[17]_INST_0/O, and wire21/okEH[17]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[18] has multiple drivers: wire22/okEH[18]_INST_0/O, and wire21/okEH[18]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[19] has multiple drivers: wire22/okEH[19]_INST_0/O, and wire21/okEH[19]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[1] has multiple drivers: wire22/okEH[1]_INST_0/O, and wire21/okEH[1]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[20] has multiple drivers: wire22/okEH[20]_INST_0/O, and wire21/okEH[20]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[21] has multiple drivers: wire22/okEH[21]_INST_0/O, and wire21/okEH[21]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[22] has multiple drivers: wire22/okEH[22]_INST_0/O, and wire21/okEH[22]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[23] has multiple drivers: wire22/okEH[23]_INST_0/O, and wire21/okEH[23]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[24] has multiple drivers: wire22/okEH[24]_INST_0/O, and wire21/okEH[24]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[25] has multiple drivers: wire22/okEH[25]_INST_0/O, and wire21/okEH[25]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[26] has multiple drivers: wire22/okEH[26]_INST_0/O, and wire21/okEH[26]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[27] has multiple drivers: wire22/okEH[27]_INST_0/O, and wire21/okEH[27]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[28] has multiple drivers: wire22/okEH[28]_INST_0/O, and wire21/okEH[28]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[29] has multiple drivers: wire22/okEH[29]_INST_0/O, and wire21/okEH[29]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[2] has multiple drivers: wire22/okEH[2]_INST_0/O, and wire21/okEH[2]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[30] has multiple drivers: wire22/okEH[30]_INST_0/O, and wire21/okEH[30]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[31] has multiple drivers: wire22/okEH[31]_INST_0/O, and wire21/okEH[31]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[3] has multiple drivers: wire22/okEH[3]_INST_0/O, and wire21/okEH[3]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[4] has multiple drivers: wire22/okEH[4]_INST_0/O, and wire21/okEH[4]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[5] has multiple drivers: wire22/okEH[5]_INST_0/O, and wire21/okEH[5]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[6] has multiple drivers: wire22/okEH[6]_INST_0/O, and wire21/okEH[6]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[7] has multiple drivers: wire22/okEH[7]_INST_0/O, and wire21/okEH[7]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[8] has multiple drivers: wire22/okEH[8]_INST_0/O, and wire21/okEH[8]_INST_0/O.
+ERROR: [DRC MDRV-1] Multiple Driver Nets: Net wire22/okEH[9] has multiple drivers: wire22/okEH[9]_INST_0/O, and wire21/okEH[9]_INST_0/O.
+INFO: [Project 1-461] DRC finished with 40 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+ERROR: [Vivado_Tcl 4-78] Error(s) found during DRC. Opt_design not run.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 1337.570 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+16 Infos, 103 Warnings, 100 Critical Warnings and 41 Errors encountered.
+opt_design failed
+ERROR: [Common 17-39] 'opt_design' failed due to earlier errors.
+
+INFO: [Common 17-206] Exiting Vivado at Thu Feb  3 11:22:19 2022...
