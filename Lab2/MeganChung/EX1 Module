@@ -40,7 +40,7 @@ module Ex1(
     //Declare your registers or wires to send or recieve data
     wire [31:0] variable;      //signals that are outputs from a module must be wires
     //wire [31:0] result_wire;                 //signals that go into modules can be wires or registers
-    reg  [7:0] counter;             //signals that go into modules can be wires or registers
+    reg [31:0] result_register;
     
     //This is the OK host that allows data to be sent or recived    
     okHost hostIF (
@@ -74,6 +74,7 @@ module Ex1(
     initial begin
         clkdiv = 0;
         slow_clk = 0;
+        counter = 8'h00;
     end
 
     // This code creates a slow clock from the high speed Clk signal
@@ -90,26 +91,19 @@ module Ex1(
     end
     
     assign led = ~counter;
-    //The main code will run fr0m the slow clock.  The rest of the code will be in this section.  
-    //The counter will decrement when button 0 is pressed and on the rising edge of the slow clk 
-    //Otherwise the counter will increment
-    always @(posedge slow_clk) begin       
-        if (button [0] == 1'b0) begin
-            counter <= counter - 1'b1;
-        end 
-        else begin
-            counter <= counter + 1'b1;
-        end 
-    end  
+     
+    
+    //beginning of exercise code
     
     //  variable_1 is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
     okWireIn wire10 (   .okHE(okHE), 
                         .ep_addr(8'h00), 
-                        .ep_dataout(variable_1));
+                        .ep_dataout(variable));
                         
-    //  variable_2 is a wire that contains data sent from the PC to FPGA.
-    //  The data is communicated via memeory location 0x01                 
+    //  variable_2 is a wire that contains data sent from the PC to FPGA. - second variable not necessary
+    //  The data is communicated via memeory location 0x01  
+    /*               
     okWireIn wire11 (   .okHE(okHE), 
                         .ep_addr(8'h01), 
                         .ep_dataout(variable_2));
@@ -118,35 +112,34 @@ module Ex1(
     // Since we are using a wire to store the result, we do not need a clock signal and 
     // we will use an assign statement                              
     assign result_wire = variable_1 + variable_2;    // Left-Side of 'assign' statement must be a 'wire'
+    */
+    
+    //Depending on the variable value, LED pattern changes
+   always @(posedge slow_clk) begin
+   
+        if (variable == 0)
+            counter <= 8'b11111111;
+        else if (variable == 1)
+            counter <= 8'd0;
+        else if (variable == 2)
+            counter <= counter + 8'd2;
+        else if (variable == 3)
+            counter <= counter - 8'd2;
+    end 
 
-    // result_wire is transmited to the PC via address 0x20   
+    // result_wire is transmited to the PC via address 0x20
+    /*   
     okWireOut wire20 (  .okHE(okHE), 
                         .okEH(okEHx[ 0*65 +: 65 ]),
                         .ep_addr(8'h20), 
                         .ep_datain(result_wire));
-                        
-     // LAB 1 CODE A
-    always @(posedge slow_clk) begin     
-    // count to 100 in binary (independantly) 
-        if ((d==1) && (counter!=8'd0)) begin
-            counter <= counter - 8'd10;  
-        end
-        else if ((d==0) && (counter != 8'd100)) begin
-             counter <= counter + 8'd10;
-        end
-        else if (counter == 8'd100) begin
-            d<=1'b1;
-        end
-        else if ((d==1) && (counter == 8'd0)) begin
-            d<=1'b0;
-        end 
-      end
+     */                   
                         
     // Variable 1 and 2 are subtracted and the result is stored in a register named: result_register
     // Since we are using a register to store the result, we not need a clock signal and 
     // we will use an always statement examening the clock state   
     always @ (posedge(slow_clk)) begin
-        result_register = variable_1 - variable_2;
+        result_register = counter;
     end
     
     // result_wire is transmited to the PC via address 0x21                         
