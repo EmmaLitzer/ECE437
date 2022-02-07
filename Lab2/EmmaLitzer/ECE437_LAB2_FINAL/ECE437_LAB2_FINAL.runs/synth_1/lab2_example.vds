@@ -2,8 +2,8 @@
 # Vivado v2019.1 (64-bit)
 # SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
 # IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
-# Start of session at: Thu Feb  3 11:20:30 2022
-# Process ID: 8940
+# Start of session at: Mon Feb  7 17:08:55 2022
+# Process ID: 5960
 # Current directory: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/synth_1
 # Command line: vivado.exe -log lab2_example.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source lab2_example.tcl
 # Log file: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/synth_1/lab2_example.vds
@@ -16,12 +16,12 @@ Attempting to get a license for feature 'Synthesis' and/or device 'xc7a75t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a75t'
 INFO: [Device 21-403] Loading part xc7a75tfgg484-1
 INFO: Launching helper process for spawning children vivado processes
-INFO: Helper process launched with PID 396 
+INFO: Helper process launched with PID 14904 
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 809.508 ; gain = 177.477
+Starting RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 810.457 ; gain = 177.578
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'lab2_example' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:3]
-	Parameter endPt_count bound to: 3 - type: integer 
+	Parameter endPt_count bound to: 2 - type: integer 
 INFO: [Synth 8-6157] synthesizing module 'okHost' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/okLibrary.v:10]
 INFO: [Synth 8-6157] synthesizing module 'IOBUF' [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:36115]
 	Parameter DRIVE bound to: 12 - type: integer 
@@ -271,14 +271,13 @@ INFO: [Synth 8-6155] done synthesizing module 'LUT6__parameterized32' (25#1) [C:
 INFO: [Synth 8-6155] done synthesizing module 'LUT6__parameterized33' (25#1) [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:39218]
 INFO: [Synth 8-6155] done synthesizing module 'LUT6__parameterized34' (25#1) [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:39218]
 INFO: [Common 17-14] Message 'Synth 8-6155' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
-WARNING: [Synth 8-7023] instance 'hostIF' of module 'okHost' has 9 connections declared, but only 7 given [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:27]
-	Parameter N bound to: 3 - type: integer 
+WARNING: [Synth 8-7023] instance 'hostIF' of module 'okHost' has 9 connections declared, but only 7 given [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:29]
+	Parameter N bound to: 2 - type: integer 
 	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
 	Parameter DIFF_TERM bound to: FALSE - type: string 
 	Parameter IBUF_DELAY_VALUE bound to: 0 - type: string 
 	Parameter IBUF_LOW_PWR bound to: TRUE - type: string 
 	Parameter IOSTANDARD bound to: DEFAULT - type: string 
-WARNING: [Synth 8-6090] variable 'counter' is written by both blocking and non-blocking assignments, entire logic could be removed [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:152]
 WARNING: [Synth 8-3331] design okWireOut has unconnected port okHE[112]
 WARNING: [Synth 8-3331] design okWireOut has unconnected port okHE[111]
 WARNING: [Synth 8-3331] design okWireOut has unconnected port okHE[110]
@@ -381,7 +380,7 @@ WARNING: [Synth 8-3331] design okWireOut has unconnected port okHE[3]
 WARNING: [Synth 8-3331] design okWireOut has unconnected port okHE[2]
 INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:13 . Memory (MB): peak = 890.016 ; gain = 257.984
+Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 890.316 ; gain = 257.438
 ---------------------------------------------------------------------------------
 
 Report Check Netlist: 
@@ -394,10 +393,10 @@ Report Check Netlist:
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:15 . Memory (MB): peak = 890.016 ; gain = 257.984
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:15 . Memory (MB): peak = 890.316 ; gain = 257.438
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:15 . Memory (MB): peak = 890.016 ; gain = 257.984
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:15 . Memory (MB): peak = 890.316 ; gain = 257.438
 ---------------------------------------------------------------------------------
 INFO: [Netlist 29-17] Analyzing 147 Unisim elements for replacement
 WARNING: [Netlist 29-432] The IBUFG primitive 'hostIF/hi_clk_bufg' has been retargeted to an IBUF primitive only. No BUFG will be added. If a global buffer is intended, please instantiate an available global clock primitive from the current architecture.
@@ -518,7 +517,7 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/lab2_example_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1015.641 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1015.367 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 98 instances were transformed.
   IBUFG => IBUF: 1 instances
@@ -529,26 +528,25 @@ INFO: [Project 1-111] Unisim Transformation Summary:
   RAM128X1S => RAM128X1S (MUXF7, RAMS64E, RAMS64E): 8 instances
   RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 4 instances
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.037 . Memory (MB): peak = 1015.641 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 1015.367 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:16 ; elapsed = 00:00:25 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Constraint Validation : Time (s): cpu = 00:00:16 ; elapsed = 00:00:24 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a75tfgg484-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:16 ; elapsed = 00:00:25 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:16 ; elapsed = 00:00:24 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:17 ; elapsed = 00:00:25 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:00:24 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:17 ; elapsed = 00:00:29 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:17 ; elapsed = 00:00:26 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -581,7 +579,33 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 Warning: Parallel synthesis criteria is not met 
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[8] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[9] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[10] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[11] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[12] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[13] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[14] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[16] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[17] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[18] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[19] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[20] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[21] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[22] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[23] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[24] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[25] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[26] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[27] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[28] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[29] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[30] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire20/\wirehold_reg[31] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\hostIF/core0 /core0/l317e0a6720f17cacca076a392154f6ab_reg)
 WARNING: [Synth 8-3332] Sequential element (l008c72ad3b3ec61be52cde84a395c4fa_reg) is unused and will be removed from module okCore.
+WARNING: [Synth 8-3332] Sequential element (l317e0a6720f17cacca076a392154f6ab_reg) is unused and will be removed from module okCore.
 WARNING: [Synth 8-3332] Sequential element (la85eaf42c58af45585f858cdefb86492_reg) is unused and will be removed from module okCore.
 WARNING: [Synth 8-3332] Sequential element (lbb5e4c7a1ee012efa72f8a060e42e0e9_reg[0]) is unused and will be removed from module okCore.
 WARNING: [Synth 8-3332] Sequential element (lbb5e4c7a1ee012efa72f8a060e42e0e9_reg[10]) is unused and will be removed from module okCore.
@@ -648,30 +672,7 @@ WARNING: [Synth 8-3332] Sequential element (ld53bc82cafe43594f651cb14d090c4f9_re
 WARNING: [Synth 8-3332] Sequential element (ld53bc82cafe43594f651cb14d090c4f9_reg[8]) is unused and will be removed from module okCore.
 WARNING: [Synth 8-3332] Sequential element (ld53bc82cafe43594f651cb14d090c4f9_reg[9]) is unused and will be removed from module okCore.
 WARNING: [Synth 8-3332] Sequential element (lf38b0951701b1c1d5bc7a746e996b3c6_reg) is unused and will be removed from module okCore.
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[8] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[9] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[10] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[11] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[12] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[13] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[14] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[15] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[16] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[17] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[18] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[19] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[20] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[21] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[22] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[23] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[24] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[25] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[26] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[27] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[28] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[29] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[30] )
-INFO: [Synth 8-3333] propagating constant 0 across sequential element (wire22/\wirehold_reg[31] )
+WARNING: [Synth 8-3332] Sequential element (hostIF/regctrlout1) is unused and will be removed from module lab2_example.
 WARNING: [Synth 8-3332] Sequential element (wirehold_reg[10]) is unused and will be removed from module okWireOut.
 WARNING: [Synth 8-3332] Sequential element (wirehold_reg[11]) is unused and will be removed from module okWireOut.
 WARNING: [Synth 8-3332] Sequential element (wirehold_reg[12]) is unused and will be removed from module okWireOut.
@@ -697,7 +698,7 @@ WARNING: [Synth 8-3332] Sequential element (wirehold_reg[31]) is unused and will
 WARNING: [Synth 8-3332] Sequential element (wirehold_reg[8]) is unused and will be removed from module okWireOut.
 WARNING: [Synth 8-3332] Sequential element (wirehold_reg[9]) is unused and will be removed from module okWireOut.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:33 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:31 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -709,13 +710,13 @@ Report RTL Partitions:
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:27 ; elapsed = 00:00:41 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:27 ; elapsed = 00:00:39 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:28 ; elapsed = 00:00:41 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Timing Optimization : Time (s): cpu = 00:00:28 ; elapsed = 00:00:40 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -727,7 +728,7 @@ Report RTL Partitions:
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:28 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Technology Mapping : Time (s): cpu = 00:00:28 ; elapsed = 00:00:40 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -751,36 +752,20 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:30 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished IO Insertion : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[7] with 1st driver pin 'counter_reg[7]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[7] with 2nd driver pin 'counter_reg[7]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[6] with 1st driver pin 'counter_reg[6]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[6] with 2nd driver pin 'counter_reg[6]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[5] with 1st driver pin 'counter_reg[5]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[5] with 2nd driver pin 'counter_reg[5]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[4] with 1st driver pin 'counter_reg[4]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[4] with 2nd driver pin 'counter_reg[4]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[3] with 1st driver pin 'counter_reg[3]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[3] with 2nd driver pin 'counter_reg[3]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[2] with 1st driver pin 'counter_reg[2]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[2] with 2nd driver pin 'counter_reg[2]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[1] with 1st driver pin 'counter_reg[1]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[1] with 2nd driver pin 'counter_reg[1]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[0] with 1st driver pin 'counter_reg[0]/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:134]
-CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin counter[0] with 2nd driver pin 'counter_reg[0]__0/Q' [U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.srcs/sources_1/imports/Lab2/lab2_example.v:75]
 
 Report Check Netlist: 
 +------+------------------+-------+---------+-------+------------------+
 |      |Item              |Errors |Warnings |Status |Description       |
 +------+------------------+-------+---------+-------+------------------+
-|1     |multi_driven_nets |      0|       40|Failed |Multi driven nets |
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
 +------+------------------+-------+---------+-------+------------------+
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:30 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 
 Report RTL Partitions: 
@@ -792,25 +777,25 @@ Report RTL Partitions:
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:30 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:31 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:31 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:31 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -826,15 +811,15 @@ Report Cell Usage:
 +------+------------+------+
 |      |Cell        |Count |
 +------+------------+------+
-|1     |BUFG        |     4|
-|2     |CARRY4      |    72|
+|1     |BUFG        |     3|
+|2     |CARRY4      |    57|
 |3     |DNA_PORT    |     1|
-|4     |LUT1        |    66|
-|5     |LUT2        |   157|
+|4     |LUT1        |    67|
+|5     |LUT2        |    54|
 |6     |LUT3        |    64|
-|7     |LUT4        |   255|
-|8     |LUT5        |   109|
-|9     |LUT6        |   407|
+|7     |LUT4        |   179|
+|8     |LUT5        |   112|
+|9     |LUT6        |   415|
 |10    |LUT6_2      |    50|
 |11    |MMCME2_BASE |     1|
 |12    |RAM128X1S   |     8|
@@ -844,27 +829,27 @@ Report Cell Usage:
 |16    |RAMB36E1    |     1|
 |17    |FDCE        |   159|
 |18    |FDPE        |    37|
-|19    |FDRE        |   910|
-|20    |FDSE        |    22|
-|21    |IBUF        |     5|
+|19    |FDRE        |   732|
+|20    |FDSE        |    30|
+|21    |IBUF        |     4|
 |22    |IBUFG       |     1|
 |23    |IBUFGDS     |     1|
 |24    |IOBUF       |    33|
 |25    |OBUF        |    11|
 +------+------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:31 ; elapsed = 00:00:44 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 16 critical warnings and 266 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:41 . Memory (MB): peak = 1015.641 ; gain = 257.984
-Synthesis Optimization Complete : Time (s): cpu = 00:00:31 ; elapsed = 00:00:45 . Memory (MB): peak = 1015.641 ; gain = 383.609
+Synthesis finished with 0 errors, 0 critical warnings and 269 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:39 . Memory (MB): peak = 1015.367 ; gain = 257.438
+Synthesis Optimization Complete : Time (s): cpu = 00:00:30 ; elapsed = 00:00:42 . Memory (MB): peak = 1015.367 ; gain = 382.488
 INFO: [Project 1-571] Translating synthesized netlist
-INFO: [Netlist 29-17] Analyzing 173 Unisim elements for replacement
+INFO: [Netlist 29-17] Analyzing 158 Unisim elements for replacement
 WARNING: [Netlist 29-432] The IBUFG primitive 'hostIF/hi_clk_bufg' has been retargeted to an IBUF primitive only. No BUFG will be added. If a global buffer is intended, please instantiate an available global clock primitive from the current architecture.
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1027.141 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1033.422 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 98 instances were transformed.
   IBUFG => IBUF: 1 instances
@@ -876,12 +861,12 @@ INFO: [Project 1-111] Unisim Transformation Summary:
   RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 4 instances
 
 INFO: [Common 17-83] Releasing license: Synthesis
-249 Infos, 301 Warnings, 16 Critical Warnings and 0 Errors encountered.
+249 Infos, 302 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:36 ; elapsed = 00:00:55 . Memory (MB): peak = 1027.141 ; gain = 673.328
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1027.141 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:37 ; elapsed = 00:00:52 . Memory (MB): peak = 1033.422 ; gain = 677.797
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1033.422 ; gain = 0.000
 WARNING: [Constraints 18-5210] No constraints selected for write.
 Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
 INFO: [Common 17-1381] The checkpoint 'U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/synth_1/lab2_example.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file lab2_example_utilization_synth.rpt -pb lab2_example_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Feb  3 11:21:32 2022...
+INFO: [Common 17-206] Exiting Vivado at Mon Feb  7 17:09:55 2022...

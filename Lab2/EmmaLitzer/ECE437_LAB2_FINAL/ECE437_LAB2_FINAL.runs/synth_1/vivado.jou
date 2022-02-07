@@ -2,8 +2,8 @@
 # Vivado v2019.1 (64-bit)
 # SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
 # IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
-# Start of session at: Thu Feb  3 11:20:30 2022
-# Process ID: 8940
+# Start of session at: Mon Feb  7 17:08:55 2022
+# Process ID: 5960
 # Current directory: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/synth_1
 # Command line: vivado.exe -log lab2_example.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source lab2_example.tcl
 # Log file: U:/Downloads/ECE437/Lab2/ECE437_LAB2_FINAL/ECE437_LAB2_FINAL.runs/synth_1/lab2_example.vds
