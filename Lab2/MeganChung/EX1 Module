@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-
-// Engineer: 
-// 
-// Create Date: 02/03/2022 10:45:15 AM
-// Design Name: 
-// Module Name: Exercise 1
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
 module Ex1(
         input   wire    [4:0] okUH,
@@ -39,8 +19,8 @@ module Ex1(
             
     //Declare your registers or wires to send or recieve data
     wire [31:0] variable;      //signals that are outputs from a module must be wires
-    //wire [31:0] result_wire;                 //signals that go into modules can be wires or registers
-    reg [31:0] result_register;
+    wire  [31:0] result;             //signals that go into modules can be wires or registers
+    reg [7:0] counter;
     
     //This is the OK host that allows data to be sent or recived    
     okHost hostIF (
@@ -63,7 +43,6 @@ module Ex1(
     wire clk;
     reg [31:0] clkdiv;
     reg slow_clk;
-    reg [7:0] counter;
     
     IBUFGDS osc_clk(
         .O(clk),
@@ -74,14 +53,13 @@ module Ex1(
     initial begin
         clkdiv = 0;
         slow_clk = 0;
-        counter = 8'h00;
+        counter = 0;
     end
 
     // This code creates a slow clock from the high speed Clk signal
     // You will use the slow clock to run your finite state machine
     // The slow clock is derived from the fast 200 MHz clock by dividing it 10,000,000 time and another 2x
     // Hence, the slow clock will run at 10 Hz
-    // to make it run at 5Hz, we need to divide by another 2x 
     always @(posedge clk) begin
         clkdiv <= clkdiv + 1'b1;
         if (clkdiv == 40_000_000) begin
@@ -91,60 +69,62 @@ module Ex1(
     end
     
     assign led = ~counter;
-     
-    
-    //beginning of exercise code
+
+    always @(posedge slow_clk) begin       
+        if (variable == 0) begin
+            counter <= 8'b11111111;
+        end 
+        else if (variable == 32'd1)begin
+            counter <= 8'd0;
+        end
+        else if (variable == 32'd2) begin
+            counter <= counter + 8'd2;
+        end
+        else if (variable == 32'd3) begin
+            counter <= counter - 8'd2;
+        end 
+    end  
     
     //  variable_1 is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
     okWireIn wire10 (   .okHE(okHE), 
                         .ep_addr(8'h00), 
                         .ep_dataout(variable));
-                        
-    //  variable_2 is a wire that contains data sent from the PC to FPGA. - second variable not necessary
-    //  The data is communicated via memeory location 0x01  
-    /*               
+   /*                     
+    //  variable_2 is a wire that contains data sent from the PC to FPGA.
+    //  The data is communicated via memeory location 0x01                 
     okWireIn wire11 (   .okHE(okHE), 
                         .ep_addr(8'h01), 
                         .ep_dataout(variable_2));
+    */
             
     // Variable 1 and 2 are added together and the result is stored in a wire named: result_wire
     // Since we are using a wire to store the result, we do not need a clock signal and 
     // we will use an assign statement                              
-    assign result_wire = variable_1 + variable_2;    // Left-Side of 'assign' statement must be a 'wire'
-    */
+    assign result = counter;    // Left-Side of 'assign' statement must be a 'wire'
     
-    //Depending on the variable value, LED pattern changes
-   always @(posedge slow_clk) begin
-   
-        if (variable == 0)
-            counter <= 8'b11111111;
-        else if (variable == 1)
-            counter <= 8'd0;
-        else if (variable == 2)
-            counter <= counter + 8'd2;
-        else if (variable == 3)
-            counter <= counter - 8'd2;
-    end 
-
-    // result_wire is transmited to the PC via address 0x20
-    /*   
+    // result_wire is transmited to the PC via address 0x20   
     okWireOut wire20 (  .okHE(okHE), 
                         .okEH(okEHx[ 0*65 +: 65 ]),
                         .ep_addr(8'h20), 
-                        .ep_datain(result_wire));
-     */                   
-                        
+                        .ep_datain(result));
+    
+    /*                  
     // Variable 1 and 2 are subtracted and the result is stored in a register named: result_register
     // Since we are using a register to store the result, we not need a clock signal and 
     // we will use an always statement examening the clock state   
     always @ (posedge(slow_clk)) begin
-        result_register = counter;
+        result_register = {32{counter}};
     end
+    
     
     // result_wire is transmited to the PC via address 0x21                         
     okWireOut wire21 (  .okHE(okHE), 
                         .okEH(okEHx[ 1*65 +: 65 ]),
                         .ep_addr(8'h21), 
-                        .ep_datain(result_register));          
+                        .ep_datain(result_register));   
+                        
+    */
+           
 endmodule
+
