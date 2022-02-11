@@ -1,0 +1,75 @@
+`timescale 1ns / 1ps
+module Intersection_Ctrl(
+    input [3:0] button,
+    output [7:0] led,
+    input sys_clkn,
+    input sys_clkp  
+    );
+
+    reg [2:0] state = 0;
+    reg [7:0] led_register = 0;
+    reg [3:0] button_reg;  
+    reg P;  
+                
+    wire clk;
+    IBUFGDS osc_clk(
+        .O(clk),
+        .I(sys_clkp),
+        .IB(sys_clkn)
+    );
+    
+    assign led = ~led_register; //map led wire to led_register
+    localparam STATE_NSG    = 2'd0;
+    localparam STATE_NSY    = 2'd1;
+    localparam STATE_EWG    = 2'd2;
+    localparam STATE_EWY    = 2'd3; 
+    localparam STATE_PEDG   = 2'd4;    
+    
+      
+    always @(posedge clk)
+    begin       
+        // pedestrian button is button[0] - if button=1 (on), if button=0 (off)
+        // if button is pressed, register P will store signal
+        P = ~button[0]; 
+        if (P==0) state <= STATE_NSG;
+        
+        else
+        begin
+            case (state)
+                STATE_NSG : begin
+                    
+                    /*
+                    if (button_reg == (4'b0100)) state <= STATE_ALPHA;                    
+                    else if (button_reg == 4'b1000) state <= STATE_BRAVO;
+                    else led_register <= 8'b00000011;
+                    */                                                                        
+                end
+
+                STATE_NSY : begin
+                    if (button_reg == 4'b1000) state <= STATE_CHARLIE;                    
+                    else if (button_reg == 4'b0010) state <= STATE_INIT;
+                    else led_register <= 8'b00001111;                                                                        
+                end
+
+                STATE_EWG : begin
+                    if (button_reg == 4'b0100) state <= STATE_CHARLIE;                    
+                    else if (button_reg == 4'b0010) state <= STATE_INIT;
+                    else led_register <= 8'b11110000;                                                                        
+                end
+
+                STATE_EWY : begin
+                    if (button_reg == 4'b0010) state <= STATE_INIT;                    
+                    else led_register <= 8'b10101010;                                                                        
+                end
+                
+                STATE_PEDG: begin
+                
+                end
+                
+                default: state <= STATE_INIT;
+                
+            endcase
+        end                           
+    end    
+endmodule
+
