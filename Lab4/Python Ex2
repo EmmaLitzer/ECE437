@@ -127,8 +127,9 @@ else:
         multimeter_measured_current = digital_multimeter.query("MEASure:CURRent:DC?")
         multimeter_current = np.append(multimeter_current, float(multimeter_measured_current))
         
-        osc_measured_voltage = oscilloscope.query("MEASure:VAVerage?") #VRMS
+        osc_measured_voltage = oscilloscope.query("MEASure:VRMS? DISP,DC,CHAN1") #VRMS
         osc_voltage = np.append(osc_voltage, float(osc_measured_voltage))
+        #print(osc_measured_voltage)
 
     # power supply output is turned off
     print(power_supply.write("OUTPUT OFF"))
@@ -159,7 +160,7 @@ else:
     # plot results (measured voltage and current of diode)
     plt.figure()
     plt.plot(osc_voltage,multimeter_current)
-    plt.title("Lab Measured Voltage vs. Measured Supplied Current for Diode")
+    plt.title("Lab Measured Voltage vs. Measured Supplied Current Across Diode")
     plt.xlabel("Measured Voltage [V]")
     plt.ylabel("Measured Current [A]")
     plt.draw()
