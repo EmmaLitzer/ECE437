@@ -34,8 +34,7 @@ for i in range (0, number_of_device):
     try:
         device_temp = device_manager.open_resource(devices[i])
         print("Instrument connect on USB port number [" + str(i) + "] is " + device_temp.query("*IDN?"))
-        if (device_temp.query("*IDN?") == 'HEWLETT-PACKARD,E3631A,0,3.2-6.0-2.0\r\n'):
-            power_supply_id = i        
+        """
         if (device_temp.query("*IDN?") == 'HEWLETT-PACKARD,E3631A,0,3.0-6.0-2.0\r\n'):
             power_supply_id = i
         if (device_temp.query("*IDN?") == 'Agilent Technologies,33511B,MY52301259,3.03-1.19-2.00-52-00\n'):
@@ -45,7 +44,18 @@ for i in range (0, number_of_device):
         if (device_temp.query("*IDN?") == 'Keysight Technologies,34461A,MY53212931,A.02.08-02.37-02.08-00.49-01-01\n'):
             digital_multimeter_id = i            
         if (device_temp.query("*IDN?") == 'KEYSIGHT TECHNOLOGIES,MSO-X 3024T,MY54440281,07.10.2017042905\n'):
-            oscilloscope_id = i                        
+            oscilloscope_id = i   
+            """
+        if (device_temp.query("*IDN?") == 'HEWLETT-PACKARD,E3631A,0,3.0-6.0-2.0\r\n'):
+            power_supply_id = i
+        if 'Agilent Technologies,33511B' in device_temp.query("*IDN?"):
+            waveform_generator_id = i
+        if 'Agilent Technologies,34461A' in device_temp.query("*IDN?"): # == 'Agilent Technologies,34461A,MY53207926,A.01.10-02.25-01.10-00.35-01-01\n'):
+            digital_multimeter_id = i 
+        if 'Keysight Technologies,34461A' in device_temp.query("*IDN?"): #,MY53212931,A.02.08-02.37-02.08-00.49-01-01\n'):
+            digital_multimeter_id = i            
+        if 'KEYSIGHT TECHNOLOGIES,MSO-X 3024T' in device_temp.query("*IDN?"): # == 'KEYSIGHT TECHNOLOGIES,MSO-X 3024T,MY54440281,07.10.2017042905\n'):
+            oscilloscope_id = i                     
         device_temp.close()
     except:
         print("Instrument on USB port number [" + str(i) + "] cannot be connected. The instrument might be powered of or you are trying to connect to a mouse or keyboard.\n")
@@ -117,7 +127,7 @@ else:
         multimeter_measured_current = digital_multimeter.query("MEASure:CURRent:DC?")
         multimeter_current = np.append(multimeter_current, float(multimeter_measured_current))
         
-        osc_measured_voltage = oscilloscope.query("MEASure:VRMS?")
+        osc_measured_voltage = oscilloscope.query("MEASure:VAVerage?") #VRMS
         osc_voltage = np.append(osc_voltage, float(osc_measured_voltage))
 
     # power supply output is turned off
@@ -131,6 +141,7 @@ else:
     # plot results (applied voltage vs measured supplied current)
     plt.figure()
     plt.plot(output_voltage,measured_current)
+    plt.plot(measured_voltage, measured_current)
     plt.title("Applied Volts vs. Measured Supplied Current for Diode")
     plt.xlabel("Applied Volts [V]")
     plt.ylabel("Measured Current [A]")
@@ -139,6 +150,7 @@ else:
     # plot results (measured voltage vs measured supplied current)
     plt.figure()
     plt.plot(measured_voltage,measured_current)
+    plt.plot(measured_voltage, multimeter_current)
     plt.title("Measured Voltage vs. Measured Supplied Current for Diode")
     plt.xlabel("Measured Voltage [V]")
     plt.ylabel("Measured Current [A]")
@@ -146,7 +158,7 @@ else:
     
     # plot results (measured voltage and current of diode)
     plt.figure()
-    plt.plot(osc_measured_voltage,multimeter_measured_current)
+    plt.plot(osc_voltage,multimeter_current)
     plt.title("Lab Measured Voltage vs. Measured Supplied Current for Diode")
     plt.xlabel("Measured Voltage [V]")
     plt.ylabel("Measured Current [A]")
