@@ -1,0 +1,33 @@
+`timescale 1ns / 1ps
+
+module lab5testBench();
+    //Declare wires and registers that will interface with the module under test
+    //Registers are initilized to known states. Wires cannot be initilized.                 
+    reg sys_clkn=1;
+    wire sys_clkp;
+    wire [7:0] led;
+    reg [3:0] button;
+    reg [31:0] PC_control;
+    wire [7:0] StateT;
+    wire FSM_Clk_reg;
+    
+    //Invoke the module that we like to test
+    tempFSM ModuleUnderTest (.sys_clkn(sys_clkn), .sys_clkp(sys_clkp), .PC_control(PC_control), .State(StateT), .FSM_Clk_reg(FSM_Clk_reg));
+    
+    // Generate a clock signal. The clock will change its state every 5ns.
+    //Remember that the test module takes sys_clkp and sys_clkn as input clock signals.
+    //From these two signals a clock signal, clk, is derived.
+    //The LVDS clock signal, sys_clkn, is always in the opposite state than sys_clkp.     
+    assign sys_clkp = ~sys_clkn;    
+    always begin
+        #5 sys_clkn = ~sys_clkn;
+    end        
+      
+    initial begin          
+            #20 PC_control <= 1;                                                      
+
+            //#100 button <= 4'b1110;
+          
+    end
+
+endmodule
