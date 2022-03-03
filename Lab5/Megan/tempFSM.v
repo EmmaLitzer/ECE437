@@ -14,12 +14,13 @@ module tempFSM(
     output reg SCL,
     output reg SDA,
     output reg [7:0] State,
-    output wire [31:0] PC_control,
+    input wire [31:0] PC_control,
     input  wire    [4:0] okUH,
     output wire    [2:0] okHU,
     inout  wire    [31:0] okUHU,   
     inout wire okAA     
     );
+    
     
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
@@ -264,7 +265,7 @@ module tempFSM(
 
             8'd30 : begin
                   SCL <= 1'b0;
-                  State <= 8'd100;
+                  State <= State + 1'b1;
             end
             
             // transmit bit 0 - Read or Write value (RW = 1 reads, = 0 writes)
@@ -272,7 +273,7 @@ module tempFSM(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= wraddr[0];
-                  else 
+                  else a
                     SDA <= RW;      
                   State <= State + 1'b1;           
             end   
@@ -323,8 +324,9 @@ module tempFSM(
                   end
                   else begin
                     ACK_bit <= SDA;                 
-                    State <= State + 1'b1;
                   end
+                  State <= State + 1'b1;
+
             end   
 
             8'd38 : begin
@@ -400,7 +402,7 @@ module tempFSM(
             8'd41 : begin
                   SCL <= 1'b1;
                   SDA <= 1'b1;
-                 // State <= STATE_INIT;                  
+                  State <= STATE_INIT;                  
             end              
             
             //If the FSM ends up in this state, there was an error in teh FSM code
@@ -415,6 +417,11 @@ module tempFSM(
     // OK Interface
     wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
     wire [64:0]     okEH;  //These are FrontPanel wires needed to IO communication 
+        //Depending on the number of outgoing endpoints, adjust endPt_count accordingly.
+    //In this example, we have 2 output endpoints, hence endPt_count = 2.
+    localparam  endPt_count = 2;
+    wire [endPt_count*65-1:0] okEHx;  
+    okWireOR # (.N(endPt_count)) wireOR (okEH, okEHx);
     
     //This is the OK host that allows data to be sent or recived    
     okHost hostIF (
@@ -429,18 +436,18 @@ module tempFSM(
     
     //  PC_controll is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
-    okWireIn wire10 (   .okHE(okHE), 
-                        .ep_addr(8'h00), 
-                        .ep_dataout(PC_control));
+//    okWireIn wire10 (   .okHE(okHE), 
+//                        .ep_addr(8'h00), 
+//                        .ep_dataout(PC_control));
                         
-    //okWireOut wire21 (  .okHE(okHE), 
-    //                .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
-    //                .ep_addr(8'h21), 
-    //                .ep_datain(tempLSB));
+   okWireOut wire21 (  .okHE(okHE), 
+                   .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
+                   .ep_addr(8'h21), 
+                   .ep_datain(tempLSB));
                     
-    //okWireOut wire20 (  .okHE(okHE), 
-    //                .okEH(okEHx[ 1*65 +: 65 ]),
-    //                .ep_addr(8'h20), 
-    //                .ep_datain(tempMSB));             
+    okWireOut wire20 (  .okHE(okHE), 
+                    .okEH(okEHx[ 1*65 +: 65 ]),
+                    .ep_addr(8'h20), 
+                    .ep_datain(tempMSB));             
                
 endmodule
