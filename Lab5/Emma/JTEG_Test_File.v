@@ -46,10 +46,35 @@ module JTEG_Test_File(
         .okAA(okAA)
         );
     
+    
+    
+        //This is the OK host that allows data to be sent or recived    
+    //okHost hostIF (
+    //    .okUH(okUH),
+    //    .okHU(okHU),
+    //    .okUHU(okUHU),
+    //    .okClk(okClk),
+    //    .okAA(okAA),
+    //    .okHE(okHE),
+    //    .okEH(okEH)
+    //);  
+    
+    
     //Instantiate the ILA module
     ila_0 ila_sample12 ( 
         .clk(ILA_Clk),
         .probe0({led, State, SDA, SCL, ACK_bit, MSB, LSB}),     //led?                        
         .probe1({FSM_Clk, TrigerEvent})
-        );                        
+        );                 
+    
+    
+    //localparam N_endpt = 1;
+    //wire [N_endpt*65-1:0] okEHx;
+    
+    //okWireOR # (.N(N_endpt)) wireOR (okEH, okEHx):
+    
+    //okWireOut wire00 (.okHE(okHE), 
+    //                    .okEH(okEHx[ 0*65 +: 65 ]),
+    //                  .ep_addr(0'00), 
+    //                    .ep_datain(Temp));
 endmodule
