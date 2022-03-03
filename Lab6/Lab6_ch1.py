@@ -93,13 +93,13 @@ else:
     print("The max voltage calculated from max power and resistor value is {}".format(max_v_i))
     print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v_i * .90))
 
-    max_v = max_v_i * .90
+    max_v = max_v_i #* .90
     
-    print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v))
+    # print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v))
 
 
-    num_measurements = 50               # number of measurements
-    num_mini_measurements = 100         # number of measurements within measurement (v, I)
+    num_measurements = 10               # number of measurements
+    num_mini_measurements = 10          # number of measurements within measurement (v, I)
     output_voltage = np.linspace(0, max_v, num_measurements)
 
     measured_voltage = np.empty((num_measurements, num_mini_measurements)) #np.array([]) # create an empty list to hold our values
@@ -107,7 +107,7 @@ else:
 
     I_SD = np.empty((num_measurements))
     I_mean = np.empty((num_measurements))
-    
+
     V_SD = np.empty((num_measurements))
     V_mean = np.empty((num_measurements))
 
@@ -127,7 +127,7 @@ else:
         for j in range(0, num_mini_measurements):
 
             # pause 10ms to let things settle
-            time.sleep(0.10)
+            time.sleep(0.5) # min 240ms
         
             # read the output voltage on the 25V power supply
             measured_voltage_tmp = power_supply.query("MEASure:VOLTage:DC? P25V")
