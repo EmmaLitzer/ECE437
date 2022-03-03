@@ -273,7 +273,7 @@ module tempFSM(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= wraddr[0];
-                  else a
+                  else
                     SDA <= RW;      
                   State <= State + 1'b1;           
             end   
