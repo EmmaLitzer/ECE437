@@ -41,21 +41,35 @@ print("----------------------------------------------------")
 PC_Control = 1
 
 # MAY NEED TO CHANGE WIRE NUMBERS (0x##)
-try:                                                        # run temperature loop until ^C is pressed in terminal
-    while(1):
-        dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
+# try:                                                        # run temperature loop until ^C is pressed in terminal
+#     while(1):
+#         dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
+#         dev. UpdateWireIns()                                # Send wirein value to FSM 
+
+#         dev.UpdateWireOuts()                                # FSM sends Temp data to PC
+#         T_msb = dev.GetWireOutValue(0x01)<<8                # get msb temp register and shift 8 bits to the left
+#         T_lsb = dev.GetWireOutValue(0x02)                   # get lsb temp register
+#         T = (1/128) * (T_lsb + T_msb)                       # Convert FSM data to Temperature:: See TEMPERATURE CONVERSION FORMULAS in ADT7420 Data Sheet (pg12)
+#         print('The Temperature is {} degrees C'.format(xx)) # Print temperature value
+#         time.sleep(0.5)                                     # Wait .5s to read next T measurement
+# except KeyboardInterrupt:
+#     pass
+
+
+    
+#%%
+
+
+for i in range(0,9):
+	dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
         dev. UpdateWireIns()                                # Send wirein value to FSM 
 
         dev.UpdateWireOuts()                                # FSM sends Temp data to PC
         T_msb = dev.GetWireOutValue(0x01)<<8                # get msb temp register and shift 8 bits to the left
         T_lsb = dev.GetWireOutValue(0x02)                   # get lsb temp register
         T = (1/128) * (T_lsb + T_msb)                       # Convert FSM data to Temperature:: See TEMPERATURE CONVERSION FORMULAS in ADT7420 Data Sheet (pg12)
-        print('The Temperature is {} degrees C'.format(xx)) # Print temperature value
+        print('Run #{}: The Temperature is {} degrees C'.format(i, xx)) # Print temperature value
         time.sleep(0.5)                                     # Wait .5s to read next T measurement
-except KeyboardInterrupt:
-    pass
-
-
+	
 dev.Close
-    
-#%%
+
