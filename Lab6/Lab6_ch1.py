@@ -91,15 +91,14 @@ else:
     max_v_i = np.sqrt(max_P * Resistor) #V
 
     print("The max voltage calculated from max power and resistor value is {}".format(max_v_i))
-    print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v_i * .90))
 
     max_v = max_v_i #* .90
     
     # print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v))
 
 
-    num_measurements = 10               # number of measurements
-    num_mini_measurements = 10          # number of measurements within measurement (v, I)
+    num_measurements = 50               # number of measurements
+    num_mini_measurements = 100          # number of measurements within measurement (v, I)
     output_voltage = np.linspace(0, max_v, num_measurements)
 
     measured_voltage = np.empty((num_measurements, num_mini_measurements)) #np.array([]) # create an empty list to hold our values
@@ -121,7 +120,7 @@ else:
         if v >= max_v_i:
             print("Maximum output resistor voltage exceeded. Turning off power supply to preserve circuit")
             break
-        
+        print(v)
         power_supply.write("APPLy P25V, %0.2f, 0.103" % v) #max_I = 0.103A
         
         for j in range(0, num_mini_measurements):
@@ -131,12 +130,12 @@ else:
         
             # read the output voltage on the 25V power supply
             measured_voltage_tmp = power_supply.query("MEASure:VOLTage:DC? P25V")
-            measured_voltage[i][j] = np.append(float(measured_voltage_tmp))
+            measured_voltage[i][j] = float(measured_voltage_tmp)
             
             
             # read the output current on the 25V power supply
             measured_current_tmp = power_supply.query("MEASure:CURRent:DC? P25V")
-            measured_current[i][j] = np.append(float(measured_current_tmp))
+            measured_current[i][j] = float(measured_current_tmp)
         
         I_mean[i] = statistics.mean(measured_current[i])
         I_SD[i] = statistics.stdev(measured_current[i])
@@ -183,7 +182,7 @@ else:
 
     plt.figure()
     plt.plot(output_voltage,I_mean * V_mean)
-    plt.title("Applied Volts vs. Measured Power (From I and VOltage Mean)")
+    plt.title("Applied Volts vs. Measured Power (From I and Voltage Mean)")
     plt.xlabel("Applied Volts [V]")
     plt.ylabel("Power [W]")
     plt.draw()
@@ -191,4 +190,3 @@ else:
     # show all plots
     plt.show()
     
-
