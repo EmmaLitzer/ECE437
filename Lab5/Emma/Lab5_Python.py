@@ -38,11 +38,12 @@ else:
     sys.exit ();
 print("----------------------------------------------------")
 
+PC_Control = 1
 
 # MAY NEED TO CHANGE WIRE NUMBERS (0x##)
 try:                                                        # run temperature loop until ^C is pressed in terminal
     while(1):
-        dev.SetWireInValue(0x00, 1)                         # send in value of 1 to start the FSM
+        dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
         dev. UpdateWireIns()                                # Send wirein value to FSM 
 
         dev.UpdateWireOuts()                                # FSM sends Temp data to PC
