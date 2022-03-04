@@ -78,6 +78,8 @@ module tempFSM(
                       State <= 8'd0;
                       counter <= 3'd0;
                       rcounter <= 4'd8;
+                      rregMSB <= 0;
+                      rregLSB <= 0;
                   end
             end            
             
