@@ -14,7 +14,7 @@ module tempFSM(
     output reg SCL,
     output reg SDA,
     output reg [7:0] State,
-    input wire [31:0] PC_control,
+    output wire [31:0] PC_control,
     input  wire    [4:0] okUH,
     output wire    [2:0] okHU,
     inout  wire    [31:0] okUHU,   
@@ -43,8 +43,8 @@ module tempFSM(
     reg rregLSB = 0; //flag signal for reading register data for LSB
     reg setack = 0; //flag signal that we want to master to set acknowledge bit
     reg [7:0] tempMSB, tempLSB;
-    reg [1:0] counter = 0; //used to count up to 4 to see how many bytes of communication we've cycled through
-    reg [3:0] rcounter = 4'd7; //used to count how many bits of the register we're reading from we've cycled through, through subtraction
+    reg [2:0] counter = 0; //used to count up to 4 to see how many bytes of communication we've cycled through
+    reg [3:0] rcounter = 4'd8; //used to count how many bits of the register we're reading from we've cycled through, through subtraction
       
        
     localparam STATE_INIT       = 8'd0;    
@@ -76,6 +76,8 @@ module tempFSM(
                       SCL <= 1'b1;
                       SDA <= 1'b1;
                       State <= 8'd0;
+                      counter <= 3'd0;
+                      rcounter <= 4'd8;
                   end
             end            
             
@@ -333,7 +335,7 @@ module tempFSM(
                   SCL <= 1'b0;
                   if (setack) begin
                         counter <= counter + 1;
-                        State <= 8'b100;
+                        State <= 8'd100;
                   end      
                   else if (rregMSB || rregLSB) begin
                     if (rcounter == 0) begin
@@ -378,7 +380,7 @@ module tempFSM(
                 rregMSB <= 0;
                 rregLSB <= 1;
                 setack <= 0;
-                rcounter <= 8'd7;
+                rcounter <= 8'd8;
                 State <= 8'd35;
             end
             
@@ -402,6 +404,7 @@ module tempFSM(
             8'd41 : begin
                   SCL <= 1'b1;
                   SDA <= 1'b1;
+                  
                   State <= STATE_INIT;                  
             end              
             
@@ -422,6 +425,7 @@ module tempFSM(
     localparam  endPt_count = 2;
     wire [endPt_count*65-1:0] okEHx;  
     okWireOR # (.N(endPt_count)) wireOR (okEH, okEHx);
+    wire okClk;
     
     //This is the OK host that allows data to be sent or recived    
     okHost hostIF (
@@ -436,18 +440,18 @@ module tempFSM(
     
     //  PC_controll is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
-//    okWireIn wire10 (   .okHE(okHE), 
-//                        .ep_addr(8'h00), 
-//                        .ep_dataout(PC_control));
-                        
+   okWireIn wire10 (   .okHE(okHE), 
+                       .ep_addr(8'h00), 
+                       .ep_dataout(PC_control));
+                      
    okWireOut wire21 (  .okHE(okHE), 
                    .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
                    .ep_addr(8'h21), 
                    .ep_datain(tempLSB));
-                    
-    okWireOut wire20 (  .okHE(okHE), 
-                    .okEH(okEHx[ 1*65 +: 65 ]),
-                    .ep_addr(8'h20), 
-                    .ep_datain(tempMSB));             
+                  
+   okWireOut wire20 (  .okHE(okHE), 
+                   .okEH(okEHx[ 0*65 +: 65 ]),
+                   .ep_addr(8'h20), 
+                   .ep_datain(tempMSB));             
                
 endmodule
