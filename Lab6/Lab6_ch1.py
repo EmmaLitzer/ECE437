@@ -92,7 +92,7 @@ else:
 
     print("The max voltage calculated from max power and resistor value is {}".format(max_v_i))
 
-    max_v = max_v_i #* .90
+    max_v = max_v_i 
     
     # print("The voltage we will use is 90% of the max voltage rating, {}".format(max_v))
 
@@ -117,11 +117,11 @@ else:
     # measure the voltage and current supplied by the 6V power supply
     for i, v in enumerate(output_voltage):
         # apply the desired voltage on teh 6V power supply and limist the output current to 60mA
-        if v >= max_v_i:
+        if v > max_v_i+.1:
             print("Maximum output resistor voltage exceeded. Turning off power supply to preserve circuit")
             break
         print(v)
-        power_supply.write("APPLy P25V, %0.2f, 0.103" % v) #max_I = 0.103A
+        power_supply.write("APPLy P25V, %0.2f, 0.11" % v) #max_I = 0.103A
         
         for j in range(0, num_mini_measurements):
 
