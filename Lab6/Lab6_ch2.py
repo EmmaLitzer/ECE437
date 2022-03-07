@@ -45,7 +45,7 @@ for i in range (0, number_of_device):
     try:
         device_temp = device_manager.open_resource(devices[i])
         print("Instrument connect on USB port number [" + str(i) + "] is " + device_temp.query("*IDN?"))
-        if (device_temp.query("*IDN?") == 'HEWLETT-PACKARD,E3631A,0,3.0-6.0-2.0\r\n'):
+        if 'HEWLETT-PACKARD,E3631A,' in device_temp.query("*IDN?"):
             power_supply_id = i
         # if 'Agilent Technologies,33511B' in device_temp.query("*IDN?"):
         #     waveform_generator_id = i
@@ -58,7 +58,8 @@ for i in range (0, number_of_device):
         device_temp.close()
     except:
         print("Instrument on USB port number [" + str(i) + "] cannot be connected. The instrument might be powered of or you are trying to connect to a mouse or keyboard.\n")
-    
+#power_supply_id = 4
+print("Power supply on port number ", power_supply_id)
 
 #%%
 # Open the USB communication port with the power supply.
@@ -97,6 +98,7 @@ else:
     # initialize FPGA stuff
     counter = 0
     time.sleep(0.5)
+    PC_Control = 1
 
     ### Positive Terminal on left (black)
     Resistor = 47                       # ohms
@@ -134,15 +136,16 @@ else:
             print("Maximum output resistor voltage exceeded. Turning off power supply to preserve circuit")
             break
         print('The voltage is %0.2f' %v)
-        print('\tWe are %0.2f through measuring' %(100 * i/len(output_voltage)))
-        power_supply.write("APPLy P25V, %0.2f, 0.11" % v) #max_I = 0.103A
+        print('\tWe are %0.2f percent through measuring' %(100 * i/len(output_voltage)))
+        power_supply.write("APPLy P6V, %0.2f, 0.11" % v) #max_I = 0.103A
         time.sleep(0.5) # min 240ms
 
         for j in range(0, num_mini_measurements):
 
             # pause 10ms to let things settle
+            time.sleep(0.5)
             PC_Control = 1
-
+            
             dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
             dev. UpdateWireIns()                                # Send wirein value to FSM 
     
@@ -188,6 +191,7 @@ else:
 
     plt.figure()
     plt.plot(output_voltage,T_SD)
+    plt.ylim(0,0.01)
     plt.title("Applied Volts vs. Measured Temperature Standard Deviation")
     plt.xlabel("Applied Volts [V]")
     plt.ylabel("Temperature Standard Deviation [C]")
@@ -196,4 +200,3 @@ else:
 
     # show all plots
     plt.show()
-    
