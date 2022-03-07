@@ -97,7 +97,6 @@ else:
     # initialize FPGA stuff
     counter = 0
     time.sleep(0.5)
-    PC_Control = 1
 
     ### Positive Terminal on left (black)
     Resistor = 47                       # ohms
@@ -142,7 +141,8 @@ else:
         for j in range(0, num_mini_measurements):
 
             # pause 10ms to let things settle
-            
+            PC_Control = 1
+
             dev.SetWireInValue(0x00, PC_Control)                # send in value of 1 to start the FSM
             dev. UpdateWireIns()                                # Send wirein value to FSM 
     
