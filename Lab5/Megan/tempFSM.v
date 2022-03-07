@@ -44,7 +44,7 @@ module tempFSM(
     reg setack = 0; //flag signal that we want to master to set acknowledge bit
     reg [7:0] tempMSB, tempLSB;
     reg [2:0] counter = 0; //used to count up to 4 to see how many bytes of communication we've cycled through
-    reg [3:0] rcounter = 4'd8; //used to count how many bits of the register we're reading from we've cycled through, through subtraction
+    reg [3:0] rcounter = 4'd7; //used to count how many bits of the register we're reading from we've cycled through, through subtraction
       
        
     localparam STATE_INIT       = 8'd0;    
@@ -71,15 +71,21 @@ module tempFSM(
         case (State)
             // Press signal from PC is sent in, start the state machine. Otherwise, stay in the STATE_INIT state        
             STATE_INIT : begin
-                 if (PC_control[0] == 1'b1) State <= 8'd1;                    
+                 if (PC_control[0] == 1'b1) begin
+                    State <= 8'd1; 
+                    counter <= 3'd0;
+                    rcounter <= 4'd7;
+                    rregMSB <= 0;
+                    rregLSB <= 0;  
+                    wrreg <= 0;
+                    RW <= 0;
+                    setack <= 0;
+                 end                 
                  else begin                 
                       SCL <= 1'b1;
                       SDA <= 1'b1;
                       State <= 8'd0;
-                      counter <= 3'd0;
-                      rcounter <= 4'd8;
-                      rregMSB <= 0;
-                      rregLSB <= 0;
+
                   end
             end            
             
@@ -369,6 +375,7 @@ module tempFSM(
                 wrreg <= 0;
                 RW <= 1; //want to read this device addresss
                 SDA <= 1;// set SDA to 1 to repeat start signal
+                SCL <= 1;
                 State <= 8'b1; // go back to state 1 to repeat start
             end
             
@@ -382,7 +389,7 @@ module tempFSM(
                 rregMSB <= 0;
                 rregLSB <= 1;
                 setack <= 0;
-                rcounter <= 8'd8;
+                rcounter <= 8'd7;
                 State <= 8'd35;
             end
             
