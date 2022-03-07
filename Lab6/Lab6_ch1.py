@@ -190,3 +190,37 @@ else:
     # show all plots
     plt.show()
     
+#%%
+    
+    power_SD = np.empty((num_measurements))
+    power_mean = np.empty((num_measurements))
+    
+    for i, v in enumerate(output_voltage):
+        for j in range(0, num_mini_measurements):
+            power_mean[i] = statistics.mean((measured_current[i])*measured_voltage[i])
+            power_SD[i] = statistics.stdev((measured_current[i])*measured_voltage[i])
+
+    
+    
+    plt.figure()
+    plt.plot(output_voltage,power_SD)
+    plt.title("Applied Volts vs. Power Standard Deviation")
+    plt.xlabel("Applied Volts [V]")
+    plt.ylabel("Power Standard Deviation [W]")
+    plt.draw()
+    
+    plt.figure()
+    plt.plot(output_voltage,power_mean)
+    plt.title("Applied Volts vs. Power Mean")
+    plt.xlabel("Applied Volts [V]")
+    plt.ylabel("Power Mean [W]")
+    plt.draw()
+
+    # show all plots
+    plt.show()
+    
+    
+    
+    
+    
+    
