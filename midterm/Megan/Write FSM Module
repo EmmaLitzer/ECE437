@@ -344,7 +344,9 @@ module Write(
                   
                   else
                     State <= 8'd100;   
-            end  
+            end 
+        endcase
+     end
     
 endmodule
 
