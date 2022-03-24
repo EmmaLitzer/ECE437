@@ -1,3 +1,4 @@
+
 `timescale 1ns / 1ps
 
 module FSM(    
@@ -15,7 +16,8 @@ module FSM(
     output reg SDA,
     output reg [7:0] State,
     output wire [31:0] PCDATA,
-    output wire START,
+    output wire [31:0] STARTR,
+    output wire [31:0] STARTW,
     input  wire    [4:0] okUH,
     output wire    [2:0] okHU,
     inout  wire    [31:0] okUHU,   
@@ -37,22 +39,21 @@ module FSM(
     wire [6:0] devaddrw = PCDATA[31:23];
     wire [6:0] devaddrr = PCDATA[15:7];
     wire [7:0] regaddr = PCDATA[23:16];
-    wire RW = PCDATA[0];  
-    reg STARTW = 0;
-    reg STARTR = 0;
+    wire RW = PCDATA[0]; //should always be 1
     wire currstate;
     wire error_bit;
     wire MSB;
-    wire LSB;
+    wire LSB;   
     
     Write write2read (  .devaddr(devaddrw),
                         .regaddr(regaddr),
-                        .START(STARTW),
+                        .START(STARTW[0]),
                         .I2C_SCL_0(I2C_SCL_0),
                         .I2C_SDA_0(I2C_SDA_0),
                         .SCL(SCL),
                         .SDA(SDA),
                         .FSM_Clk(FSM_Clk),                                      
+                        .ILA_Clk(ILA_Clk),
                         .ILA_Clk(ILA_Clk),
                         .FSM_Clk_reg(FSM_Clk_reg),
                         .ILA_Clk_reg(ILA_Clk_reg),
@@ -64,7 +65,7 @@ module FSM(
     Read read_data (    .devaddr(devaddrr),
                         .DATAL(LSB),
                         .DATAH(MSB),
-                        .START(STARTR),
+                        .START(STARTR[0]),
                         .I2C_SCL_0(I2C_SCL_0),
                         .I2C_SDA_0(I2C_SDA_0),
                         .SCL(SCL),
@@ -80,17 +81,7 @@ module FSM(
        
     localparam STATE_INIT       = 8'd0;    
     assign led[7] = ACK_bit;
-    assign led[6] = error_bit;  
-       
-    always @(*) begin
-        if (RW) begin //if RW=1, currently reading
-            
-        end
-        else begin //if RW=0, currently writing (reg address to read from)
-            STARTW = 1;
-            if (devaddrw == 7'b0011001) // 
-        end 
-    end                            
+    assign led[6] = error_bit;                         
     
     // OK Interface
     wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
@@ -117,20 +108,24 @@ module FSM(
     //  The data is communicated via memeory location 0x00
    okWireIn wire10 (   .okHE(okHE), 
                        .ep_addr(8'h00), 
-                       .ep_dataout(PCDATA));
+                       .ep_dataout(PCDATA));  
                        
    okWireIn wire11 (   .okHE(okHE), 
                        .ep_addr(8'h01), 
-                       .ep_dataout(START));                     
+                       .ep_dataout(STARTW));  
+                       
+    okWireIn wire12 (   .okHE(okHE), 
+                       .ep_addr(8'h02), 
+                       .ep_dataout(STARTR));                                                                                    
                       
    okWireOut wire21 (  .okHE(okHE), 
                    .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
                    .ep_addr(8'h21), 
-                   .ep_datain(tempLSB));
+                   .ep_datain(MSB));
                   
    okWireOut wire20 (  .okHE(okHE), 
                    .okEH(okEHx[ 0*65 +: 65 ]),
                    .ep_addr(8'h20), 
-                   .ep_datain(tempMSB));             
+                   .ep_datain(LSB));             
                
 endmodule
