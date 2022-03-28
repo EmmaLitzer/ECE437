@@ -24,18 +24,24 @@ else:
     sys.exit ()
 
 
-counter = 0
+
+
+
+# counter = 0
 time.sleep(0.5)
 
 
 # PCDATA components
-SADW_A = '00110010'
-SADW_M = '00111100'
+# Accelerometer
+SADW_A =    '00110010'
+SADW_M =    '00111100'
 
-SADR_A = '00110011'
-SADR_M = '00111100'
+# Magnetometer
+SADR_A =    '00110011'
+SADR_M =    '00111100'
 
-RW = '00000001'
+# Set to read instead of write
+RW =        '00000001'
 
 
 PCDATA = {
@@ -57,22 +63,24 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
     # Grab FSM data from FPGA, convert and concatanate LSB and MSB into SI data units.
 
     # Write register you want data from
-    dev.UpdateWireIns(0x00, PCDATA[data_bit_name])
-    Start_RW(0, 1)
-    dev.UpdateWireIns()                             # Send PCDATA, start R/W values to FSM
+    dev.UpdateWireIns(0x00, PCDATA[data_bit_name])  # Write address to FPGA
+    Start_RW(0, 1)                                  # Tell FSM you want to write
+    dev.UpdateWireIns()                             # Write PCDATA to FSM write to FPGA
 
     # Tell FSM you want to read data
-    Start_RW(1, 0)
-    dev.UpdateWireIns()                             # Send PCDATA, start R/W values to FSM
+    # Start_RW(1, 0)                                  # Tell FSM you want to read
+    # dev.UpdateWireIns()                             # Tell FSM you want to read
 
     dev.UpdateWireOuts()                            # FSM sends data to PC
 
-    # Read data from out dev
-    if data_bit_name[-1] == 'A'
+    # Read data from FSM in dev
+    if data_bit_name[-1] == 'A':
+        # Grab Accelerator data
         MSB = dev.GetWireOutValue(loc_MSB)<<8       # get msb temp register and shift 8 bits to the left
         LSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
     
-    if data_bit_name[-1] == 'M'
+    if data_bit_name[-1] == 'M':
+        # Grab Magnometer data
         # Magnometer register LSB and MSB are flipped due to ease of Verilog code
         LSB = dev.GetWireOutValue(loc_MSB)<<8       # get msb temp register and shift 8 bits to the left
         MSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
@@ -80,29 +88,29 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
     Data = int(LSB + MSB)                           # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
 
     Start_RW(0, 0)
-    dev.UpdateWireIns()                             # Send Start R/W to FSM
+    dev.UpdateWireIns()                             # Tell FSM you don't want to write or read
 
     return Data
 
 
 
-try:                                                        # run temperature loop until ^C is pressed in terminal
-    while counter<100 : 
-        X_A = grab_convert("X_A")               # loc MSB, loc LSB
-        Y_A = grab_convert("Y_A")               # loc MSB, loc LSB
-        Z_A = grab_convert("Z_A")               # loc MSB, loc LSB
+try:                     
+    # Grab and convert data from FSM into SI units. Print these values.
+    X_A = grab_convert("X_A")               # loc MSB, loc LSB
+    Y_A = grab_convert("Y_A")               # loc MSB, loc LSB
+    Z_A = grab_convert("Z_A")               # loc MSB, loc LSB
 
-        X_M = grab_convert("X_M")               # loc MSB, loc LSB
-        Y_M = grab_convert("Y_M")               # loc MSB, loc LSB
-        Z_M = grab_convert("Z_M")               # loc MSB, loc LSB
+    X_M = grab_convert("X_M")               # loc MSB, loc LSB
+    Y_M = grab_convert("Y_M")               # loc MSB, loc LSB
+    Z_M = grab_convert("Z_M")               # loc MSB, loc LSB
 
 
-        print('Accelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\n' +
-              'Magnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
+    print('Accelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\n' +
+            'Magnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
 
-        counter = counter + 1
-        
-        time.sleep(0.25)                                     # Wait .25s to read next Data measurement
+    # counter = counter + 1
+    
+    time.sleep(0.25)                        # Wait .25s to read next Data measurement
         
         
 except KeyboardInterrupt:
