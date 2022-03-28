@@ -1,14 +1,14 @@
 #%%
 # import various libraries necessery to run your Python code
 from ast import Add
-import time   # time related library
-import sys    # system related library
+import time                         # time related library
+import sys                          # system related library
 ok_loc = 'C:\\Program Files\\Opal Kelly\\FrontPanelUSB\\API\\Python\\3.6\\x64'
-sys.path.append(ok_loc)   # add the path of the OK library
-import ok     # OpalKelly library
+sys.path.append(ok_loc)             # add the path of the OK library
+import ok                           # OpalKelly library
 
 
-bit_file = '' + '.bit'										# bit file name in same folder as python file
+# bit_file = '' + '.bit'										# bit file name in same folder as python file
 
 #%% 
 dev = ok.okCFrontPanel()  # define a device for FrontPanel communication
@@ -32,11 +32,11 @@ time.sleep(0.5)
 
 
 # PCDATA components
-# Accelerometer
+# Accelerometer:
 SADW_A =    '00110010'
 SADW_M =    '00111100'
 
-# Magnetometer
+# Magnetometer:
 SADR_A =    '00110011'
 SADR_M =    '00111100'
 
@@ -85,9 +85,9 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
         LSB = dev.GetWireOutValue(loc_MSB)<<8       # get msb temp register and shift 8 bits to the left
         MSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
     
-    Data = int(LSB + MSB)                           # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
+    Data = int(MSB + LSB)                           # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
 
-    Start_RW(0, 0)
+    Start_RW(0, 0)                                  # Turn write and read off
     dev.UpdateWireIns()                             # Tell FSM you don't want to write or read
 
     return Data
@@ -96,13 +96,13 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
 
 try:                     
     # Grab and convert data from FSM into SI units. Print these values.
-    X_A = grab_convert("X_A")               # loc MSB, loc LSB
-    Y_A = grab_convert("Y_A")               # loc MSB, loc LSB
-    Z_A = grab_convert("Z_A")               # loc MSB, loc LSB
+    X_A = grab_convert("X_A")
+    Y_A = grab_convert("Y_A")
+    Z_A = grab_convert("Z_A")
 
-    X_M = grab_convert("X_M")               # loc MSB, loc LSB
-    Y_M = grab_convert("Y_M")               # loc MSB, loc LSB
-    Z_M = grab_convert("Z_M")               # loc MSB, loc LSB
+    X_M = grab_convert("X_M")
+    Y_M = grab_convert("Y_M")
+    Z_M = grab_convert("Z_M")
 
 
     print('Accelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\n' +
