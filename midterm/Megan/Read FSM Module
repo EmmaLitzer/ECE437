@@ -25,10 +25,8 @@ module Read(
         output reg [7:0] DATAL,
         output reg [7:0] DATAH,
         input wire START,
-        output I2C_SCL_0,
-        inout  I2C_SDA_0,
-        output reg SCL,
-        output reg SDA,
+        output wire SCLR,
+        output wire SDAR,
         input  FSM_Clk,
         input  ILA_Clk,    
         output reg FSM_Clk_reg,    
@@ -51,10 +49,10 @@ module Read(
     */
     
     
-
+    reg SCL, SDA;
     localparam STATE_INIT = 8'd100;
-    assign I2C_SCL_0 = SCL;
-    assign I2C_SDA_0 = SDA;
+    assign SCLR = SCL;
+    assign SDAR = SDA;
     
     always @(*) begin          
         FSM_Clk_reg = FSM_Clk;
@@ -66,12 +64,13 @@ module Read(
     reg datal = 0; //reading DATAL flag
     reg datah = 0; //reading DATAH flag
     reg setack = 0;
+
     
     initial  begin
         SCL = 1'b1;
         SDA = 1'b1;
         ACK_bit = 1'b1;  
-        State = 8'd0; 
+        State = 8'd100; 
         error_bit = 1'b1;
     end
     
@@ -90,7 +89,7 @@ module Read(
                  else begin                 
                       SCL <= 1'b1;
                       SDA <= 1'b1;
-                      State <= 8'd0;
+                      State <= 8'd100;
 
                   end
             end            
@@ -329,15 +328,15 @@ module Read(
                   else if (datal || datah) begin
                     if (rcounter == 0) begin
                         setack <= 1;
-                        State <= 8'd135;
+                        State <= 8'd135; 
                     end
                     else begin
                         rcounter <= rcounter -1;
                         State <= 8'd135;                    
                     end
                   end
-                  
-                  State <= State + 1'b1;   
+                  else 
+                    State <= State + 1'b1;   
             end 
             
             8'd139 : begin //reading first byte of data (L- lower byte)
@@ -346,7 +345,7 @@ module Read(
                 State <= 8'd135;
             end
             
-            8'd140 : begin
+            8'd140 : begin //reading second byte of data
                 datah <= 1;
                 datal <= 0;
                 setack <= 0;
@@ -367,11 +366,9 @@ module Read(
                   State <= State + 1'b1;
             end                                    
 
-            8'd143 : begin
+            8'd143 : begin //halt state
                   SCL <= 1'b1;
-                  SDA <= 1'b1;
-                  
-                  State <= STATE_INIT;                  
+                  SDA <= 1'b1;                
             end
             
             //If the FSM ends up in this state, there was an error in the FSM code
