@@ -7,12 +7,14 @@ module Testbench();
     wire sys_clkp;
     wire [7:0] led;
     reg [3:0] button;
-    reg [31:0] PC_control;
+    reg [31:0] PCDATA;
     wire [7:0] StateT;
     wire FSM_Clk_reg;
+    reg [31:0] STARTW = 0;
+    wire SDA;
     
     //Invoke the module that we like to test
-    tempFSM ModuleUnderTest (.sys_clkn(sys_clkn), .sys_clkp(sys_clkp), .PC_control(PC_control), .State(StateT), .FSM_Clk_reg(FSM_Clk_reg));
+    FSM ModuleUnderTest (.sys_clkn(sys_clkn), .sys_clkp(sys_clkp), .PCDATA(PCDATA), .State(StateT), .FSM_Clk_reg(FSM_Clk_reg), .STARTW(STARTW), .I2C_SDA_0(SDA));
     
     // Generate a clock signal. The clock will change its state every 5ns.
     //Remember that the test module takes sys_clkp and sys_clkn as input clock signals.
@@ -24,8 +26,8 @@ module Testbench();
     end        
       
     initial begin          
-            #20000 PC_control <= 1;   
-            #2000000 PC_control <= 0;                                                   
+            #20000 PCDATA <= 32'b00110010001010000011001100000001;   
+            #20000 STARTW <= 1;                                                   
 
             //#100 button <= 4'b1110;
           
