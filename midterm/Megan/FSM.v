@@ -9,15 +9,15 @@ module FSM(
     output ADT7420_A1,
     output I2C_SCL_0,
     inout  I2C_SDA_0,        
-    output reg FSM_Clk_reg,    
-    output reg ILA_Clk_reg,
-    output reg ACK_bit,
-    output reg SCL,
-    output reg SDA,
+    output wire FSM_Clk_reg,    
+    output wire ILA_Clk_reg,
+    output wire ACK_bit,
+    output wire SCL,
+    output wire SDA,
     output reg [7:0] State,
-    output wire [31:0] PCDATA,
-    output wire [31:0] STARTR,
-    output wire [31:0] STARTW,
+    output wire [31:0] PCDATA,//changed to input
+    //output wire [31:0] STARTR,
+    output wire [31:0] STARTW, //changed to input
     input  wire    [4:0] okUH,
     output wire    [2:0] okHU,
     inout  wire    [31:0] okUHU,   
@@ -36,52 +36,79 @@ module FSM(
                                       .ILA_Clk(ILA_Clk) );
     
                                         
-    wire [6:0] devaddrw = PCDATA[31:23];
-    wire [6:0] devaddrr = PCDATA[15:7];
+    wire [6:0] devaddrw = PCDATA[31:25];
+    wire [6:0] devaddrr = PCDATA[15:9];
     wire [7:0] regaddr = PCDATA[23:16];
     wire RW = PCDATA[0]; //should always be 1
-    wire currstate;
+    wire [7:0] currstateW;
+    wire [7:0] currstateR;
     wire error_bit;
-    wire MSB;
-    wire LSB;   
+    wire [7:0] MSB;
+    wire [7:0] LSB;   
+    wire STARTR;
+    wire WSTART;
+    wire SDAW, SCLW, SDAR, SCLR;
+    reg SDAreg, SCLreg, errorbit, ACKbit;
+    wire ACK_bitW, ACK_bitR, error_bitR, error_bitW;
     
     Write write2read (  .devaddr(devaddrw),
                         .regaddr(regaddr),
                         .START(STARTW[0]),
-                        .I2C_SCL_0(I2C_SCL_0),
-                        .I2C_SDA_0(I2C_SDA_0),
-                        .SCL(SCL),
-                        .SDA(SDA),
+                        .SDAW(SDAW),
+                        .SCLW(SCLW),
                         .FSM_Clk(FSM_Clk),                                      
-                        .ILA_Clk(ILA_Clk),
                         .ILA_Clk(ILA_Clk),
                         .FSM_Clk_reg(FSM_Clk_reg),
                         .ILA_Clk_reg(ILA_Clk_reg),
-                        .State(currstate),
-                        .ACK_bit(ACK_bit),
-                        .error_bit(error_bit)
+                        .State(currstateW),
+                        .ACK_bit(ACK_bitW),
+                        .error_bit(error_bitW),
+                        .STARTR(STARTR),
+                        .WSTART(WSTART)
                       );
                       
     Read read_data (    .devaddr(devaddrr),
                         .DATAL(LSB),
                         .DATAH(MSB),
-                        .START(STARTR[0]),
-                        .I2C_SCL_0(I2C_SCL_0),
-                        .I2C_SDA_0(I2C_SDA_0),
-                        .SCL(SCL),
-                        .SDA(SDA),
+                        .START(STARTR),
+                        .SDAR(SDAR),
+                        .SCLR(SCLR),
                         .FSM_Clk(FSM_Clk),                                      
                         .ILA_Clk(ILA_Clk),
                         .FSM_Clk_reg(FSM_Clk_reg),
                         .ILA_Clk_reg(ILA_Clk_reg),
-                        .State(currstate),
-                        .ACK_bit(ACK_bit),
-                        .error_bit(error_bit)
+                        .State(currstateR),
+                        .ACK_bit(ACK_bitR),
+                        .error_bit(error_bitR)
                       );     
        
     localparam STATE_INIT       = 8'd0;    
     assign led[7] = ACK_bit;
-    assign led[6] = error_bit;                         
+    assign led[6] = error_bit;     
+    assign I2C_SCL_0 = SCLreg;
+    assign I2C_SDA_0 = SDAreg;
+    assign ACK_bit = ACKbit;
+    assign error_bit = errorbit;
+
+    
+    always @(*) begin
+        if (WSTART) begin
+            SCLreg = SCLW;
+            SDAreg = SDAW;
+            State = currstateW;
+            ACKbit = ACK_bitW;
+            errorbit = error_bitW;
+        end
+        else if (STARTR) begin 
+            SCLreg = SCLR;
+            SDAreg = SDAR;  
+            State = currstateR; 
+            ACKbit = ACK_bitR;
+            errorbit = error_bitR;   
+        end
+    
+    end 
+                       
     
     // OK Interface
     wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
@@ -104,8 +131,10 @@ module FSM(
         .okEH(okEH)
     );
     
+    
     //  PC_controll is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
+
    okWireIn wire10 (   .okHE(okHE), 
                        .ep_addr(8'h00), 
                        .ep_dataout(PCDATA));  
@@ -113,10 +142,14 @@ module FSM(
    okWireIn wire11 (   .okHE(okHE), 
                        .ep_addr(8'h01), 
                        .ep_dataout(STARTW));  
-                       
+
+    
+    /*                   
     okWireIn wire12 (   .okHE(okHE), 
                        .ep_addr(8'h02), 
-                       .ep_dataout(STARTR));                                                                                    
+                       .ep_dataout(STARTR)); 
+    */                                                                                   
+   
                       
    okWireOut wire21 (  .okHE(okHE), 
                    .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
@@ -127,5 +160,6 @@ module FSM(
                    .okEH(okEHx[ 0*65 +: 65 ]),
                    .ep_addr(8'h20), 
                    .ep_datain(LSB));             
+              
                
 endmodule
