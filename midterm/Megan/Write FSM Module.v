@@ -23,18 +23,18 @@
 module Write(
         input [6:0]      devaddr,
         input [7:0]      regaddr,
-        input wire       START,
-        output           I2C_SCL_0,
-        inout            I2C_SDA_0,
-        output reg       SCL,
-        output reg       SDA,
+        input            START,
+        output wire      WSTART,
+        output wire      SCLW,
+        output wire      SDAW,
         input            FSM_Clk,
         input            ILA_Clk,    
         output reg       FSM_Clk_reg,    
         output reg       ILA_Clk_reg,
         output reg [7:0] State,
         output reg       ACK_bit,
-        output reg       error_bit
+        output reg       error_bit,
+        output reg       STARTR
     );
     
     /*
@@ -50,10 +50,13 @@ module Write(
     */
     
     reg wrreg = 0; //flag signal to tell FSM that we want to write the address of the register we want to read from
-
+    reg STARTW; 
+    reg SCL, SDA;
+    
     localparam STATE_INIT = 8'd0;
-    assign I2C_SCL_0 = SCL;
-    assign I2C_SDA_0 = SDA;
+    assign SCLW = SCL;
+    assign SDAW = SDA;
+    assign WSTART = STARTW; 
     
     always @(*) begin          
         FSM_Clk_reg = FSM_Clk;
@@ -75,6 +78,8 @@ module Write(
                  if (START) begin
                     State <= 8'd1;
                     wrreg <= 0;
+                    STARTR <= 0;
+                    STARTW <= 1;
                  end                 
                  else begin                 
                       SCL <= 1'b1;
@@ -332,6 +337,12 @@ module Write(
                 wrreg <= 0;
                 SDA <= 1;// set SDA to 1 to prepare for repeat start signal in READ FSM
                 SCL <= 1;
+                State <= State + 1'b1;
+            end
+            
+            8'd41 : begin //halt state
+                STARTR <= 1;
+                STARTW <= 0;
             end
             
             //If the FSM ends up in this state, there was an error in teh FSM code
