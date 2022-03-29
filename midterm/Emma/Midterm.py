@@ -8,27 +8,14 @@ sys.path.append(ok_loc)             # add the path of the OK library
 import ok                           # OpalKelly library
 
 
-# bit_file = '' + '.bit'										# bit file name in same folder as python file
+bit_file = '' + '.bit'										# bit file name in same folder as python file
 
 #%% 
 dev = ok.okCFrontPanel()  # define a device for FrontPanel communication
 SerialStatus=dev.OpenBySerial("")      # open USB communicaiton with the OK board
 
-print("----------------------------------------------------")
-# Check if FrontPanel is initialized correctly and if the bit file is loaded. Otherwise terminate the program
-if SerialStatus == 0:
-    print ("FrontPanel host interface was successfully initialized.")
-else:    
-    print ("FrontPanel host interface not detected. The error code number is:" + str(int(SerialStatus)))
-    print("Exiting the program.")
-    sys.exit ()
-
-
-
-
-
-# counter = 0
-time.sleep(0.5)
+counter = 0
+#time.sleep(0.5)
 
 
 # PCDATA components
@@ -54,17 +41,20 @@ PCDATA = {
     "Z_M": SADW_M + '00000101' + SADR_M + RW
 }
 
-def Start_RW(R, W):
-    dev.UpdateWireIns(0x01, W) #STARTW
-    dev.UpdateWireIns(0x02, R) #STARTR
+#def Start_RW(R, W):
+    #dev.UpdateWireIns(0x01, W) #STARTW
+    #dev.UpdateWireIns(0x02, R) #STARTR
 
 
 def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
     # Grab FSM data from FPGA, convert and concatanate LSB and MSB into SI data units.
 
     # Write register you want data from
-    dev.UpdateWireIns(0x00, PCDATA[data_bit_name])  # Write address to FPGA
-    Start_RW(0, 1)                                  # Tell FSM you want to write
+
+    #dev.SetWireInValue(0x00, PCDATA[data_bit_name])  # Write address to FPGA
+    dev.SetWireInValue(0x00, int(PCDATA[data_bit_name],2))  # Write address to FPGA    
+    dev.SetWireInValue(0x01, 1) #STARTW
+    #Start_RW(0, 1)                                  # Tell FSM you want to write
     dev.UpdateWireIns()                             # Write PCDATA to FSM write to FPGA
 
     # Tell FSM you want to read data
@@ -86,31 +76,32 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
         MSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
     
     Data = int(MSB + LSB)                           # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
-
-    Start_RW(0, 0)                                  # Turn write and read off
+    
+    dev.SetWireInValue(0x01, 0)
+    #Start_RW(0, 0)                                  # Turn write and read off
     dev.UpdateWireIns()                             # Tell FSM you don't want to write or read
-
+    time.sleep(0.25)  
     return Data
 
 
 
 try:                     
     # Grab and convert data from FSM into SI units. Print these values.
-    X_A = grab_convert("X_A")
-    Y_A = grab_convert("Y_A")
-    Z_A = grab_convert("Z_A")
-
-    X_M = grab_convert("X_M")
-    Y_M = grab_convert("Y_M")
-    Z_M = grab_convert("Z_M")
-
-
-    print('Accelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\n' +
-            'Magnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
-
-    # counter = counter + 1
+    while (counter<100):
+        X_A = grab_convert("X_A")
+        Y_A = grab_convert("Y_A")
+        Z_A = grab_convert("Z_A")
     
-    time.sleep(0.25)                        # Wait .25s to read next Data measurement
+        X_M = grab_convert("X_M")
+        Y_M = grab_convert("Y_M")
+        Z_M = grab_convert("Z_M")
+    
+    
+        print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
+    
+        counter = counter + 1
+        
+        time.sleep(0.25)                        # Wait .25s to read next Data measurement
         
         
 except KeyboardInterrupt:
