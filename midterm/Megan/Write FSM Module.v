@@ -34,7 +34,9 @@ module Write(
         output reg [7:0] State,
         output reg       ACK_bit,
         output reg       error_bit,
-        output reg       STARTR
+        output reg       STARTR,
+        input wire       RW,
+        input [7:0]      wdata
     );
     
     /*
@@ -50,8 +52,9 @@ module Write(
     */
     
     reg wrreg = 0; //flag signal to tell FSM that we want to write the address of the register we want to read from
+    reg wrdata;
     reg STARTW; 
-    reg SCL, SDA;
+    reg SCL, SDA; 
     
     localparam STATE_INIT = 8'd0;
     assign SCLW = SCL;
@@ -78,6 +81,7 @@ module Write(
                  if (START) begin
                     State <= 8'd1;
                     wrreg <= 0;
+                    wrdata <= 0;
                     STARTR <= 0;
                     STARTW <= 1;
                  end                 
@@ -107,6 +111,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[7];
+                  else if (wrdata)
+                    SDA <= wdata[7];
                   else
                     SDA <= devaddr[6];
                   State <= State + 1'b1;                 
@@ -132,6 +138,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[6];
+                  else if (wrdata)
+                    SDA <= wdata[6];                    
                   else                  
                     SDA <= devaddr[5];
                   State <= State + 1'b1;               
@@ -157,6 +165,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[5];
+                  else if (wrdata)
+                    SDA <= wdata[5];                    
                   else                  
                     SDA <= devaddr[4]; 
                   State <= State + 1'b1;                
@@ -182,6 +192,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[4];
+                  else if (wrdata)
+                    SDA <= wdata[4];                    
                   else                  
                     SDA <= devaddr[3]; 
                   State <= State + 1'b1;                
@@ -207,6 +219,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[3];
+                  else if (wrdata)
+                    SDA <= wdata[3];                   
                   else                  
                     SDA <= devaddr[2]; 
                   State <= State + 1'b1;                
@@ -232,6 +246,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[2];
+                  else if (wrdata)
+                    SDA <= wdata[2];                    
                   else                  
                     SDA <= devaddr[1]; 
                   State <= State + 1'b1;                
@@ -257,6 +273,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[1];
+                  else if (wrdata)
+                    SDA <= wdata[1];                    
                   else                  
                     SDA <= devaddr[0];  
                   State <= State + 1'b1;               
@@ -282,6 +300,8 @@ module Write(
                   SCL <= 1'b0;
                   if (wrreg) //write register address we want to read from flag flagged
                     SDA <= regaddr[0];
+                  else if (wrdata)
+                    SDA <= wdata[0];                    
                   else                  
                     SDA <= 1'b0;     
                   State <= State + 1'b1;           
@@ -317,9 +337,15 @@ module Write(
             8'd37 : begin
                   SCL <= 1'b1;
                   ACK_bit <= SDA;                 
-                  State <= State + 1'b1;
-                  if (wrreg)
+
+                  if (wrreg && RW)
                     State <= 8'd39; //go to halt state to start reading data after finish writing register we want to read from
+                  else if (wrreg && ~RW)
+                    State <= 8'd42; //go to write data state after finish writing register address
+                  else if (wrdata)
+                    State <= 8'd43; //go to stop sequence
+                  else
+                    State <= State + 1'b1; 
             end   
 
             8'd38 : begin
@@ -343,6 +369,30 @@ module Write(
             8'd41 : begin //halt state
                 STARTR <= 1;
                 STARTW <= 0;
+            end
+            
+            8'd42: begin //need to go write data to FSM
+                wrdata <= 1;
+                State <= 8'd3;
+            end
+            
+            //stop bit sequence and go back to STATE_INIT           
+            8'd43 : begin
+                  SCL <= 1'b0;
+                  SDA <= 1'b0;                
+                  State <= State + 1'b1;
+            end   
+
+            8'd44 : begin
+                  SCL <= 1'b1;
+                  SDA <= 1'b0;
+                  State <= State + 1'b1;
+            end                                    
+
+            8'd45 : begin //halt state
+                  SCL <= 1'b1;
+                  SDA <= 1'b1; 
+                  wrdata <= 0;               
             end
             
             //If the FSM ends up in this state, there was an error in teh FSM code
