@@ -19,6 +19,7 @@ module JTEG_Test_File(
     wire SCL, SDA; 
     wire [7:0] State;
     wire [31:0] STARTW;
+    reg trigger;
     
     assign TrigerEvent = STARTW[0];   
 
@@ -49,5 +50,14 @@ module JTEG_Test_File(
         .clk(ILA_Clk),
         .probe0({State, I2C_SDA_1, I2C_SCL_1, ACK_bit}),                             
         .probe1({FSM_Clk, TrigerEvent})
-        );                        
+        );
+ /*       
+    always @(*) begin
+        if (STARTW != 0)
+            trigger = 1;
+        else 
+            trigger = 0;
+    end  
+*/  
+                                
 endmodule
