@@ -37,9 +37,9 @@ module FSM(
     
                                         
     wire [6:0] devaddrw = PCDATA[31:25];
-    wire [6:0] devaddrr = PCDATA[15:9];
     wire [7:0] regaddr = PCDATA[23:16];
-    wire RW = PCDATA[0]; //should always be 1
+    wire [6:0] DATA = PCDATA[15:9];
+    wire RW = PCDATA[0]; 
     wire [7:0] currstateW;
     wire [7:0] currstateR;
     wire error_bit;
@@ -64,10 +64,12 @@ module FSM(
                         .ACK_bit(ACK_bitW),
                         .error_bit(error_bitW),
                         .STARTR(STARTR),
-                        .WSTART(WSTART)
+                        .WSTART(WSTART),
+                        .RW(RW),
+                        .wdata(DATA)
                       );
                       
-    Read read_data (    .devaddr(devaddrr),
+    Read read_data (    .devaddr(DATA),
                         .DATAL(LSB),
                         .DATAH(MSB),
                         .START(STARTR),
