@@ -12,8 +12,8 @@ module FSM(
     output wire FSM_Clk_reg,    
     output wire ILA_Clk_reg,
     output wire ACK_bit,
-    output wire SCL,
-    output wire SDA,
+    //output wire SCL,
+    //output wire SDA,
     output reg [7:0] State,
     output wire [31:0] PCDATA,//changed to input
     //output wire [31:0] STARTR,
