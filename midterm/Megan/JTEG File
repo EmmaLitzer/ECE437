@@ -6,8 +6,8 @@ module JTEG_Test_File(
     input sys_clkp,  
     output ADT7420_A0,
     output ADT7420_A1,
-    output I2C_SCL_0,
-    inout I2C_SDA_0,
+    output I2C_SCL_1,
+    inout I2C_SDA_1,
     input  [4:0] okUH,
     output [2:0] okHU,
     inout  [31:0] okUHU,
@@ -29,13 +29,13 @@ module JTEG_Test_File(
         .sys_clkp(sys_clkp),
         .ADT7420_A0(ADT7420_A0),
         .ADT7420_A1(ADT7420_A1),
-        .I2C_SCL_0(I2C_SCL_0),
-        .I2C_SDA_0(I2C_SDA_0),             
+        .I2C_SCL_0(I2C_SCL_1),
+        .I2C_SDA_0(I2C_SDA_1),             
         .FSM_Clk_reg(FSM_Clk),        
         .ILA_Clk_reg(ILA_Clk),
         .ACK_bit(ACK_bit),
-        .SCL(SCL),
-        .SDA(SDA),
+        //.SCL(SCL),
+        //.SDA(SDA),
         .State(State),
         .STARTW(STARTW),
         .okUH(okUH),
@@ -47,7 +47,7 @@ module JTEG_Test_File(
     //Instantiate the ILA module
     ila_0 ila_sample12 ( 
         .clk(ILA_Clk),
-        .probe0({State, SDA, SCL, ACK_bit}),                             
+        .probe0({State, I2C_SDA_1, I2C_SCL_1, ACK_bit}),                             
         .probe1({FSM_Clk, TrigerEvent})
         );                        
 endmodule
