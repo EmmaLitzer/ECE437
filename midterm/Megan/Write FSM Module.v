@@ -36,7 +36,8 @@ module Write(
         output reg       error_bit,
         output reg       STARTR,
         input wire       RW,
-        input [7:0]      wdata
+        input [7:0]      wdata,
+        input            RDONE
     );
     
     /*
@@ -63,7 +64,10 @@ module Write(
     
     always @(*) begin          
         FSM_Clk_reg = FSM_Clk;
-        ILA_Clk_reg = ILA_Clk;   
+        ILA_Clk_reg = ILA_Clk;  
+        //if (RDONE) begin //need to better connect so will write again after done reading
+        //    STARTR = 0;
+        //end
     end
 
     initial  begin
@@ -337,21 +341,20 @@ module Write(
             8'd37 : begin
                   SCL <= 1'b1;
                   ACK_bit <= SDA;                 
+                  State <= State + 1'b1;
+            end   
 
+            8'd38 : begin
+                  SCL <= 1'b0;
+                  wrreg <= 1'b1;
                   if (wrreg && RW)
                     State <= 8'd39; //go to halt state to start reading data after finish writing register we want to read from
                   else if (wrreg && ~RW)
                     State <= 8'd42; //go to write data state after finish writing register address
                   else if (wrdata)
                     State <= 8'd43; //go to stop sequence
-                  else
-                    State <= State + 1'b1; 
-            end   
-
-            8'd38 : begin
-                  SCL <= 1'b0;
-                  wrreg <= 1'b1;
-                  State <= 8'd3;   
+                 else 
+                    State <= 8'd3;   
             end 
             
             8'd39 : begin
@@ -372,6 +375,8 @@ module Write(
             end
             
             8'd42: begin //need to go write data to FSM
+                SCL <= 1'b0;
+                wrreg <= 0;
                 wrdata <= 1;
                 State <= 8'd3;
             end
@@ -392,7 +397,8 @@ module Write(
             8'd45 : begin //halt state
                   SCL <= 1'b1;
                   SDA <= 1'b1; 
-                  wrdata <= 0;               
+                  wrdata <= 0;   
+                  State <= STATE_INIT;            
             end
             
             //If the FSM ends up in this state, there was an error in teh FSM code
