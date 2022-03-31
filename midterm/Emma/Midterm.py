@@ -101,7 +101,7 @@ time.sleep(0.25)
 
 try:                     
     # Grab and convert data from FSM into SI units. Print these values.
-    while (counter<50):
+    for i in range(0,10):
         X_A = grab_convert("X_A")
         Y_A = grab_convert("Y_A")
         Z_A = grab_convert("Z_A")
@@ -112,9 +112,7 @@ try:
     
     
         print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
-    
-        counter = counter + 1
-        
+            
         time.sleep(0.25)                        # Wait .25s to read next Data measurement
         
         
