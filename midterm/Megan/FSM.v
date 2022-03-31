@@ -1,3 +1,4 @@
+//commented out okwires
 
 `timescale 1ns / 1ps
 
@@ -38,7 +39,7 @@ module FSM(
                                         
     wire [6:0] devaddrw = PCDATA[31:25];
     wire [7:0] regaddr = PCDATA[23:16];
-    wire [6:0] DATA = PCDATA[15:9];
+    wire [7:0] DATA = PCDATA[15:8];
     wire RW = PCDATA[0]; 
     wire [7:0] currstateW;
     wire [7:0] currstateR;
@@ -49,7 +50,7 @@ module FSM(
     wire WSTART;
     wire SDAW, SCLW, SDAR, SCLR;
     reg SDAreg, SCLreg, errorbit, ACKbit;
-    wire ACK_bitW, ACK_bitR, error_bitR, error_bitW;
+    wire ACK_bitW, ACK_bitR, error_bitR, error_bitW, DONE;
     
     Write write2read (  .devaddr(devaddrw),
                         .regaddr(regaddr),
@@ -66,10 +67,11 @@ module FSM(
                         .STARTR(STARTR),
                         .WSTART(WSTART),
                         .RW(RW),
-                        .wdata(DATA)
+                        .wdata(DATA),
+                        .RDONE(DONE)
                       );
                       
-    Read read_data (    .devaddr(DATA),
+    Read read_data (    .devaddr(DATA[7:1]),
                         .DATAL(LSB),
                         .DATAH(MSB),
                         .START(STARTR),
@@ -81,7 +83,8 @@ module FSM(
                         .ILA_Clk_reg(ILA_Clk_reg),
                         .State(currstateR),
                         .ACK_bit(ACK_bitR),
-                        .error_bit(error_bitR)
+                        .error_bit(error_bitR),
+                        .DONE(DONE)
                       );     
        
     localparam STATE_INIT       = 8'd0;    
@@ -146,12 +149,6 @@ module FSM(
                        .ep_dataout(STARTW));  
 
     
-    /*                   
-    okWireIn wire12 (   .okHE(okHE), 
-                       .ep_addr(8'h02), 
-                       .ep_dataout(STARTR)); 
-    */                                                                                   
-   
                       
    okWireOut wire21 (  .okHE(okHE), 
                    .okEH(okEHx[ 1*65 +: 65 ]), //unsure what this line is for but is giving errors
