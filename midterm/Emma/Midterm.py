@@ -16,11 +16,16 @@ SerialStatus=dev.OpenBySerial("")      # open USB communicaiton with the OK boar
 
 counter = 0
 #time.sleep(0.5)
-def twos_comp(val, bits):
-    """compute the 2's complement of int value val"""
-    if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
-        val = val - (1 << bits)        # compute negative value
-    return val                         # return positive value as is
+def twos_complement(val, nbits):
+    """Compute the 2's complement of int value val"""
+    if val < 0:
+        val = (1 << nbits) + val
+    else:
+        if (val & (1 << (nbits - 1))) != 0:
+            # If sign bit is set.
+            # compute negative value.
+            val = val - (1 << nbits)
+    return val
 
 
 # PCDATA components
@@ -80,7 +85,7 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
         LSB = dev.GetWireOutValue(loc_MSB)<<8       # get msb temp register and shift 8 bits to the left
         MSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
     
-    Data = str(MSB) + str(LSB)                                # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
+    Data = MSB + LSB                                # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
     
     dev.SetWireInValue(0x01, 0)
     #Start_RW(0, 0)                                  # Turn write and read off
@@ -117,13 +122,13 @@ try:
 
         print(X_M_bin, '\n',type(X_M_bin))
 
-        # X_A=twos_comp(int(X_A_bin,2), len(X_A_bin))
-        # Y_A=twos_comp(int(Y_A_bin,2), len(Y_A_bin))
-        # Z_A=twos_comp(int(Z_A_bin,2), len(Z_A_bin))
+        X_A=twos_comp(int(X_A_bin,2), len(X_A_bin))
+        Y_A=twos_comp(int(Y_A_bin,2), len(Y_A_bin))
+        Z_A=twos_comp(int(Z_A_bin,2), len(Z_A_bin))
 
-        # X_M=twos_comp(int(X_M_bin,2), len(X_M_bin))
-        # Y_M=twos_comp(int(Y_M_bin,2), len(Y_M_bin))
-        # Z_M=twos_comp(int(Z_M_bin,2), len(Z_M_bin))
+        X_M=twos_comp(int(X_M_bin,2), len(X_M_bin))
+        Y_M=twos_comp(int(Y_M_bin,2), len(Y_M_bin))
+        Z_M=twos_comp(int(Z_M_bin,2), len(Z_M_bin))
     
         print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
             
