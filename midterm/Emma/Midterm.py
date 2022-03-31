@@ -115,14 +115,15 @@ try:
         Y_M_bin = grab_convert("Y_M")
         Z_M_bin = grab_convert("Z_M")
 
+        print(X_M_bin, '\n',type(X_M_bin))
 
-        X_A=twos_comp(int(X_A_bin,2), len(X_A_bin))
-        Y_A=twos_comp(int(Y_A_bin,2), len(Y_A_bin))
-        Z_A=twos_comp(int(Z_A_bin,2), len(Z_A_bin))
+        # X_A=twos_comp(int(X_A_bin,2), len(X_A_bin))
+        # Y_A=twos_comp(int(Y_A_bin,2), len(Y_A_bin))
+        # Z_A=twos_comp(int(Z_A_bin,2), len(Z_A_bin))
 
-        X_M=twos_comp(int(X_M_bin,2), len(X_M_bin))
-        Y_M=twos_comp(int(Y_M_bin,2), len(Y_M_bin))
-        Z_M=twos_comp(int(Z_M_bin,2), len(Z_M_bin))
+        # X_M=twos_comp(int(X_M_bin,2), len(X_M_bin))
+        # Y_M=twos_comp(int(Y_M_bin,2), len(Y_M_bin))
+        # Z_M=twos_comp(int(Z_M_bin,2), len(Z_M_bin))
     
         print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(X_A, Y_A, Z_A, X_M, Y_M, Z_M), end='\r') # Print data
             
