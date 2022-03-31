@@ -25,9 +25,17 @@ module Testbench();
         #5 sys_clkn = ~sys_clkn;
     end        
       
-    initial begin          
-            #20000 PCDATA <= 32'b00110010001010000011001100000001;   
-            #20000 STARTW <= 1;                                                   
+    initial begin 
+            #20000 PCDATA <= 32'b00110010001000001001011100000000;           //acc on
+            #20000 STARTW <= 1; 
+            #1000000  STARTW <= 0;
+            #5000000 PCDATA <= 32'b00111100000000100000000000000000; //mag on
+            #20000 STARTW <= 1;     
+            #1000000 STARTW <= 0;                   
+            #5000000 PCDATA <= 32'b00110010001010000011001100000001; //x-acc collection
+            #20000 STARTW <= 1;  
+            #1000000 STARTW <= 0;
+                                                
 
             //#100 button <= 4'b1110;
           
