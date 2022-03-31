@@ -80,7 +80,7 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
         LSB = dev.GetWireOutValue(loc_MSB)<<8       # get msb temp register and shift 8 bits to the left
         MSB = dev.GetWireOutValue(loc_LSB)          # get lsb temp register (may need to shift 3 to the right (>>3))
     
-    Data = int(MSB + LSB)                           # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
+    Data = str(MSB) + str(LSB)                                # Convert FSM data to SI data values:: See CONVERSION FORMULAS in Data Sheet (pg10)
     
     dev.SetWireInValue(0x01, 0)
     #Start_RW(0, 0)                                  # Turn write and read off
