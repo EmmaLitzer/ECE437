@@ -83,11 +83,25 @@ def grab_convert(data_bit_name, loc_MSB=0x21, loc_LSB=0x20):
     time.sleep(0.25)  
     return Data
 
-
+onacc= "00110010001000001001011100000000"
+onmag= "00111100000000100000000000000000"
+print(int(onacc,2))
+dev.SetWireInValue(0x00, int(onacc,2))
+dev.SetWireInValue(0x01, 1)
+dev.UpdateWireIns()
+dev.SetWireInValue(0x01, 0)
+dev.UpdateWireIns()
+time.sleep(0.25)
+#dev.SetWireInValue(0x01, 1)
+#dev.SetWireInValue(0x00, int(onmag,2))
+#dev.UpdateWireIns()
+#dev.SetWireInValue(0x01, 0)
+#dev.UpdateWireIns()
+#time.sleep(0.25)
 
 try:                     
     # Grab and convert data from FSM into SI units. Print these values.
-    while (counter<100):
+    while (counter<50):
         X_A = grab_convert("X_A")
         Y_A = grab_convert("Y_A")
         Z_A = grab_convert("Z_A")
