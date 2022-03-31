@@ -54,6 +54,8 @@ module Write(
     
     reg wrreg = 0; //flag signal to tell FSM that we want to write the address of the register we want to read from
     reg wrdata;
+    //reg onacc, onmag;
+    
     reg STARTW; 
     reg SCL, SDA; 
     
@@ -332,6 +334,14 @@ module Write(
                   SDA <= 1'bz;
                   State <= State + 1'b1;                 
             end   
+            
+            /*
+            8'd250 : begin
+                ACK_bit <= SDA; 
+                  ;
+                  State <= 36;
+            end
+            */
 
             8'd36 : begin
                   SCL <= 1'b1;
