@@ -8,8 +8,8 @@ module FSM(
     input  sys_clkp,
     output ADT7420_A0,
     output ADT7420_A1,
-    output I2C_SCL_0,
-    inout  I2C_SDA_0,        
+    output I2C_SCL_1,
+    inout  I2C_SDA_1,        
     output wire FSM_Clk_reg,    
     output wire ILA_Clk_reg,
     output wire ACK_bit,
@@ -28,7 +28,7 @@ module FSM(
     
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
-    wire [23:0] ClkDivThreshold = 100;   
+    wire [23:0] ClkDivThreshold = 1000;   
     wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
                                       .sys_clkp(sys_clkp),                                      
@@ -90,8 +90,8 @@ module FSM(
     localparam STATE_INIT       = 8'd0;    
     assign led[7] = ACK_bit;
     assign led[6] = error_bit;     
-    assign I2C_SCL_0 = SCLreg;
-    assign I2C_SDA_0 = SDAreg;
+    assign I2C_SCL_1 = SCLreg;
+    assign I2C_SDA_1 = SDAreg;
     assign ACK_bit = ACKbit;
     assign error_bit = errorbit;
 
