@@ -51,14 +51,16 @@ Addresses = {'XLA':0x28,
             'ZHM':0x05}
 
 def grab_convert(PCDATA):
+    time.sleep(.02)
     RW = 0
     dev.SetWireInValue(0x00,RW)                  # Turn R/W off
     dev.UpdateWireIns()
+    time.sleep(.02)
     RW = 1
     dev.SetWireInValue(0x00,RW)                 # Turn read on
     dev.SetWireInValue(0x03,Addresses[PCDATA])               # Address
     dev.UpdateWireIns()  
-    time.sleep(0.01)   
+    time.sleep(.02)
     dev.UpdateWireOuts()
     return dev.GetWireOutValue(0x25)            # Grab data from line 25 (Sens_data)
 
@@ -77,6 +79,7 @@ for i in range(0, 100):
     dev.SetWireInValue(0x03,0x20)               # Write to CTRL REG
     dev.SetWireInValue(0x04,0b10010111)         # Write TURN ON to CTRL
     dev.UpdateWireIns()
+    time.sleep(.05)
     dev.SetWireInValue(0x00,0)                  # Turn R/W off
     dev.UpdateWireIns()
     # --------------------------------------------------------
