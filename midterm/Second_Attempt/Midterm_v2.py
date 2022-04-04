@@ -68,7 +68,7 @@ PC_Control = 1
 dev.SetWireInValue(0x07, PC_Control)
 dev.UpdateWireIns()
 
-while(1):
+for i in range(0, 100):
     # Write to acceleration sensor
     RW = 2
     dev.SetWireInValue(0x00,RW)                 # Turn write on
@@ -80,7 +80,7 @@ while(1):
     dev.SetWireInValue(0x00,0)                  # Turn R/W off
     dev.UpdateWireIns()
     # --------------------------------------------------------
-    # grab acceleration data
+    # Read acceleration data
     PCDATA = 'XLA'
     XLA = grab_convert(PCDATA)
     PCDATA = 'XHA'
@@ -106,42 +106,30 @@ while(1):
     print("z:%.2f"%(ZA_data)) #/16*0.001))
     time.sleep(.25)
     print("-----------------")
+    # -----------------------------------------------------------------------------------------
 
-PC_Control = 0
-dev.SetWireInValue(0x07, PC_Control)
-dev.UpdateWireIns()
-
-
-
-# Write to magnetic sensor
-PC_Control = 1
-dev.SetWireInValue(0x07, PC_Control)
-dev.UpdateWireIns()
-
-
-RW = 2
-dev.SetWireInValue(0x00,RW) 
-dev.SetWireInValue(0x01,int(M_SAD + W,2))
-dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
-dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
-dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
-dev.UpdateWireIns()
-dev.SetWireInValue(0x00,0)
-dev.UpdateWireIns()
-
-
-while(1):
+    # Write to magnetic sensor
+    RW = 2
+    dev.SetWireInValue(0x00,RW) 
+    dev.SetWireInValue(0x01,int(M_SAD + W,2))
+    dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
+    dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
+    dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
+    dev.UpdateWireIns()
     dev.SetWireInValue(0x00,0)
     dev.UpdateWireIns()
-    dev.SetWireInValue(0x00,1)
-    dev.SetWireInValue(0x01,int(M_SAD + W,2)) 
-    dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
-    dev.SetWireInValue(0x03,0b00000011) #Xhm
-    dev.UpdateWireIns()  
-    time.sleep(0.01)   
-    dev.UpdateWireOuts()
 
+    # dev.SetWireInValue(0x00,0)
+    # dev.UpdateWireIns()
+    # dev.SetWireInValue(0x00,1)
+    # dev.SetWireInValue(0x01,int(M_SAD + W,2)) 
+    # dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
+    # dev.SetWireInValue(0x03,0b00000011) #Xhm
+    # dev.UpdateWireIns()  
+    # time.sleep(0.01)   
+    # dev.UpdateWireOuts()
 
+    # Read Magnetic data
     PCDATA = 'XLM'
     XLM = grab_convert(Addresses[PCDATA])
     PCDATA = 'XHM'
@@ -169,7 +157,7 @@ while(1):
 
     print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
 
+
 PC_Control = 0
 dev.SetWireInValue(0x07, PC_Control)
 dev.UpdateWireIns()
- 
