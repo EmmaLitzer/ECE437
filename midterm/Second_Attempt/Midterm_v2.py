@@ -27,6 +27,8 @@ def twos_comp(val, bits):
 
 
 
+
+#acceleration data load:
 RW = 0
 dev.SetWireInValue(0x00,RW)             # Turn Read/Write off
 dev.UpdateWireIns()
@@ -35,7 +37,6 @@ A_SAD = '0011001'
 M_SAD = '0011110'
 R = '1'
 W = '0'
-counter = 0
 
 Addresses = {'XLA':0x28,
             'XHA':0x29,
@@ -60,13 +61,7 @@ def grab_convert(PCDATA):
     dev.UpdateWireIns()  
     time.sleep(0.01)   
     dev.UpdateWireOuts()
-    return dev.GetWireOutValue(Addresses[PCDATA]) 
-
-
-for i in range(0,50):
-    if counter == 0:
-        
-
+    return dev.GetWireOutValue(0x25)            # Grab data from line 25 (Sens_data)
 
 
 
