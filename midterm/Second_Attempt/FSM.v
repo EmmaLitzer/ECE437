@@ -4,16 +4,14 @@ module FSM(
     input  wire    [4:0] okUH,
     output wire    [2:0] okHU,
     inout  wire    [31:0] okUHU, 
-    inout wire okAA
+    inout wire okAA,
     output [7:0] led,
     input  sys_clkn,
     input  sys_clkp,
-
     output ADT7420_A0,
     output ADT7420_A1,
-
     output I2C_SCL_1,
-    inout  I2C_SDA_1,   
+    inout  I2C_SDA_1   
 );
 
     //Instantiate the ClockGenerator module, where three signals are generate:
@@ -55,10 +53,8 @@ module FSM(
     reg SDA;
     reg [7:0] State;
     reg [7:0] Sens_Data;// MSB + LSB to PC
-    reg [4:0] error_bit;// error flag
+    reg error_bit;// error flag
 
-
-    reg error_bit = 1'b1;   // set status to error if FSM fails
 
     wire [1:0] RW;      // read/write
     wire [7:0] Data;    //SingleByteData
@@ -81,7 +77,7 @@ module FSM(
         SCL = 1'b1;         // set SCL high
         SDA = 1'b1;         // set SDA low
         ACK_bit = 1'b1;     // set ACK to 1
-        State = 8'd0        // start at state 0
+        State = 8'd0;        // start at state 0
         Sens_Data = 8'd0;   // Sensor data is 0
         error_bit = 1'b1;   // set error high
         rec_RW = 2'd0;      // set RW record to nothing
@@ -121,7 +117,6 @@ module FSM(
                       State <= 8'd0;
                  end    
             end
-    end
 
 
            // Start sequence            
@@ -1215,10 +1210,10 @@ module FSM(
 
             8'd203 : begin
                   SCL <= 1'b0;
-                  if (flag == 5)    State <= State + 1'b1;
+                  if (error_bit == 5)    State <= State + 1'b1;
                   else  begin
                     State <= 116;
-                    flag <= flag + 1'b1;
+                    error_bit <= error_bit + 1'b1;
                   end                  
             end
                
@@ -1250,16 +1245,6 @@ module FSM(
     end
 
 
-
-
-
-
-
-
-
-
-
-    
     
     //  PC_controll is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
@@ -1309,8 +1294,6 @@ module FSM(
     okWireIn wire14 (   .okHE(okHE), 
                         .ep_addr(8'h04), // address 0b10010111
                         .ep_dataout(Array2)); 
-
-
 
               
                
