@@ -2,8 +2,7 @@
 # import various libraries necessery to run your Python code
 from ast import Add
 import time                         # time related library
-import sys
-from ECE437midterm_v1 import grab_convert                          # system related library
+import sys                         # system related library
 ok_loc = 'C:\\Program Files\\Opal Kelly\\FrontPanelUSB\\API\\Python\\3.6\\x64'
 sys.path.append(ok_loc)             # add the path of the OK library
 import ok                           # OpalKelly library
@@ -65,6 +64,10 @@ def grab_convert(PCDATA):
 
 
 
+PC_Control = 1
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
+
 while(1):
     # Write to acceleration sensor
     RW = 2
@@ -104,8 +107,18 @@ while(1):
     time.sleep(.25)
     print("-----------------")
 
+PC_Control = 0
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
+
+
 
 # Write to magnetic sensor
+PC_Control = 1
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
+
+
 RW = 2
 dev.SetWireInValue(0x00,RW) 
 dev.SetWireInValue(0x01,int(M_SAD + W,2)) #0b00111100
@@ -156,4 +169,7 @@ while(1):
 
     print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
 
+PC_Control = 0
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
  
