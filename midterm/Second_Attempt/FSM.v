@@ -12,13 +12,19 @@ module FSM(
     output ADT7420_A1,
     output I2C_SCL_1,
     output wire [31:0] PC_control,
-    inout  I2C_SDA_1   
+    inout  I2C_SDA_1,
+    output reg [7:0] State,
+    output reg SDA,
+    output reg SCL,
+    output ACK_bitw,
+    output wire FSM_Clk,
+    output wire ILA_Clk
 );
 
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
     wire [23:0] ClkDivThreshold = 1000;   
-    wire FSM_Clk, ILA_Clk; 
+    //wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
                                       .sys_clkp(sys_clkp),                                      
                                       .ClkDivThreshold(ClkDivThreshold),
@@ -50,9 +56,9 @@ module FSM(
     reg FSM_Clk_reg;
     reg ILA_Clk_reg;
     reg ACK_bit;        // Acknowledge var
-    reg SCL;            
-    reg SDA;
-    reg [7:0] State;
+    //reg SCL;            
+    //reg SDA;
+    //reg [7:0] State;
     reg [7:0] Sens_Data;// MSB + LSB to PC
     reg error_bit;// error flag
 
@@ -74,6 +80,7 @@ module FSM(
     assign I2C_SDA_1 = SDA;
     assign ADT7420_A0 = 1'b0;   // ??
     assign ADT7420_A1 = 1'b0;   // ??
+    assign AKC_bitw = ACK_bit;
 
 
     initial begin
@@ -1276,9 +1283,9 @@ module FSM(
 //                    .ep_datain(LSB));    
 
     
-    okWireOut wire25 (  .okHE(okHE), 
-                        .okEH(okEHx[ 5*65 +: 65 ]),
-                        .ep_addr(8'h25), 
+    okWireOut wire20 (  .okHE(okHE), 
+                        .okEH(okEHx[ 0*65 +: 65 ]),
+                        .ep_addr(8'h20), 
                         .ep_datain(Sens_Data));
                         
     okWireIn wire10 (   .okHE(okHE),    // Read/Write: 2 = write, 1 = Read, 0 = do nothing with RW
