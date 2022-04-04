@@ -28,7 +28,7 @@ module FSM(
     
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
-    wire [23:0] ClkDivThreshold = 1000;   
+    wire [23:0] ClkDivThreshold = 1000; //1000   
     wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
                                       .sys_clkp(sys_clkp),                                      
@@ -90,10 +90,12 @@ module FSM(
     localparam STATE_INIT       = 8'd0;    
     assign led[7] = ACK_bit;
     assign led[6] = error_bit;     
-    assign I2C_SCL_1 = SCLreg;
-    assign I2C_SDA_1 = SDAreg;
+    //assign I2C_SCL_1 = SCLreg; //high z's can't be passed through registers
+    //assign I2C_SDA_1 = SDAreg;
     assign ACK_bit = ACKbit;
     assign error_bit = errorbit;
+    assign I2C_SDA_1 = (WSTART)? SDAW : SDAR;
+    assign I2C_SCL_1 = (WSTART)? SCLW : SCLR;
 
     
     always @(*) begin
@@ -114,7 +116,7 @@ module FSM(
     
     end 
                        
-    
+   
     // OK Interface
     wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
     wire [64:0]     okEH;  //These are FrontPanel wires needed to IO communication 
@@ -159,6 +161,6 @@ module FSM(
                    .okEH(okEHx[ 0*65 +: 65 ]),
                    .ep_addr(8'h20), 
                    .ep_datain(LSB));             
-              
+           
                
 endmodule
