@@ -79,7 +79,7 @@ for i in range(0, 100):
     dev.SetWireInValue(0x03,0x20)               # Write to CTRL REG
     dev.SetWireInValue(0x04,0b10010111)         # Write TURN ON to CTRL
     dev.UpdateWireIns()
-    time.sleep(.05)
+    time.sleep(.1)
     dev.SetWireInValue(0x00,0)                  # Turn R/W off
     dev.UpdateWireIns()
     # --------------------------------------------------------
@@ -103,11 +103,11 @@ for i in range(0, 100):
     ZHA = grab_convert(PCDATA)
     ZA_data = ZHA<<8 + ZLA
    
-        
+    print('Acceleration')
     print("x:%.2f"%(XA_data)) #/16*0.001))
     print("y:%.2f"%(YA_data)) #/16*0.001))
     print("z:%.2f"%(ZA_data)) #/16*0.001))
-    time.sleep(.25)
+    time.sleep(.1)
     print("-----------------")
     # -----------------------------------------------------------------------------------------
 
@@ -119,6 +119,7 @@ for i in range(0, 100):
     dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
     dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
     dev.UpdateWireIns()
+    time.sleep(0.1)
     dev.SetWireInValue(0x00,0)
     dev.UpdateWireIns()
 
@@ -151,10 +152,10 @@ for i in range(0, 100):
     ZHM = grab_convert(Addresses[PCDATA])
     ZM_data = ZHM<<8 + ZLM
    
-        
-    print("x:%.2f"%(XA_data)) #/16*0.001))
-    print("y:%.2f"%(YA_data)) #/16*0.001))
-    print("z:%.2f"%(ZA_data)) #/16*0.001))
+    print('Magnetic')
+    print("x:%.2f"%(XM_data)) #/16*0.001))
+    print("y:%.2f"%(YM_data)) #/16*0.001))
+    print("z:%.2f"%(ZM_data)) #/16*0.001))
     time.sleep(.25)
     print("-----------------")
 
