@@ -13,16 +13,7 @@ module FSM(
     output ADT7420_A1,
 
     output I2C_SCL_1,
-    inout  I2C_SDA_1,  
-
-    
-    //output wire FSM_Clk_reg,    
-    //output wire ILA_Clk_reg,
-    //output wire ACK_bit,
-    //output reg [7:0] State,
-    //output wire [31:0] PCDATA,//changed to input
-    //output wire [31:0] STARTW, //changed to input
-    
+    inout  I2C_SDA_1,   
 );
 
     //Instantiate the ClockGenerator module, where three signals are generate:
@@ -54,131 +45,49 @@ module FSM(
         .okEH(okEH)
     );
 
-    // ADDED IN //
+
+    // Initialize all variables
+    // Clock vars
     reg FSM_Clk_reg;
     reg ILA_Clk_reg;
-    reg ACK_bit; //SACK_bit
-    reg SCL;
+    reg ACK_bit;        // Acknowledge var
+    reg SCL;            
     reg SDA;
     reg [7:0] State;
-    reg [7:0] XLA;
-    reg [7:0] XHA;
-    reg [7:0] YLA;
-    reg [7:0] YHA;
-    reg [7:0] ZLA;
-    reg [7:0] ZHA;
-    reg [4:0] error_bit; //flag
+    reg [7:0] Sens_Data;// MSB + LSB to PC
+    reg [4:0] error_bit;// error flag
 
 
-    reg error_bit = 1'b1;
+    reg error_bit = 1'b1;   // set status to error if FSM fails
 
-    wire [1:0] RW;
-    wire [7:0] SBD1; //Data
-    wire [7:0] SBD2;
-    wire [7:0] A;
-    wire [7:0] D;
-    reg [7:0] rec_RW; //changed from p_RW
-
-
+    wire [1:0] RW;      // read/write
+    wire [7:0] Data;    //SingleByteData
+    wire [7:0] Data_2;
+    wire [7:0] Array1;  // Data array 1 from sensor
+    wire [7:0] Array2;  // Data array 2 from sensor
+    reg [7:0] rec_RW;   // records RW previous value
 
 
     localparam STATE_INIT     = 8'd0;    
-    assign led[7] = ACK_bit;
-    assign led[6] = error_bit; 
+    assign led[7] = ACK_bit;    // display ACK on led board
+    assign led[6] = error_bit;  // display error on led board
     assign I2C_SCL_1 = SCL;
     assign I2C_SDA_1 = SDA;
-    assign ADT7420_A0 = 1'b0;
-    assign ADT7420_A1 = 1'b0;
+    assign ADT7420_A0 = 1'b0;   // ??
+    assign ADT7420_A1 = 1'b0;   // ??
 
-
-    // ??
-    //wire [6:0] devaddrw = PCDATA[31:25];
-    //wire [7:0] regaddr = PCDATA[23:16];
-    ///wire [7:0] DATA = PCDATA[15:8];
-    //wire RW = PCDATA[0]; 
-    //wire [7:0] currstateW;
-    //wire [7:0] currstateR;
-    //wire error_bit;
-    //wire [7:0] MSB;
-    //wire [7:0] LSB;   
-    //wire STARTR;
-    //wire WSTART;
-    //wire SDAW, SCLW, SDAR, SCLR;
-    //reg SDAreg, SCLreg, errorbit, ACKbit;
-    //wire ACK_bitW, ACK_bitR, error_bitR, error_bitW, DONE;
-    // ??
-
-
-    
-    // Write write2read (  .devaddr(devaddrw),
-    //                     .regaddr(regaddr),
-    //                     .START(STARTW[0]),
-    //                     .SDAW(SDAW),
-    //                     .SCLW(SCLW),
-    //                     .FSM_Clk(FSM_Clk),                                      
-    //                     .ILA_Clk(ILA_Clk),
-    //                     .FSM_Clk_reg(FSM_Clk_reg),
-    //                     .ILA_Clk_reg(ILA_Clk_reg),
-    //                     .State(currstateW),
-    //                     .ACK_bit(ACK_bitW),
-    //                     .error_bit(error_bitW),
-    //                     .STARTR(STARTR),
-    //                     .WSTART(WSTART),
-    //                     .RW(RW),
-    //                     .wdata(DATA),
-    //                     .RDONE(DONE)
-    //                   );
-                      
-    // Read read_data (    .devaddr(DATA[7:1]),
-    //                     .DATAL(LSB),
-    //                     .DATAH(MSB),
-    //                     .START(STARTR),
-    //                     .SDAR(SDAR),
-    //                     .SCLR(SCLR),
-    //                     .FSM_Clk(FSM_Clk),                                      
-    //                     .ILA_Clk(ILA_Clk),
-    //                     .FSM_Clk_reg(FSM_Clk_reg),
-    //                     .ILA_Clk_reg(ILA_Clk_reg),
-    //                     .State(currstateR),
-    //                     .ACK_bit(ACK_bitR),
-    //                     .error_bit(error_bitR),
-    //                     .DONE(DONE)
-    //                   );     
-           
-
-    // always @(*) begin
-    //     if (WSTART) begin
-    //         SCLreg = SCLW;
-    //         SDAreg = SDAW;
-    //         State = currstateW;
-    //         ACKbit = ACK_bitW;
-    //         errorbit = error_bitW;
-    //     end
-    //     else if (STARTR) begin 
-    //         SCLreg = SCLR;
-    //         SDAreg = SDAR;  
-    //         State = currstateR; 
-    //         ACKbit = ACK_bitR;
-    //         errorbit = error_bitR;   
-    //     end
-    
-    // end 
 
     initial begin
-        SCL = 1'b1;
-        SDA = 1'b1;
-        ACK_bit = 1'b1;
-        State = 8'd0
-        XLA = 8'd0;
-        XHA = 8'd0;
-        YLA = 8'd0;
-        XHA = 8'd0;
-        ZLA = 8'd0;
-        ZHA = 8'd0;
-        error_bit = 1'b1; //d5?
-        rec_RW = 2'd0;
+        SCL = 1'b1;         // set SCL high
+        SDA = 1'b1;         // set SDA low
+        ACK_bit = 1'b1;     // set ACK to 1
+        State = 8'd0        // start at state 0
+        Sens_Data = 8'd0;   // Sensor data is 0
+        error_bit = 1'b1;   // set error high
+        rec_RW = 2'd0;      // set RW record to nothing
     end
 
+    // Clock
     always @(*) begin
         FSM_Clk_reg = FSM_Clk;
         ILA_Clk_reg = ILA_Clk;
@@ -189,14 +98,17 @@ module FSM(
         case (State)
             STATE_INIT: begin
                 if (RW == 2'd1 && RW != rec_RW) begin
+                    // if RW =2 (write) go to state 1
                     State <= 8'd1;
                     rec_RW <= RW;
                 end
 
                 else if(RW == 2'd2 && RW != rec_RW) begin
+                    // if RW = 1 (read) go to state 1
                     State <= 8'd1;
                     rec_RW <= RW;
                 end
+                // else stay at state 0 (RW = 0: do nothing)
                  else if (RW == 2'd0) begin
                       rec_RW <= 2'd0;                 
                       SCL <= 1'b1;
@@ -212,7 +124,7 @@ module FSM(
     end
 
 
-           // This is the Start sequence            
+           // Start sequence            
             8'd1 : begin
                   SCL <= 1'b1;
                   SDA <= 1'b0;
@@ -225,7 +137,8 @@ module FSM(
                   State <= State + 1'b1;                 
             end   
 
-            // transmit bit 7   
+            // SAD + Read
+            // transit bit 7   
             8'd3 : begin
                   SCL <= 1'b0;
                   SDA <= Data[7];
@@ -247,7 +160,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 6
+            //  bit 6
             8'd7 : begin
                   SCL <= 1'b0;
                   SDA <= Data[6];  
@@ -269,7 +182,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 5
+            //  bit 5
             8'd11 : begin
                   SCL <= 1'b0;
                   SDA <= Data[5]; 
@@ -291,7 +204,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 4
+            //  bit 4
             8'd15 : begin
                   SCL <= 1'b0;
                   SDA <= Data[4]; 
@@ -313,7 +226,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 3
+            //  bit 3
             8'd19 : begin
                   SCL <= 1'b0;
                   SDA <= Data[3]; 
@@ -335,7 +248,7 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            // transmit bit 2
+            //  bit 2
             8'd23 : begin
                   SCL <= 1'b0;
                   SDA <= Data[2]; 
@@ -357,7 +270,7 @@ module FSM(
                   State <= State + 1'b1;
             end  
  
-            // transmit bit 1
+            //  bit 1
             8'd27 : begin
                   SCL <= 1'b0;
                   SDA <= Data[1];  
@@ -379,7 +292,7 @@ module FSM(
                   State <= State + 1'b1;
             end
             
-            // transmit bit 0
+            //  bit 0
             8'd31 : begin
                   SCL <= 1'b0;
                   SDA <= Data[0];      
@@ -401,13 +314,14 @@ module FSM(
                   State <= State + 1'b1;
             end  
                         
-            // read the ACK bit from the sensor and display it on LED[7]
+            // Get ACK bit
             8'd35 : begin
                   SCL <= 1'b0;
-                  SDA <= 1'bz;
+                  SDA <= 1'bz; //ACK
                   State <= State + 1'b1;                 
             end   
 
+            // Set SCL high
             8'd36 : begin
                   SCL <= 1'b1;
                   State <= State + 1'b1;
@@ -415,7 +329,7 @@ module FSM(
 
             8'd37 : begin
                   SCL <= 1'b1;
-                  SACK_bit <= SDA;                 
+                  ACK_bit <= SDA;                 
                   State <= State + 1'b1;
             end   
             
@@ -425,10 +339,11 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            //A7
+            // Read Data
+            // Data bit 7
             8'd39 : begin
                   SCL <= 1'b0;
-                  SDA <= A[7];             
+                  SDA <= Array1[7];             
                   State <= State + 1'b1; 
             end                 
                   
@@ -447,10 +362,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 6
+            // Data bit 6
             8'd43 : begin
                   SCL <= 1'b0;
-                  SDA <= A[6];  
+                  SDA <= Array1[6];  
                   State <= State + 1'b1;               
             end   
 
@@ -469,10 +384,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 5
+            // Data bit 5
             8'd47 : begin
                   SCL <= 1'b0;
-                  SDA <= A[5]; 
+                  SDA <= Array1[5]; 
                   State <= State + 1'b1;                
             end   
 
@@ -491,10 +406,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 4
+            // Data bit 4
             8'd51 : begin
                   SCL <= 1'b0;
-                  SDA <= A[4]; 
+                  SDA <= Array1[4]; 
                   State <= State + 1'b1;                
             end   
 
@@ -513,10 +428,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 3
+            // Data bit 3
             8'd55 : begin
                   SCL <= 1'b0;
-                  SDA <= A[3]; 
+                  SDA <= Array1[3]; 
                   State <= State + 1'b1;                
             end   
 
@@ -535,10 +450,10 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            // transmit bit 2
+            // Data bit 2
             8'd59 : begin
                   SCL <= 1'b0;
-                  SDA <= A[2]; 
+                  SDA <= Array1[2]; 
                   State <= State + 1'b1;                
             end   
 
@@ -557,10 +472,10 @@ module FSM(
                   State <= State + 1'b1;
             end  
  
-            // transmit bit 1
+            // Data bit 1
             8'd63 : begin
                   SCL <= 1'b0;
-                  SDA <= A[1];  
+                  SDA <= Array1[1];  
                   State <= State + 1'b1;               
             end   
 
@@ -579,10 +494,10 @@ module FSM(
                   State <= State + 1'b1;
             end
             
-            // transmit bit 0
+            // Data bit 0
             8'd67 : begin
                   SCL <= 1'b0;
-                  SDA <= A[0];     
+                  SDA <= Array1[0];     
                   State <= State + 1'b1;           
             end   
 
@@ -601,13 +516,14 @@ module FSM(
                   State <= State + 1'b1;
             end  
                         
-            // read the ACK bit from the sensor and display it on LED[7]
+            // Get ACK bit
             8'd71 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
                   State <= State + 1'b1;                 
             end   
 
+            // Set SCL high
             8'd72 : begin
                   SCL <= 1'b1;
                   State <= State + 1'b1;
@@ -615,21 +531,28 @@ module FSM(
             
             8'd73 : begin
                   SCL <= 1'b1;
-                  SACK_bit <= SDA;                 
+                  ACK_bit <= SDA;                 
                   State <= State + 1'b1;
             end   
             
-
+            // Restart
             8'd74 : begin
+                // set SCL low
                   SCL <= 1'b0;
-                  if (RW == 2'd1) State <= State + 1'b1;
-                  else if (RW == 2'd2) State <= 8'd155;
+                  if (RW == 2'd1) begin
+                      // if read is on go to state 1
+                       State <= State + 1'b1;
+                  end
+                  else if (RW == 2'd2) begin
+                      // if write is on go to state 155
+                      State <= 8'd155;
+                  end
             end    
             
-            //A7
+            //SAD + W
             8'd155 : begin
                   SCL <= 1'b0;
-                  SDA <= D[7];             
+                  SDA <= Array2[7];             
                   State <= State + 1'b1; 
             end                 
                   
@@ -648,10 +571,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 6
+            //  bit 6
             8'd159 : begin
                   SCL <= 1'b0;
-                  SDA <= D[6];  
+                  SDA <= Array2[6];  
                   State <= State + 1'b1;               
             end   
 
@@ -670,10 +593,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 5
+            //  bit 5
             8'd163 : begin
                   SCL <= 1'b0;
-                  SDA <= D[5]; 
+                  SDA <= Array2[5]; 
                   State <= State + 1'b1;                
             end   
 
@@ -692,10 +615,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 4
+            //  bit 4
             8'd167 : begin
                   SCL <= 1'b0;
-                  SDA <= D[4]; 
+                  SDA <= Array2[4]; 
                   State <= State + 1'b1;                
             end   
 
@@ -714,10 +637,10 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 3
+            //  bit 3
             8'd171 : begin
                   SCL <= 1'b0;
-                  SDA <= D[3]; 
+                  SDA <= Array2[3]; 
                   State <= State + 1'b1;                
             end   
 
@@ -736,10 +659,10 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            // transmit bit 2
+            //  bit 2
             8'd175 : begin
                   SCL <= 1'b0;
-                  SDA <= D[2]; 
+                  SDA <= Array2[2]; 
                   State <= State + 1'b1;                
             end   
 
@@ -758,10 +681,10 @@ module FSM(
                   State <= State + 1'b1;
             end  
  
-            // transmit bit 1
+            //  bit 1
             8'd179 : begin
                   SCL <= 1'b0;
-                  SDA <= D[1];  
+                  SDA <= Array2[1];  
                   State <= State + 1'b1;               
             end   
 
@@ -780,10 +703,10 @@ module FSM(
                   State <= State + 1'b1;
             end
             
-            // transmit bit 0
+            //  bit 0
             8'd183 : begin
                   SCL <= 1'b0;
-                  SDA <= D[0];     
+                  SDA <= Array2[0];     
                   State <= State + 1'b1;           
             end   
 
@@ -802,13 +725,14 @@ module FSM(
                   State <= State + 1'b1;
             end
             
-            // read the ACK bit from the sensor and display it on LED[7]
+            // Get ACK
             8'd187 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
                   State <= State + 1'b1;                 
             end   
 
+            // Set SCL high
             8'd188 : begin
                   SCL <= 1'b1;
                   State <= State + 1'b1;
@@ -816,7 +740,7 @@ module FSM(
             
             8'd189 : begin
                   SCL <= 1'b1;
-                  SACK_bit <= SDA;                 
+                  ACK_bit <= SDA;                 
                   State <= State + 1'b1;
             end   
             
@@ -826,7 +750,7 @@ module FSM(
                   State <= 8'd204;
             end 
             
-            //repeat
+            // Repeat
             8'd75 : begin
                   SCL <= 1'b0;
                   SDA <= 1'b1;
@@ -848,11 +772,11 @@ module FSM(
             8'd78 : begin
                   SCL <= 1'b0;
                   SDA <= 1'b0;
-                  State <= 8'd80;                 
+                  State <= 8'd80;   // Set to state 80              
             end   
                                                                                         
             //Data_2
-            // Transmit bit 7
+            //  bit 7
             8'd80 : begin
                   SDA <= Data_2[7];             
                   State <= State + 1'b1; 
@@ -873,7 +797,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 6
+            //  bit 6
             8'd84 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[6];  
@@ -895,7 +819,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 5
+            //  bit 5
             8'd88 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[5]; 
@@ -917,7 +841,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 4
+            //  bit 4
             8'd92 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[4]; 
@@ -939,7 +863,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
-            // transmit bit 3
+            //  bit 3
             8'd96 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[3]; 
@@ -961,7 +885,7 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            // transmit bit 2
+            //  bit 2
             8'd100 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[2]; 
@@ -983,7 +907,7 @@ module FSM(
                   State <= State + 1'b1;
             end  
  
-            // transmit bit 1
+            //  bit 1
             8'd104 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[1];  
@@ -1005,7 +929,7 @@ module FSM(
                   State <= State + 1'b1;
             end
             
-            // transmit bit 0
+            //  bit 0
             8'd108 : begin
                   SCL <= 1'b0;
                   SDA <= Data_2[0];      
@@ -1027,13 +951,14 @@ module FSM(
                   State <= State + 1'b1;
             end  
                         
-            // read the ACK bit from the sensor and display it on LED[7]
+            // Get ACK
             8'd112 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
                   State <= State + 1'b1;                 
             end   
 
+            // Set SCL high
             8'd113 : begin
                   SCL <= 1'b1;
                   State <= State + 1'b1;
@@ -1041,7 +966,7 @@ module FSM(
             
             8'd114 : begin
                   SCL <= 1'b1;
-                  SACK_bit <= SDA;                 
+                  ACK_bit <= SDA;                 
                   State <= State + 1'b1;
             end   
             
@@ -1051,6 +976,10 @@ module FSM(
                   State <= State + 1'b1;
             end                       
             
+
+
+
+
             //MSB LSB
             8'd116 : begin
                   SCL <= 1'b0;
@@ -1063,9 +992,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 7th bit
             8'd118 : begin
                   SCL <= 1'b1;
-                  ZHA[7] <= SDA;                 
+                  Sens_Data[7] <= SDA;                 
                   State <= State + 1'b1;
             end   
             
@@ -1074,7 +1004,7 @@ module FSM(
                   State <= State + 1'b1;
             end       
             
-            //6
+            // ACK
             8'd120 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1086,9 +1016,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 6th bit
             8'd122 : begin
                   SCL <= 1'b1;
-                  ZHA[6] <= SDA;                   
+                  Sens_Data[6] <= SDA;                   
                   State <= State + 1'b1;
             end   
             
@@ -1097,7 +1028,7 @@ module FSM(
                   State <= State + 1'b1;
             end   
             
-            //5
+            // ACK
             8'd124 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1109,9 +1040,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 5th bit
             8'd126 : begin
                   SCL <= 1'b1;
-                  ZHA[5] <= SDA;                   
+                  Sens_Data[5] <= SDA;                   
                   State <= State + 1'b1;
             end   
             
@@ -1120,7 +1052,7 @@ module FSM(
                   State <= State + 1'b1;
             end    
             
-            //4
+            // ACK
             8'd128 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1132,9 +1064,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 4th bit
             8'd130 : begin
                   SCL <= 1'b1;
-                  ZHA[4] <= SDA;                  
+                  Sens_Data[4] <= SDA;                  
                   State <= State + 1'b1;
             end   
             
@@ -1143,7 +1076,7 @@ module FSM(
                   State <= State + 1'b1;
             end      
             
-            //3
+            // ACK
             8'd132 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1155,9 +1088,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 3rd bit
             8'd134 : begin
                   SCL <= 1'b1;
-                  ZHA[3] <= SDA;                   
+                  Sens_Data[3] <= SDA;                   
                   State <= State + 1'b1;
             end   
             
@@ -1166,7 +1100,7 @@ module FSM(
                   State <= State + 1'b1;
             end 
             
-            //2
+            // ACK
             8'd136 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1178,9 +1112,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 2nd bit
             8'd138 : begin
                   SCL <= 1'b1;
-                  ZHA[2] <= SDA;                
+                  Sens_Data[2] <= SDA;                
                   State <= State + 1'b1;
             end   
             
@@ -1189,7 +1124,7 @@ module FSM(
                   State <= State + 1'b1;
             end 
             
-            //1
+            // ACK
             8'd140 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1201,9 +1136,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 1st bit
             8'd142 : begin
                   SCL <= 1'b1;
-                  ZHA[1] <= SDA;                  
+                  Sens_Data[1] <= SDA;                  
                   State <= State + 1'b1;
             end   
             
@@ -1212,7 +1148,7 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
-            //0
+            // ACK
             8'd144 : begin
                   SCL <= 1'b0;
                   SDA <= 1'bz;
@@ -1224,9 +1160,10 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+            // Set 0th bit
             8'd146 : begin
                   SCL <= 1'b1;
-                  ZHA[0] <= SDA;                    
+                  Sens_Data[0] <= SDA;                    
                   State <= State + 1'b1;
             end   
             
@@ -1235,6 +1172,7 @@ module FSM(
                   State <= State + 1'b1;
             end                                                                                       
             
+            // 
             8'd148 : begin
                   SCL <= 1'b0;
                   SDA <= 1'b1;      
@@ -1258,7 +1196,7 @@ module FSM(
             
             
             
-            // write the ACK bit to the sensor and display it on LED[7]
+            // Get ACK
             8'd200  : begin
                   SCL <= 1'b0;
                   SDA <= 1'b0;     
@@ -1284,7 +1222,7 @@ module FSM(
                   end                  
             end
                
-            //stop bit sequence and go back to STATE_INIT            
+            //Stop sequence and return to INIT           
             8'd204 : begin
                   SCL <= 1'b0;
                   SDA <= 1'b0;             
@@ -1305,7 +1243,6 @@ module FSM(
             end              
             
             //If the FSM ends up in this state, there was an error in teh FSM code
-            //LED[6] will be turned on (signal is active low) in that case.
             default : begin
                   error_bit <= 0;
             end                              
@@ -1347,35 +1284,11 @@ module FSM(
 //                    .ep_addr(8'h20), 
 //                    .ep_datain(LSB));    
 
-    okWireOut wire20 (  .okHE(okHE), 
-                        .okEH(okEHx[ 0*65 +: 65 ]),
-                        .ep_addr(8'h20), 
-                        .ep_datain(XLA));    
-    
-    okWireOut wire21 (  .okHE(okHE), 
-                        .okEH(okEHx[ 1*65 +: 65 ]),
-                        .ep_addr(8'h21), 
-                        .ep_datain(XHA));
-                        
-    okWireOut wire22 (  .okHE(okHE), 
-                        .okEH(okEHx[ 2*65 +: 65 ]),
-                        .ep_addr(8'h22), 
-                        .ep_datain(YLA));    
-    
-    okWireOut wire23 (  .okHE(okHE), 
-                        .okEH(okEHx[ 3*65 +: 65 ]),
-                        .ep_addr(8'h23), 
-                        .ep_datain(YHA));
-                        
-    okWireOut wire24 (  .okHE(okHE), 
-                        .okEH(okEHx[ 4*65 +: 65 ]),
-                        .ep_addr(8'h24), 
-                        .ep_datain(ZLA));    
     
     okWireOut wire25 (  .okHE(okHE), 
                         .okEH(okEHx[ 5*65 +: 65 ]),
                         .ep_addr(8'h25), 
-                        .ep_datain(ZHA));
+                        .ep_datain(Sens_Data));
                         
     okWireIn wire10 (   .okHE(okHE),    // Read/Write: 2 = write, 1 = Read, 0 = do nothing with RW
                         .ep_addr(8'h00), 
@@ -1391,11 +1304,11 @@ module FSM(
     
     okWireIn wire13 (   .okHE(okHE), 
                         .ep_addr(8'h03), // set to 0x20 first then 0x29
-                        .ep_dataout(A));
+                        .ep_dataout(Array1));
     
     okWireIn wire14 (   .okHE(okHE), 
                         .ep_addr(8'h04), // address 0b10010111
-                        .ep_dataout(D)); 
+                        .ep_dataout(Array2)); 
 
 
 
