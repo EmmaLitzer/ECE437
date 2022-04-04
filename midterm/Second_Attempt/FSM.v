@@ -11,6 +11,7 @@ module FSM(
     output ADT7420_A0,
     output ADT7420_A1,
     output I2C_SCL_1,
+    output wire [31:0] PC_control,
     inout  I2C_SDA_1   
 );
 
@@ -55,6 +56,8 @@ module FSM(
     reg [7:0] Sens_Data;// MSB + LSB to PC
     reg error_bit;// error flag
 
+    reg [3:0]   button_reg; 
+
 
     wire [1:0] RW;      // read/write
     wire [7:0] Data;    //SingleByteData
@@ -91,31 +94,34 @@ module FSM(
                        
     /// FSM machine:
     always @(posedge FSM_Clk) begin
+
         case (State)
             STATE_INIT: begin
-                if (RW == 2'd1 && RW != rec_RW) begin
-                    // if RW =2 (write) go to state 1
-                    State <= 8'd1;
-                    rec_RW <= RW;
-                end
+                if (PC_control[0] == 1'b1) begin
+                    if (RW == 2'd1 && RW != rec_RW) begin
+                        // if RW =2 (write) go to state 1
+                        State <= 8'd1;
+                        rec_RW <= RW;
+                    end
 
-                else if(RW == 2'd2 && RW != rec_RW) begin
-                    // if RW = 1 (read) go to state 1
-                    State <= 8'd1;
-                    rec_RW <= RW;
+                    else if(RW == 2'd2 && RW != rec_RW) begin
+                        // if RW = 1 (read) go to state 1
+                        State <= 8'd1;
+                        rec_RW <= RW;
+                    end
+                    // else stay at state 0 (RW = 0: do nothing)
+                    else if (RW == 2'd0) begin
+                        rec_RW <= 2'd0;                 
+                        SCL <= 1'b1;
+                        SDA <= 1'b1;
+                        State <= 8'd0;
+                    end
+                    else begin             
+                        SCL <= 1'b1;
+                        SDA <= 1'b1;  
+                        State <= 8'd0;
+                    end    
                 end
-                // else stay at state 0 (RW = 0: do nothing)
-                 else if (RW == 2'd0) begin
-                      rec_RW <= 2'd0;                 
-                      SCL <= 1'b1;
-                      SDA <= 1'b1;
-                      State <= 8'd0;
-                  end
-                 else begin             
-                      SCL <= 1'b1;
-                      SDA <= 1'b1;  
-                      State <= 8'd0;
-                 end    
             end
 
 
@@ -1295,6 +1301,8 @@ module FSM(
                         .ep_addr(8'h04), // address 0b10010111
                         .ep_dataout(Array2)); 
 
-              
+    okWireIn wire7 (   .okHE(okHE), 
+                        .ep_addr(8'h07), // PC control
+                        .ep_dataout(PC_control));
                
 endmodule
