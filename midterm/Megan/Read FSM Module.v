@@ -34,7 +34,7 @@ module Read(
         output reg [7:0] State,
         output reg ACK_bit,
         output reg error_bit,
-        output reg DONE
+        output DONE
     );
     
     /*
@@ -50,10 +50,11 @@ module Read(
     */
     
     
-    reg SCL, SDA;
+    reg SCL, SDA, DONEREG;
     localparam STATE_INIT = 8'd100;
     assign SCLR = SCL;
     assign SDAR = SDA;
+    assign DONE = DONEREG;
     
     always @(*) begin          
         FSM_Clk_reg = FSM_Clk;
@@ -86,7 +87,7 @@ module Read(
                     setack <= 0;
                     datal <= 0;
                     datah <= 0;  
-                    DONE <= 0;
+                    DONEREG <= 0;                    
                  end                 
                  else begin                 
                       SCL <= 1'b1;
@@ -358,7 +359,8 @@ module Read(
             //stop bit sequence and go back to STATE_INIT           
             8'd141 : begin
                   SCL <= 1'b0;
-                  SDA <= 1'b0;                
+                  SDA <= 1'b0;  
+                  DONEREG <= 1;                
                   State <= State + 1'b1;
             end   
 
@@ -370,10 +372,9 @@ module Read(
 
             8'd143 : begin //halt state
                   SCL <= 1'b1;
-                  SDA <= 1'b1;        
-                  DONE <= 1;   
-                  if (~START)
-                    State <= STATE_INIT;     
+                  SDA <= 1'b1; 
+                  if (START)        
+                  State <= STATE_INIT;     
             end
             
             //If the FSM ends up in this state, there was an error in the FSM code
