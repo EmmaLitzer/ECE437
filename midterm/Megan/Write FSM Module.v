@@ -37,7 +37,8 @@ module Write(
         output reg       STARTR,
         input wire       RW,
         input [7:0]      wdata,
-        input            RDONE
+        input            RDONE,
+        output reg       READY
     );
     
     /*
@@ -57,7 +58,7 @@ module Write(
     //reg onacc, onmag;
     
     reg STARTW; 
-    reg SCL, SDA; 
+    reg SCL, SDA;
     
     localparam STATE_INIT = 8'd0;
     assign SCLW = SCL;
@@ -95,7 +96,12 @@ module Write(
                       SCL <= 1'b1;
                       SDA <= 1'b1;
                       State <= 8'd0;
-
+                      if (RDONE) begin
+                        READY <= 1;
+                        STARTR <= 0;
+                      end
+                      else 
+                        READY <= 0;
                   end
             end            
             
@@ -369,12 +375,16 @@ module Write(
             
             8'd39 : begin
                 SCL <= 1'b0;
-                State <= State + 1'b1;
+                State <= 8'd250;
+            end
+            
+            8'd250: begin
+                SDA <= 1'b1;// set SDA to 1 to prepare for repeat start signal in READ FSM
+                State <= 8'd40;
             end
             
             8'd40 : begin
                 wrreg <= 0;
-                SDA <= 1;// set SDA to 1 to prepare for repeat start signal in READ FSM
                 SCL <= 1;
                 State <= State + 1'b1;
             end
@@ -382,6 +392,7 @@ module Write(
             8'd41 : begin //halt state
                 STARTR <= 1;
                 STARTW <= 0;
+                State <= STATE_INIT; 
             end
             
             8'd42: begin //need to go write data to FSM
