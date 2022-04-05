@@ -92,7 +92,7 @@ for i in range(0, 50):
     # Write to 4A ctrl
     RW = 2
     dev.SetWireInValue(0x00,RW) 
-    dev.SetWireInValue(0x01,int(M_SAD + W,2))
+    dev.SetWireInValue(0x01,int(A_SAD + W,2))
     dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
     dev.SetWireInValue(0x03,0x23)             # Write to CRTL REG
     dev.SetWireInValue(0x04,0x40)       # Write TURN ON to mag CTRL reg
@@ -131,7 +131,7 @@ for i in range(0, 50):
     RW = 2
     dev.SetWireInValue(0x00,RW) 
     dev.SetWireInValue(0x01,int(M_SAD + W,2))
-    dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
+    dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
     dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
     dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
     dev.UpdateWireIns()
