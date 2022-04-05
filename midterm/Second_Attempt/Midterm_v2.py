@@ -17,13 +17,13 @@ dev = ok.okCFrontPanel()  # define a device for FrontPanel communication
 SerialStatus=dev.OpenBySerial("")      # open USB communicaiton with the OK board
 
 counter = 0
-#time.sleep(0.5)
-def twos_comp(val, bits):
+'''
+def twos_comp(val, bits=8):
     """compute the 2's complement of int value val"""
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
         val = val - (1 << bits)        # compute negative value
     return val                         # return positive value as is
-
+'''
 
 
 
@@ -36,6 +36,10 @@ A_SAD = '0011001'
 M_SAD = '0011110'
 R = '1'
 W = '0'
+
+big = 32768
+inc = 65536
+
 
 Addresses = {'XLA':0x28,
             'XHA':0x29,
@@ -51,64 +55,76 @@ Addresses = {'XLA':0x28,
             'ZHM':0x05}
 
 def grab_convert(PCDATA):
-    time.sleep(.02)
     RW = 0
     dev.SetWireInValue(0x00,RW)                  # Turn R/W off
     dev.UpdateWireIns()
-    time.sleep(.02)
     RW = 1
     dev.SetWireInValue(0x00,RW)                 # Turn read on
     dev.SetWireInValue(0x03,Addresses[PCDATA])               # Address
     dev.UpdateWireIns()  
-    time.sleep(.02)
+    time.sleep(0.01)   
     dev.UpdateWireOuts()
-    return dev.GetWireOutValue(0x25)            # Grab data from line 25 (Sens_data)
+    return dev.GetWireOutValue(0x20)            # Grab data from line 25 (Sens_data)
 
+#'''
+def twos_comp(data):
+    if data > big:
+        data = data - inc
+    return data
 
-
+#'''
 PC_Control = 1
 dev.SetWireInValue(0x07, PC_Control)
 dev.UpdateWireIns()
 
-for i in range(0, 100):
+for i in range(0, 50):
     # Write to acceleration sensor
     RW = 2
     dev.SetWireInValue(0x00,RW)                 # Turn write on
     dev.SetWireInValue(0x01,int(A_SAD + R,2))   # SAD + R: 51
     dev.SetWireInValue(0x02,int(A_SAD + W,2))   # SAD + W: 50
     dev.SetWireInValue(0x03,0x20)               # Write to CTRL REG
-    dev.SetWireInValue(0x04,0b10010111)         # Write TURN ON to CTRL
+    dev.SetWireInValue(0x04,0x27)         # Write TURN ON to CTRL
     dev.UpdateWireIns()
-    time.sleep(.1)
     dev.SetWireInValue(0x00,0)                  # Turn R/W off
     dev.UpdateWireIns()
+    
+    # Write to 4A ctrl
+    RW = 2
+    dev.SetWireInValue(0x00,RW) 
+    dev.SetWireInValue(0x01,int(M_SAD + W,2))
+    dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
+    dev.SetWireInValue(0x03,0x23)             # Write to CRTL REG
+    dev.SetWireInValue(0x04,0x40)       # Write TURN ON to mag CTRL reg
+    dev.UpdateWireIns()
+    dev.SetWireInValue(0x00,0)
+    dev.UpdateWireIns()
+
     # --------------------------------------------------------
     # Read acceleration data
     PCDATA = 'XLA'
     XLA = grab_convert(PCDATA)
     PCDATA = 'XHA'
     XHA = grab_convert(PCDATA)
-    XA_data = XHA<<8 + XLA
+    #XA_data = XHA<<8 + XLA
+    XA_data = (XHA<<8) + XLA
+
+    XA_data = twos_comp(XA_data)/16*0.001
 
     PCDATA = 'YLA'
     YLA = grab_convert(PCDATA)
     PCDATA = 'YHA'
     YHA = grab_convert(PCDATA)
-    YA_data = YHA<<8 + YLA
-
+    YA_data = (YHA<<8) + YLA
+    YA_data = twos_comp(YA_data)/16*0.001
 
     PCDATA = 'ZLA'
     ZLA = grab_convert(PCDATA)
     PCDATA = 'ZHA'
     ZHA = grab_convert(PCDATA)
-    ZA_data = ZHA<<8 + ZLA
-   
-    print('Acceleration')
-    print("x:%.2f"%(XA_data)) #/16*0.001))
-    print("y:%.2f"%(YA_data)) #/16*0.001))
-    print("z:%.2f"%(ZA_data)) #/16*0.001))
-    time.sleep(.1)
-    print("-----------------")
+    ZA_data = (ZHA<<8) + ZLA
+    ZA_data = twos_comp(ZA_data)/16*0.001
+
     # -----------------------------------------------------------------------------------------
 
     # Write to magnetic sensor
@@ -119,47 +135,37 @@ for i in range(0, 100):
     dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
     dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
     dev.UpdateWireIns()
-    time.sleep(0.1)
     dev.SetWireInValue(0x00,0)
     dev.UpdateWireIns()
 
-    # dev.SetWireInValue(0x00,0)
-    # dev.UpdateWireIns()
-    # dev.SetWireInValue(0x00,1)
-    # dev.SetWireInValue(0x01,int(M_SAD + W,2)) 
-    # dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
-    # dev.SetWireInValue(0x03,0b00000011) #Xhm
-    # dev.UpdateWireIns()  
-    # time.sleep(0.01)   
-    # dev.UpdateWireOuts()
+
 
     # Read Magnetic data
     PCDATA = 'XLM'
-    XLM = grab_convert(Addresses[PCDATA])
+    XLM = grab_convert(PCDATA)
     PCDATA = 'XHM'
-    XHM = grab_convert(Addresses[PCDATA])
-    XM_data = XHM<<8 + XLM
+    XHM = grab_convert(PCDATA)
+    XM_data = (XHM<<8) + XLM
+    XM_data = twos_comp(XM_data) #/980
+
 
     PCDATA = 'YLM'
-    YLM = grab_convert(Addresses[PCDATA])
+    YLM = grab_convert(PCDATA)
     PCDATA = 'YHM'
-    YHM = grab_convert(Addresses[PCDATA])
-    YM_data = YHM<<8 + YLM
+    YHM = grab_convert(PCDATA)
+    YM_data = (YHM<<8) + YLM
+    YM_data = twos_comp(YM_data) #/980
+
 
     PCDATA = 'ZLM'
-    ZLM = grab_convert(Addresses[PCDATA])
+    ZLM = grab_convert(PCDATA)
     PCDATA = 'ZHM'
-    ZHM = grab_convert(Addresses[PCDATA])
-    ZM_data = ZHM<<8 + ZLM
-   
-    print('Magnetic')
-    print("x:%.2f"%(XM_data)) #/16*0.001))
-    print("y:%.2f"%(YM_data)) #/16*0.001))
-    print("z:%.2f"%(ZM_data)) #/16*0.001))
-    time.sleep(.25)
-    print("-----------------")
+    ZHM = grab_convert(PCDATA)
+    ZM_data = (ZHM<<8) + ZLM
+    ZM_data = twos_comp(ZM_data) #/1100 #1100
 
-    print('\n\nAccelerometer: \n\tX:{0}\tY:{1}\tZ:{2}\n\nMagnometer:  \n\tX:{3}\tY:{4}\tZ:{5}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
+
+    print('\nAccelerometer:\t\t\tMagnometer: \n\tX:{0:.2f}\tY:{1:.2f}\tZ:{2:.2f}\t\tX:{3:.2f}\tY:{4:.2f}\tZ:{5:.2f}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
 
 
 PC_Control = 0
