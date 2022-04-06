@@ -528,5 +528,6 @@ module AccMag(
                    .ep_addr(8'h20), 
                    .ep_datain(LSB));
                    
+                   //data in needs to be 32 bits but the current LSB and MSB are only 8 bits long
                    
  endmodule
