@@ -126,17 +126,39 @@ for i in range(0, 50):
     ZA_data = twos_comp(ZA_data)/16*0.001
 
     # -----------------------------------------------------------------------------------------
-
+    dev.SetWireInValue(0x00,0)
+    dev.UpdateWireIns()
+    
+    
     # Write to magnetic sensor
     RW = 2
     dev.SetWireInValue(0x00,RW) 
     dev.SetWireInValue(0x01,int(M_SAD + W,2))
     dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
     dev.SetWireInValue(0x03,0x02)             # Write to CRTL REG
-    dev.SetWireInValue(0x04,0b00000000)       # Write TURN ON to mag CTRL reg
+    dev.SetWireInValue(0x04,0x00)       # Write TURN ON to mag CTRL reg
+    
+    #dev.SetWireInValue(0x03,0b00000011) #Xha
+    
     dev.UpdateWireIns()
+    time.sleep(0.01)
+    
+    #dev.UpdateWireOuts()
+    #XLM = dev.GetWireOutValue(0x25)
+    
     dev.SetWireInValue(0x00,0)
     dev.UpdateWireIns()
+    
+    
+#    RW = 2
+#    dev.SetWireInValue(0x00,RW) 
+#    dev.SetWireInValue(0x01,int(M_SAD + W,2))
+#    dev.SetWireInValue(0x02,int(M_SAD + R,2)) 
+#    dev.SetWireInValue(0x03,0x00)             # Write to CRTL REG
+#    dev.SetWireInValue(0x04,0x14)       # Write TURN ON to mag CTRL reg
+#    dev.UpdateWireIns()
+#    dev.SetWireInValue(0x00,0)
+#    dev.UpdateWireIns()
 
 
 
@@ -146,7 +168,7 @@ for i in range(0, 50):
     PCDATA = 'XHM'
     XHM = grab_convert(PCDATA)
     XM_data = (XHM<<8) + XLM
-    XM_data = twos_comp(XM_data) #/980
+    XM_data = twos_comp(XM_data) /980
 
 
     PCDATA = 'YLM'
@@ -154,7 +176,7 @@ for i in range(0, 50):
     PCDATA = 'YHM'
     YHM = grab_convert(PCDATA)
     YM_data = (YHM<<8) + YLM
-    YM_data = twos_comp(YM_data) #/980
+    YM_data = twos_comp(YM_data) /980
 
 
     PCDATA = 'ZLM'
@@ -162,11 +184,12 @@ for i in range(0, 50):
     PCDATA = 'ZHM'
     ZHM = grab_convert(PCDATA)
     ZM_data = (ZHM<<8) + ZLM
-    ZM_data = twos_comp(ZM_data) #/1100 #1100
+    ZM_data = twos_comp(ZM_data) /980 #1100
 
 
     print('\nAccelerometer:\t\t\tMagnometer: \n\tX:{0:.2f}\tY:{1:.2f}\tZ:{2:.2f}\t\tX:{3:.2f}\tY:{4:.2f}\tZ:{5:.2f}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
-
+    #print("Compass heading:\t{0:.2f}".format((np.arccos(ZM_data/(np.sqrt(XM_data**2 + YM_data**2 + ZM_data**2)))-2)*360))
+    #print("Compass heading:\t{0:.2f}".format((np.arctan(YM_data/XM_data))*360))
 
 PC_Control = 0
 dev.SetWireInValue(0x07, PC_Control)
