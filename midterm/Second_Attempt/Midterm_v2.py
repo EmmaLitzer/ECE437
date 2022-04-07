@@ -168,7 +168,7 @@ for i in range(0, 50):
     PCDATA = 'XHM'
     XHM = grab_convert(PCDATA)
     XM_data = (XHM<<8) + XLM
-    XM_data = twos_comp(XM_data) /980
+    XM_data = twos_comp(XM_data) /1000 # Does not work without /1000?
 
 
     PCDATA = 'YLM'
@@ -176,7 +176,7 @@ for i in range(0, 50):
     PCDATA = 'YHM'
     YHM = grab_convert(PCDATA)
     YM_data = (YHM<<8) + YLM
-    YM_data = twos_comp(YM_data) /980
+    YM_data = twos_comp(YM_data) /1000
 
 
     PCDATA = 'ZLM'
@@ -184,7 +184,7 @@ for i in range(0, 50):
     PCDATA = 'ZHM'
     ZHM = grab_convert(PCDATA)
     ZM_data = (ZHM<<8) + ZLM
-    ZM_data = twos_comp(ZM_data) /980 #1100
+    ZM_data = twos_comp(ZM_data) /1000
 
 
     print('\nAccelerometer:\t\t\tMagnometer: \n\tX:{0:.2f}\tY:{1:.2f}\tZ:{2:.2f}\t\tX:{3:.2f}\tY:{4:.2f}\tZ:{5:.2f}'.format(XA_data, YA_data, ZA_data, XM_data, YM_data, ZM_data)) # Print data
