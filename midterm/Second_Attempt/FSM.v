@@ -8,17 +8,18 @@ module FSM(
     output [7:0] led,
     input  sys_clkn,
     input  sys_clkp,
-    output ADT7420_A0,
-    output ADT7420_A1,
+    
+    output wire FSM_Clk,
+    output wire ILA_Clk
+
     output I2C_SCL_1,
-    output wire [31:0] PC_control,
     inout  I2C_SDA_1,
+    output wire [31:0] PC_control,
     output reg [7:0] State,
     output reg SDA,
     output reg SCL,
     output ACK_bitw,
-    output wire FSM_Clk,
-    output wire ILA_Clk
+
 );
 
     //Instantiate the ClockGenerator module, where three signals are generate:
@@ -56,9 +57,6 @@ module FSM(
     reg FSM_Clk_reg;
     reg ILA_Clk_reg;
     reg ACK_bit;        // Acknowledge var
-    //reg SCL;            
-    //reg SDA;
-    //reg [7:0] State;
     reg [7:0] Sens_Data;// MSB + LSB to PC
     reg error_bit;// error flag
 
@@ -88,9 +86,9 @@ module FSM(
         SDA = 1'b1;         // set SDA low
         ACK_bit = 1'b1;     // set ACK to 1
         State = 8'd0;        // start at state 0
-        Sens_Data = 8'd0;   // Sensor data is 0
         error_bit = 1'b1;   // set error high
         rec_RW = 2'd0;      // set RW record to nothing
+        Sens_Data = 8'd0;   // Sensor data is 0
     end
 
     // Clock
@@ -746,6 +744,7 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
             8'd189 : begin
                   SCL <= 1'b1;
                   ACK_bit <= SDA;                 
@@ -758,6 +757,7 @@ module FSM(
                   State <= 8'd204;
             end 
             
+			
             // Repeat
             8'd75 : begin
                   SCL <= 1'b0;
@@ -770,6 +770,7 @@ module FSM(
                   SDA <= 1'b1;
                   State <= State + 1'b1;                                
             end
+			
             
             8'd77 : begin
                   SCL <= 1'b1;
@@ -788,7 +789,8 @@ module FSM(
             8'd80 : begin
                   SDA <= Data_2[7];             
                   State <= State + 1'b1; 
-            end                 
+            end       
+			
                   
             8'd81 : begin
                   SCL <= 1'b1;
@@ -799,12 +801,15 @@ module FSM(
                   SCL <= 1'b1;
                   State <= State + 1'b1;
             end   
+			
 
             8'd83 : begin
                   SCL <= 1'b0;
                   State <= State + 1'b1;
             end   
 
+			
+			
             //  bit 6
             8'd84 : begin
                   SCL <= 1'b0;
@@ -826,6 +831,8 @@ module FSM(
                   SCL <= 1'b0;
                   State <= State + 1'b1;
             end   
+			
+			
 
             //  bit 5
             8'd88 : begin
@@ -848,6 +855,8 @@ module FSM(
                   SCL <= 1'b0;
                   State <= State + 1'b1;
             end   
+			
+			
 
             //  bit 4
             8'd92 : begin
@@ -871,6 +880,8 @@ module FSM(
                   State <= State + 1'b1;
             end   
 
+			
+			
             //  bit 3
             8'd96 : begin
                   SCL <= 1'b0;
@@ -893,6 +904,8 @@ module FSM(
                   State <= State + 1'b1;
             end  
             
+			
+			
             //  bit 2
             8'd100 : begin
                   SCL <= 1'b0;
@@ -915,6 +928,8 @@ module FSM(
                   State <= State + 1'b1;
             end  
  
+			
+			
             //  bit 1
             8'd104 : begin
                   SCL <= 1'b0;
@@ -937,6 +952,8 @@ module FSM(
                   State <= State + 1'b1;
             end
             
+			
+			
             //  bit 0
             8'd108 : begin
                   SCL <= 1'b0;
@@ -958,7 +975,9 @@ module FSM(
                   SCL <= 1'b0;                  
                   State <= State + 1'b1;
             end  
-                        
+                 
+			
+			
             // Get ACK
             8'd112 : begin
                   SCL <= 1'b0;
@@ -1000,6 +1019,8 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
+			
             // Set 7th bit
             8'd118 : begin
                   SCL <= 1'b1;
@@ -1012,6 +1033,8 @@ module FSM(
                   State <= State + 1'b1;
             end       
             
+			
+			
             // ACK
             8'd120 : begin
                   SCL <= 1'b0;
@@ -1022,7 +1045,9 @@ module FSM(
             8'd121 : begin
                   SCL <= 1'b1;
                   State <= State + 1'b1;
-            end            
+            end     
+			
+			
             
             // Set 6th bit
             8'd122 : begin
@@ -1036,6 +1061,8 @@ module FSM(
                   State <= State + 1'b1;
             end   
             
+			
+			
             // ACK
             8'd124 : begin
                   SCL <= 1'b0;
@@ -1048,6 +1075,8 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
+			
             // Set 5th bit
             8'd126 : begin
                   SCL <= 1'b1;
@@ -1059,6 +1088,8 @@ module FSM(
                   SCL <= 1'b0;
                   State <= State + 1'b1;
             end    
+			
+			
             
             // ACK
             8'd128 : begin
@@ -1072,6 +1103,8 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
+			
             // Set 4th bit
             8'd130 : begin
                   SCL <= 1'b1;
@@ -1084,6 +1117,8 @@ module FSM(
                   State <= State + 1'b1;
             end      
             
+			
+			
             // ACK
             8'd132 : begin
                   SCL <= 1'b0;
@@ -1108,6 +1143,7 @@ module FSM(
                   State <= State + 1'b1;
             end 
             
+			
             // ACK
             8'd136 : begin
                   SCL <= 1'b0;
@@ -1120,6 +1156,7 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
             // Set 2nd bit
             8'd138 : begin
                   SCL <= 1'b1;
@@ -1144,6 +1181,7 @@ module FSM(
                   State <= State + 1'b1;
             end            
             
+			
             // Set 1st bit
             8'd142 : begin
                   SCL <= 1'b1;
@@ -1203,6 +1241,7 @@ module FSM(
             end
             
             
+			
             
             // Get ACK
             8'd200  : begin
@@ -1230,26 +1269,33 @@ module FSM(
                   end                  
             end
                
+			
+			
+			
             //Stop sequence and return to INIT           
             8'd204 : begin
                   SCL <= 1'b0;
-                  SDA <= 1'b0;             
+                  SDA <= 1'b0;    
+				
                   State <= State + 1'b1;
             end   
+			
 
             8'd205 : begin
                   SCL <= 1'b1;
                   SDA <= 1'b0;
+				
                   State <= State + 1'b1;
             end                                    
 
             8'd206 : begin
                   SCL <= 1'b1;
                   SDA <= 1'b1;
-                  //flag <= 5'd0;
-                  State <= STATE_INIT;                
+
+				  State <= STATE_INIT;                
             end              
             
+			
             //If the FSM ends up in this state, there was an error in teh FSM code
             default : begin
                   error_bit <= 0;
