@@ -18,13 +18,13 @@ module JTEG_Test_File(
     wire [23:0] ClkDivThreshold = 1_000;   
     wire SCL, SDA; 
     wire [7:0] State;
-    wire [31:0] STARTW;
+    wire [31:0] PC_control;
     reg trigger;
     
-    assign TrigerEvent = STARTW[0];   
+    assign TrigerEvent = PC_control[0];   
 
     //Instantiate the module that we like to test
-    FSM I2C_Test1 (        
+    AccMag I2C_Test1 (        
         .led(led),
         .sys_clkn(sys_clkn),
         .sys_clkp(sys_clkp),
@@ -35,10 +35,10 @@ module JTEG_Test_File(
         .FSM_Clk_reg(FSM_Clk),        
         .ILA_Clk_reg(ILA_Clk),
         .ACK_bit(ACK_bit),
-        //.SCL(SCL),
-        //.SDA(SDA),
+        .SCL(SCL),
+        .SDA(SDA),
         .State(State),
-        .STARTW(STARTW),
+        .PC_control(PC_control),
         .okUH(okUH),
         .okHU(okHU),
         .okUHU(okUHU),
@@ -48,16 +48,9 @@ module JTEG_Test_File(
     //Instantiate the ILA module
     ila_0 ila_sample12 ( 
         .clk(ILA_Clk),
-        .probe0({State, I2C_SDA_1, I2C_SCL_1, ACK_bit}),                             
+        .probe0({State, SDA, SCL, ACK_bit}),                             
         .probe1({FSM_Clk, TrigerEvent})
         );
- /*       
-    always @(*) begin
-        if (STARTW != 0)
-            trigger = 1;
-        else 
-            trigger = 0;
-    end  
-*/  
+
                                 
 endmodule
