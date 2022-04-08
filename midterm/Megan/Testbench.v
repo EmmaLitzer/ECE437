@@ -10,11 +10,12 @@ module Testbench();
     reg [31:0] PCDATA;
     wire [7:0] StateT;
     wire FSM_Clk_reg;
-    reg [31:0] STARTW = 0;
-    wire SDA;
+    reg [31:0] START = 0;
+    wire SDA, SCL;
+    wire READY;
     
     //Invoke the module that we like to test
-    FSM ModuleUnderTest (.sys_clkn(sys_clkn), .sys_clkp(sys_clkp), .PCDATA(PCDATA), .State(StateT), .FSM_Clk_reg(FSM_Clk_reg), .STARTW(STARTW), .I2C_SDA_0(SDA));
+    AccMag ModuleUnderTest (.sys_clkn(sys_clkn), .sys_clkp(sys_clkp), .PCDATA(PCDATA), .State(StateT), .FSM_Clk_reg(FSM_Clk_reg), .PC_control(START), .I2C_SDA_1(SDA), .I2C_SCL_1(SCL), .READY(READY));
     
     // Generate a clock signal. The clock will change its state every 5ns.
     //Remember that the test module takes sys_clkp and sys_clkn as input clock signals.
@@ -27,14 +28,14 @@ module Testbench();
       
     initial begin 
             #20000 PCDATA <= 32'b00110010001000001001011100000000;           //acc on
-            #20000 STARTW <= 1; 
-            #1000000  STARTW <= 0;
-            #5000000 PCDATA <= 32'b00111100000000100000000000000000; //mag on
-            #20000 STARTW <= 1;     
-            #1000000 STARTW <= 0;                   
-            #5000000 PCDATA <= 32'b00110010001010000011001100000001; //x-acc collection
-            #20000 STARTW <= 1;  
-            #1000000 STARTW <= 0;
+            #20000 START <= 1; 
+            #1000000  START <= 0;
+            //#5000000 PCDATA <= 32'b00111100000000100000000000000000; //mag on
+            //#20000 STARTW <= 1;     
+            //#1000000 STARTW <= 0;                   
+            #50000000 PCDATA <= 32'b00110010001010000011001100000101; //x-acc collection
+            #20000 START <= 1;  
+            #1000000 START <= 0;
                                                 
 
             //#100 button <= 4'b1110;
