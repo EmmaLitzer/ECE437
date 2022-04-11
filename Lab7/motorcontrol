@@ -25,24 +25,15 @@ module MotorControl(
         output [7:0] led,
         input  sys_clkn,
         input  sys_clkp,
-        /*
-        output ADT7420_A0,
-        output ADT7420_A1,
-        output I2C_SCL_0,
-        inout  I2C_SDA_0,        
-        output reg FSM_Clk_reg,    
-        output reg ILA_Clk_reg,
-        output reg ACK_bit,
-        output reg SCL,
-        output reg SDA,
-        */
-        output EN,
-        output DIR,
+        output FSM_Clk_reg,        
+        output ILA_Clk_reg,
+        output PMOD_B1,
+        output PMOD_B2,
         output reg [7:0] State,
-        output wire [31:0] PC_control, //start to trigger FSM
+        output wire [31:0] motor_control, //start to trigger FSM
         output wire [31:0] Pulses, //number of pulses motor should go on for
-        output wire [31:0] Dir, //direction of motor: 0 = forward, 1= reverse
-        output wire [31:0] DC, //duty cycle
+        output wire [31:0] dirinput, //direction of motor: 0 = forward, 1= reverse inputed from PC
+        output wire [31:0] dutycycle, //duty cycle
         input  wire    [4:0] okUH,
         output wire    [2:0] okHU,
         inout  wire    [31:0] okUHU,   
@@ -53,9 +44,10 @@ module MotorControl(
     
     reg [23:0] clkdiv;
     reg slow_clk;
-    reg [7:0] counter; //counter to count how many pulses have been passed
-    reg [3:0] DCcounter; //counter to count how much DC 1's and 0's have been passed
+    reg [7:0] pcounter; //counter to count how many pulses have been passed
+    reg [7:0] counter; //counter to count how much DC 1's and 0's have been passed
     reg ENr; //regiter to hold enable value
+    reg DIRr; //register to hold direction value
     
     // This section defines the main system clock from two
     //differential clock signals: sys_clkn and sys_clkp
@@ -69,6 +61,10 @@ module MotorControl(
     
     initial begin
         clkdiv = 0;
+        pcounter = 0;
+        counter = 0;
+        State = 0;
+        ENr = 0;
     end
       
     // This code creates a slow clock from the high speed Clk signal
@@ -77,220 +73,63 @@ module MotorControl(
     // Hence, the slow clock will run at 200 Hz
     always @(posedge clk) begin
         clkdiv <= clkdiv + 1'b1;
-        if (clkdiv == 100000) begin //want clock used in FSM to be 10x's faster so that full period will be 1/200Hz 
+        if (clkdiv == 1000) begin //want slow clock used in FSM to be 100x's faster than desired 200Hz frequency of PWM 
             slow_clk <= ~slow_clk;
             clkdiv <= 0;
         end
     end
 
     localparam STATE_INIT       = 8'd0;  
-    assign EN = ENr; //assign enable register to enable output wire signal
+    assign PMOD_B1 = ENr; //assign enable register to enable output wire signal
+    assign PMOD_B2 = DIRr; //assing direction reigster to direction output wire signal
+    assign FSM_Clk_reg = slow_clk;        
+    assign ILA_Clk_reg = clk;
 
     always @(posedge slow_clk) begin                       
         case (State)
             // Press signal from PC is sent in, start the state machine. Otherwise, stay in the STATE_INIT state        
             STATE_INIT : begin
-                 if (PC_control[0] == 1'b1) begin
-                    if (DC==0)
-                        State <= 8'd11;
-                    else 
-                        State <= 8'd1; 
-                    counter <= 8'd0; //how many pulses we've finished
-                    DCcounter <= 4'd1;
-                 end                 
-                 else begin                 
-                      State <= 8'd0;
-                  end
-            end            
+                if (motor_control[0]==1) begin
+                    State <= 8'd1;
+                end
+                else begin
+                    State <= 8'd0;
+                end
+            end         
             
-            // Start creating PWM- loading 1's into enable          
             8'd1 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                                                
-            end   
+                pcounter <= pcounter + 1'b1;
+                counter <= 0;
+                ENr <= 1;
+                DIRr <= dirinput;
+                State <= State + 1'b1;
+            end
             
             8'd2 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                     
-            end  
-            
-            8'd3 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                                    
-            end   
-            
-            8'd4 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                   
-            end 
-            
-            8'd5 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                      
-            end  
-            
-            8'd6 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                     
-            end  
-            
-            8'd7 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                   
-            end  
-            
-            8'd8 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                      
-            end  
-            
-            8'd9 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                      
-            end 
-            
-            8'd10 : begin
-                  ENr <= 1;
-                  if (DCcounter == DC) begin
-                    State <= 8'd11;
-                    DCcounter <= 0;
-                  end
-                  else begin
-                    State <= State + 1'b1;  
-                    DCcounter <= DCcounter + 1'b1;  
-                  end                      
-            end   
-            
-            //loading 0's into enable
-            8'd11 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd12 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd13 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd14 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd15 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd16 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd17 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd18 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end  
-            
-            8'd19 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end 
-            
-            8'd20 : begin
-                  ENr <= 0;
-                  State <= State + 1'b1;                 
-            end   
-            
-            8'd21 : begin //cycling state control
-            
-            
+                if (counter >= dutycycle) begin
+                    ENr <= 0;
+                    if (counter >= 100) begin
+                        if (pcounter == Pulses) begin
+                            State <= 8'd0; 
+                            pcounter <= 0;
+                        end
+                        else 
+                            State <= 8'd1;  
+                   end
+                   else begin
+                        counter <= counter + 1'b1;
+                        State <= 8'd2;
+                   end
+                   
+                end  
+                else begin
+                    counter <= counter + 1'b1;
+                    State <= 8'd2;
+                end
             end
 
         endcase
     end
-
-
-
-
-
-
-
-
-
 
 
 
@@ -315,11 +154,11 @@ module MotorControl(
         .okEH(okEH)
     );
     
-    //  PC_controll is a wire that contains data sent from the PC to FPGA.
+    //  motor_control is a wire that contains data sent from the PC to FPGA.
     //  The data is communicated via memeory location 0x00
    okWireIn wire10 (   .okHE(okHE), 
                        .ep_addr(8'h00), 
-                       .ep_dataout(PC_control)); //signal to tell motor control to start
+                       .ep_dataout(motor_control)); //signal to tell motor control to start
                        
    okWireIn wire11 (   .okHE(okHE), 
                        .ep_addr(8'h01), 
@@ -327,8 +166,13 @@ module MotorControl(
                        
    okWireIn wire12 (   .okHE(okHE), 
                        .ep_addr(8'h02), 
-                       .ep_dataout(Dir)); //signal to tell motor what direction to go in
-                   
+                       .ep_dataout(dirinput)); //signal to tell motor what direction to go in
+                       
+   okWireIn wire13 (   .okHE(okHE), 
+                       .ep_addr(8'h03), 
+                       .ep_dataout(dutycycle)); //signal to tell motor what direction to go in                       
+
+
 endmodule
 
 
