@@ -1,0 +1,49 @@
+`timescale 1ns / 1ps
+
+module JTEG_Test_File(   
+    output PMOD_B1,
+    output PMOD_B2,
+    input sys_clkn,
+    input sys_clkp,  
+
+
+    input  [4:0] okUH,
+    output [2:0] okHU,
+    inout  [31:0] okUHU,
+    inout  okAA      
+);
+
+    wire  ILA_Clk, ACK_bit, FSM_Clk, TrigerEvent;    
+    wire [23:0] ClkDivThreshold = 1_000;   
+    wire EN1, DIR1; 
+    wire [7:0] State;
+    wire [31:0] motor_control, Pulses, direction, dutycycle ;
+    
+    assign TrigerEvent = motor_control[0];   
+
+    //Instantiate the module that we like to test
+    MotorControl I2C_Test1 (        
+        .sys_clkn(sys_clkn),
+        .sys_clkp(sys_clkp),             
+        .FSM_Clk_reg(FSM_Clk),        
+        .ILA_Clk_reg(ILA_Clk),
+        .PMOD_B1(PMOD_B1),
+        .PMOD_B2(PMOD_B2),
+        .State(State),
+        .motor_control(motor_control),
+        .Pulses(Pulses),
+        .dirinput(direction),
+        .dutycycle(dutycycle),
+        .okUH(okUH),
+        .okHU(okHU),
+        .okUHU(okUHU),
+        .okAA(okAA)
+        );
+    
+    //Instantiate the ILA module
+    ila_0 ila_sample12 ( 
+        .clk(ILA_Clk),
+        .probe0({State, PMOD_B1, PMOD_B2}),                             
+        .probe1({FSM_Clk, TrigerEvent})
+        );                        
+endmodule
