@@ -26,15 +26,15 @@ module SPI_FSM(
         input  sys_clkp,
         output reg FSM_Clk_reg,        
         output reg ILA_Clk_reg,
-        output PMOD_A1,
-        output PMOD_A2,
         output reg [7:0] State,
         output wire SPI_EN, 
         output wire SPI_CLK, 
         output wire SPI_IN, 
         input wire SPI_OUT, 
-        output wire [31:0] PC_control,
+        //change to input using testbench//
+        output wire [31:0] PC_control, 
         output wire [31:0] PC_data, //data sent in from PC with specified register address, read/write mode, and value to be written
+        //*********************************//
         output wire [31:0] return, //data to send back to PC after reading
         input  wire    [4:0] okUH,
         output wire    [2:0] okHU,
@@ -47,11 +47,21 @@ module SPI_FSM(
     reg [7:0] dataout; //register to store output data to
     reg wdataf; //flag signal to start writing data to register
     reg [3:0] counter; //counter to count how many bits have been read from register
-    wire FSM_Clk, ILA_Clk; 
+
     wire RW = PC_data[0];
     wire [6:0] regaddr = PC_data[30:24];
     wire [7:0] wdata = PC_data[23:16];
-     
+    
+    //Instantiate the ClockGenerator module, where three signals are generate:
+    //High speed CLK signal, Low speed FSM_Clk signal     
+    wire [23:0] ClkDivThreshold = 1; //40MHz   
+    wire FSM_Clk, ILA_Clk; 
+    ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
+                                      .sys_clkp(sys_clkp),                                      
+                                      .ClkDivThreshold(ClkDivThreshold),
+                                      .FSM_Clk(FSM_Clk),                                      
+                                      .ILA_Clk(ILA_Clk) );
+    
     always @(*) begin          
         FSM_Clk_reg = FSM_Clk;
         ILA_Clk_reg = ILA_Clk;   
@@ -61,7 +71,6 @@ module SPI_FSM(
     assign SPI_EN = sen;
     assign SPI_CLK = sclk; 
     assign SPI_IN = sin;
-    assign SPI_OUT = sout;
     assign return = dataout;
  
     initial  begin  
@@ -225,25 +234,26 @@ module SPI_FSM(
                     State <= 8'd1;
                   end
                   else begin //RW = 0 (reading)
-                    sin <= 1'b0;
                     State <= State + 1'b1;        
                   end                        
             end
             
             //if reading, start storing data from SPI_OUT
             8'd17: begin
+                sin <= 1'b0;
                 sclk <= 1'b0;
-                dataout[counter] <= SPI_OUT;
                 State <= State + 1'b1;
             end
             
             8'd18: begin
-                sclk <= 1'b1;
-                counter <= counter - 1'b1;
-                if (counter < 0) begin
-                    State <= State + 1'b1;
+                if (counter > 4'd7) begin //done reading, go back to STATE_INIT
+                    sen <= 1'b0;
+                    State <= STATE_INIT;
                 end
                 else begin //haven't read all 8 bits from register
+                    sclk <= 1'b1;
+                    dataout[counter] <= SPI_OUT;
+                    counter <= counter - 1'b1;
                     State <= 8'd17;
                 end
             end
@@ -263,6 +273,7 @@ module SPI_FSM(
             
          endcase                           
     end               
+  
     
  // OK Interface
     wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
@@ -299,5 +310,6 @@ module SPI_FSM(
                    .ep_addr(8'h20), 
                    .ep_datain(return));    
     
+
     
 endmodule
