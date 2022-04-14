@@ -3,13 +3,19 @@ import sys    # system related library
 ok_loc = 'C:\\Program Files\\Opal Kelly\\FrontPanelUSB\\API\\Python\\3.6\\x64'
 sys.path.append(ok_loc)   # add the path of the OK library
 import ok     # OpalKelly library
+import os
 
 #%% 
 # Define FrontPanel device variable, open USB communication and
 # load the bit file in the FPGA
 dev = ok.okCFrontPanel();  # define a device for FrontPanel communication
 SerialStatus=dev.OpenBySerial("");      # open USB communicaiton with the OK board
-ConfigStatus=dev.ConfigureFPGA("C:\\Xilinx Projects\\lab7_part1\\lab7_part1.runs\\impl_1\\BTPipeExample.bit"); # Configure the FPGA with this bit file
+
+# Find bit file automatically
+for file in os.listdir():
+    if file.endswith(".bit"):
+        bit_path = file
+ConfigStatus=dev.ConfigureFPGA(bit_path); # Configure the FPGA with this bit file -- MUST PUT BIT FILE IN SAME DIR AS PYTHON FILE
 
 # Check if FrontPanel is initialized correctly and if the bit file is loaded.
 # Otherwise terminate the program
