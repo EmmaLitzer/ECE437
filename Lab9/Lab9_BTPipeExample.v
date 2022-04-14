@@ -1,4 +1,4 @@
- `timescale 1ns / 1ps
+`timescale 1ns / 1ps
 
 module BTPipeExample(
     input   wire    [4:0] okUH,
@@ -152,4 +152,3 @@ module BTPipeExample(
                         .ep_addr(8'h00), 
                         .ep_dataout(Reset_Counter));                                
 endmodule
-
