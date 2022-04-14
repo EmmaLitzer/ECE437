@@ -23,12 +23,11 @@ read_bit = '00000000'
 write_bit = '00000001'
 
 registers = {'raddr3':'0000011',
-	     'radar4':'0000100',
-	     ''
+	     'radar4':'0000100'
 	     
 	    }
 read_write = {'raddr3_w':'00000011001010010000000000000001',#"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
-	      'raddr3_r':'00000011001010010000000000000001', #"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
+	      'raddr3_r':'00000011001010010000000000000000', #"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
 	     'raddr4_w':'00000100100010010000000000000001', # "0" + registers['raddr4'] + '10001001' + zeross8 +write_bit,
 	     'raddr4_r':'00000100001010010000000000000000'# "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit
 	      
@@ -47,7 +46,7 @@ def Write_Grab_FSM(rw):
 		
 	# send read/write to PC and grab data into dev
 	dev.SetWireInValue(0x00, PC_control)                # send in value of 1 to start the FSM
-	dev.SetWireInValue(0x01, int(PC_data,2))
+	dev.SetWireInValue(0x01, int(PC_Data,2))
 	dev. UpdateWireIns()                                # Send wirein value to FSM 
 	time.sleep(0.001)	
 	PC_control = 0																			# turn FSM off
@@ -59,19 +58,19 @@ def Write_Grab_FSM(rw):
 
 # MAY NEED TO CHANGE WIRE NUMBERS (0x##)
 try:                                                        # run temperature loop until ^C is pressed in terminal
-        # write sequence
-	Write_Grab_FSM('raddr3_w')
-	Write_Grab_FSM('raddr4_w')
-	Write_Grab_FSM('raddr3_r')
+       #  write sequence
+    Write_Grab_FSM('raddr3_w')
+    Write_Grab_FSM('raddr4_w')
+    Write_Grab_FSM('raddr3_r')
 	
-	dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-        output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-        print(output)
+    dev.UpdateWireOuts()                                # FSM sends Temp data to PC
+    output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
+    print(output)
 	
-	Write_Grab_FSM('raddr4_r')
-	dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-        output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-        print(output)
+    Write_Grab_FSM('raddr4_r')
+    dev.UpdateWireOuts()                                # FSM sends Temp data to PC
+    output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
+    print(output)
 	
         
         
