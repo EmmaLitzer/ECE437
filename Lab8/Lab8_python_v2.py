@@ -29,7 +29,7 @@ registers = {'raddr3':'0000011',
 read_write = {'raddr3_w':"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
 	      'raddr3_r':"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
 	     'raddr4_w': "0" + registers['raddr4'] + '10001001' + zeross8 +write_bit,
-	     'raddr4_r': "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit,
+	     'raddr4_r': "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit
 	     }
 
 
