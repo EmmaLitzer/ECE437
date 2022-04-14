@@ -94,12 +94,9 @@ read_write = {
 
 
 def Write_Grab_FSM(rw):
-    PC_control = 1																				# turn FSM on
-    if rw in read_write.keys():
-        PC_Data=read_write[rw]
-    else:
-        print("Please put a correct key into Write_Grab_FSM")
-        
+    PC_control = 1				
+    PC_Data=read_write[rw]																# turn FSM on
+
     # send read/write to PC and grab data into dev
     dev.SetWireInValue(0x00, PC_control)                # send in value of 1 to start the FSM
     dev.SetWireInValue(0x01, int(PC_Data,2))
@@ -113,13 +110,13 @@ def Write_Grab_FSM(rw):
 
 # MAY NEED TO CHANGE WIRE NUMBERS (0x##)
 try:                                                        # run temperature loop until ^C is pressed in terminal
-    reg_key = registers.keys()
+    reg_key = read_write.keys()
     for i, key in enumerate(reg_key):
         Write_Grab_FSM(key) 
         if key[-1] !='w':
             dev.UpdateWireOuts()                                # FSM sends Temp data to PC
             output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-            print('regaddr:', key[:-1] +'\t'+output)
+            print('regaddr:', key[:-2] +'\t'+str(output))
                         
                         
                         
