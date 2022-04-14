@@ -24,12 +24,15 @@ write_bit = '00000001'
 
 registers = {'raddr3':'0000011',
 	     'radar4':'0000100',
+	     ''
 	     
 	    }
-read_write = {'raddr3_w':"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
-	      'raddr3_r':"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
-	     'raddr4_w': "0" + registers['raddr4'] + '10001001' + zeross8 +write_bit,
-	     'raddr4_r': "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit
+read_write = {'raddr3_w':'00000011001010010000000000000001',#"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
+	      'raddr3_r':'00000011001010010000000000000001', #"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
+	     'raddr4_w':'00000100100010010000000000000001', # "0" + registers['raddr4'] + '10001001' + zeross8 +write_bit,
+	     'raddr4_r':'00000100001010010000000000000000'# "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit
+	      
+	      
 	     }
 
 
