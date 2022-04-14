@@ -70,10 +70,6 @@ try:                                                        # run temperature lo
         output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
         print(output)
 	
-    
-        dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-        output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-        print(output)
         
         
 except KeyboardInterrupt:
