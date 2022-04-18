@@ -1,6 +1,6 @@
 # import various libraries necessery to run your Python code
 import sys    # system related library
-ok_loc = 'C:\\Program Files\\Opal Kelly\\FrontPanelUSB\\API\\Python\\3.6\\x64'
+ok_loc = 'C:\Program Files\Opal Kelly\FrontPanelUSB\API\Python\3.6\x64'
 sys.path.append(ok_loc)   # add the path of the OK library
 import ok     # OpalKelly library
 
@@ -8,9 +8,10 @@ import ok     # OpalKelly library
 # Define FrontPanel device variable, open USB communication and
 # load the bit file in the FPGA
 dev = ok.okCFrontPanel();  # define a device for FrontPanel communication
+# FrontPanel MUST BE CLOSED FOR THIS STEP TO SUCCEED!!!
 SerialStatus=dev.OpenBySerial("");      # open USB communicaiton with the OK board
-ConfigStatus=dev.ConfigureFPGA("C:\\Xilinx Projects\\lab7_part1\\lab7_part1.runs\\impl_1\\BTPipeExample.bit"); # Configure the FPGA with this bit file
-
+ConfigStatus=dev.ConfigureFPGA("U:\Documents\ECE437\Lab9\BTPipeExample.bit"); # Configure the FPGA with this bit file
+print(ConfigStatus)
 # Check if FrontPanel is initialized correctly and if the bit file is loaded.
 # Otherwise terminate the program
 print("----------------------------------------------------")
