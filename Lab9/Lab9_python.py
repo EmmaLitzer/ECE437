@@ -86,8 +86,8 @@ read_write = {
             '69_r':"0" + registers['69'] + str(format(9,'08b')) + zeros8 + read_bit,
             '80_w':"0" + registers['80'] + str(format(2,'08b')) + zeros8 + write_bit,
             '80_r':"0" + registers['80'] + str(format(2,'08b')) + zeros8 + read_bit,
-            '83_w':"0" + registers['83'] + str(format(187,'08b')) + zeros8 + write_bit,
-            '83_r':"0" + registers['83'] + str(format(187,'08b')) + zeros8 + read_bit,
+            '83_w':"0" + registers['83'] + str(format(251,'08b')) + zeros8 + write_bit,
+            '83_r':"0" + registers['83'] + str(format(251,'08b')) + zeros8 + read_bit,
             '97_w':"0" + registers['97'] + str(format(240,'08b')) + zeros8 + write_bit,
             '97_r':"0" + registers['97'] + str(format(240,'08b')) + zeros8 + read_bit,
             '98_w':"0" + registers['98'] + str(format(10,'08b')) + zeros8 + write_bit,
@@ -161,12 +161,26 @@ except KeyboardInterrupt:
     pass
 
 #%% Reset FIFOs ##
-
 dev.SetWireInValue(0x00, 1); #Reset FIFOs and counter
-dev.UpdateWireIns();  # Update the WireIns
-
+dev.UpdateWireIns();  
 dev.SetWireInValue(0x00, 0); #Release reset signal
-dev.UpdateWireIns();  # Update the WireIns
+dev.UpdateWireIns();  
+
+#%% Ask for system reset    ##
+sys_reset_wire = 0x01
+Frm_req = 1
+dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
+dev.UpdateWireIns();  
+time.sleep(.001)                       # make sure sys is reset by waiting for stable signal
+dev.SetWireInValue(sys_reset_wire, 1); # Turn sys back on
+dev.UpdateWireIns();  
+
+time.sleep(.001)                       # delay for frame req
+#%% Ask for frame requst    ##
+Frm_req_wire = 0x01
+dev.SetWireInValue(Frm_req_wire, 1); # Ask for frame req
+dev.UpdateWireIns();  
+# set frame req to 0 in FSM to get exact clc cycle (want it to fall at falling clk (negedge))
 #%% Grab data ##
 
 # Data transfer length multiple of 16
@@ -175,21 +189,23 @@ dev.UpdateWireIns();  # Update the WireIns
 
 # 8 bit in, 32 out
 
-transfer_length = 4 #16
+transfer_length = 1 #16
 pix1 = 488
 pix2 = 648
-Block_size = pix1*pix2*transfer_length  # 316224 Bytes
+Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
     # 64 or 1024?
+Block_size = int(Block_size_max/1024)*1024  # ask for 315392 pixels
+#ignore 812 pixels of the full 316224 pixels to obtain a full 1024 array
 
 image = []
 
-buf = bytearray(Block_size)
-dev.ReadFromBlockPipeOut(0xa0, 256, buf);  # Read data from BT PipeOut
+buf = bytearray(Block_size*2)                     # make sure buf is bigger than the amount of data coming in
+dev.ReadFromBlockPipeOut(0xa0, Block_size, buf);  # Read data from BT PipeOut
 
 #%% Set array to image array ##
 counter = 0
 for i in range(0, Block_size, 4):   
-    image.append(buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16)) # transfer length is 16 bits
+    image.append( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
     counter = counter + 1
 #    print (buf[i])
 
