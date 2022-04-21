@@ -129,45 +129,27 @@ def Write_Grab_FSM(rw):
     dev. UpdateWireIns()                                # Send wirein value to FSM 
 	
 
-
-# MAY NEED TO CHANGE WIRE NUMBERS (0x##)
-try:                                                        # run temperature loop until ^C is pressed in terminal
+# Send SPI settings to FSM
+try:                                                       
     reg_key = read_write.keys()
     for i, key in enumerate(reg_key):
         Write_Grab_FSM(key) 
         if key[-1] !='w':
-            dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-            output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-            print('regaddr:', key[:-2] +'\t'+str(output))
-                        
-                        
-    #  write sequence
-    #Write_Grab_FSM('raddr3_w')
-    #Write_Grab_FSM('raddr4_w')
-    #Write_Grab_FSM('raddr3_r')
-	#
-    #dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-    #output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-    #print(output)
-	
-    #Write_Grab_FSM('raddr4_r')
-    #dev.UpdateWireOuts()                                # FSM sends Temp data to PC
-    #output = dev.GetWireOutValue(0x20)                  # get msb temp register and shift 8 bits to the left
-    #print(output)
-	
-        
-        
+            dev.UpdateWireOuts()                                
+            output = dev.GetWireOutValue(0x20)                  
+            print('regaddr:', key[:-2] +'\t'+str(output))       
 except KeyboardInterrupt:
     pass
 
 #%% Reset FIFOs ##
-dev.SetWireInValue(0x00, 1); #Reset FIFOs and counter
+FIFO_wire = 0x02
+dev.SetWireInValue(FIFO_wire, 1); #Reset FIFOs and counter
 dev.UpdateWireIns();  
-dev.SetWireInValue(0x00, 0); #Release reset signal
+dev.SetWireInValue(FIFO_wire, 0); #Release reset signal
 dev.UpdateWireIns();  
 
 #%% Ask for system reset    ##
-sys_reset_wire = 0x01
+sys_reset_wire = 0x03
 Frm_req = 1
 dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
 dev.UpdateWireIns();  
@@ -177,7 +159,7 @@ dev.UpdateWireIns();
 
 time.sleep(.001)                       # delay for frame req
 #%% Ask for frame requst    ##
-Frm_req_wire = 0x01
+Frm_req_wire = 0x04
 dev.SetWireInValue(Frm_req_wire, 1); # Ask for frame req
 dev.UpdateWireIns();  
 # set frame req to 0 in FSM to get exact clc cycle (want it to fall at falling clk (negedge))
@@ -197,12 +179,12 @@ Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
 Block_size = int(Block_size_max/1024)*1024  # ask for 315392 pixels
 #ignore 812 pixels of the full 316224 pixels to obtain a full 1024 array
 
-image = []
-
 buf = bytearray(Block_size*2)                     # make sure buf is bigger than the amount of data coming in
-dev.ReadFromBlockPipeOut(0xa0, Block_size, buf);  # Read data from BT PipeOut
+dev.ReadFromBlockPipeOut(0x20, Block_size, buf);  # Read data from BT PipeOut
 
 #%% Set array to image array ##
+image = []
+
 counter = 0
 for i in range(0, Block_size, 4):   
     image.append( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
@@ -210,7 +192,6 @@ for i in range(0, Block_size, 4):
 #    print (buf[i])
 
 #%% show image ##
-   
 image = np.array(image)                         # convert list to array
 im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
 pic = plt.imshow(im_array, cmap='jet',origin='lower')            # plot image with origin in lower left
