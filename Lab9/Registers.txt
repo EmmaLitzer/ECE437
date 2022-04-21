@@ -18,6 +18,7 @@ Pin C6 (Test3/CLK_out) (69):
       9 CLK_OUT <-- SET TO 9!!
 sensor sequencer (61-62) set to word data that replaces pixel data ( wut? )
 
+--------------------------------------------------------------------------------------------------------------
 1: num lines read out from sensor (min1, max488) -- 232
 2: num lines read out from sensor (min1, max488) -- 1
 (only use one window)
@@ -51,11 +52,3 @@ sensor sequencer (61-62) set to word data that replaces pixel data ( wut? )
 109: 82
 110: 80
 117: 91
-
-
-
-
-
-
-[1  ,2,3,4,39,42 ,43,44,57,58,59 ,60,68,69,80,83 ,97 ,98,100,101,102,103,106,107,108,109,110,117]
-[232,1,0,0,1 ,232,5 ,0 ,3 ,44,240,10,2 ,9 ,2 ,187,240,10,112,98 ,34 ,64 ,94 ,110,91 ,82 ,80 ,91 ]
