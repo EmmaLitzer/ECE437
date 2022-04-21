@@ -136,7 +136,7 @@ try:
         Write_Grab_FSM(key) 
         if key[-1] !='w':
             dev.UpdateWireOuts()                                
-            output = dev.GetWireOutValue(0x20)                  
+            output = dev.GetWireOutValue(0x21)                  
             print('regaddr:', key[:-2] +'\t'+str(output))       
 except KeyboardInterrupt:
     pass
