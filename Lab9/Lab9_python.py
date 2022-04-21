@@ -1,15 +1,15 @@
 # import various libraries necessery to run your Python code
-import sys    # system related library
-import time   # time related library
+import sys                      # system related library
+import time                     # time related library
 ok_loc = 'C:\Program Files\Opal Kelly\FrontPanelUSB\API\Python\3.6\x64'
-sys.path.append(ok_loc)   # add the path of the OK library
-import ok     # OpalKelly library
+sys.path.append(ok_loc)         # add the path of the OK library
+import ok                       # OpalKelly library
 import numpy as np
 import matplotlib.pyplot as plt
 
 #%% 
 # Define FrontPanel device variable, open USB communication and load the bit file in the FPGA
-dev = ok.okCFrontPanel();  # define a device for FrontPanel communication
+dev = ok.okCFrontPanel();                                                     # define a device for FrontPanel communication
 # FrontPanel MUST BE CLOSED FOR THIS STEP TO SUCCEED!!!
 SerialStatus=dev.OpenBySerial("");      # open USB communicaiton with the OK board
 ConfigStatus=dev.ConfigureFPGA("U:\Documents\ECE437\Lab9\BTPipeExample.bit"); # Configure the FPGA with this bit file
@@ -68,10 +68,10 @@ registers = {
             '117':str(format(117,'07b'))	     
 	    }
 read_write = {
-            'raddr3_w':'00000011001010010000000000000001',#"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
-            'raddr4_w':'00000100100010010000000000000001', # "0" + registers['raddr4'] + '10001001' + zeross8 +write_bit,
-            'raddr3_r':'00000011001010010000000000000000', #"0" + registers['raddr3'] + '00101001' + zeros8 + write_bit,
-            'raddr4_r':'00000100001010010000000000000000',# "0" + registers['raddr4'] + '00101001' + zeross8 + write_bit
+            'raddr3_w':'00000011001010010000000000000001',
+            'raddr4_w':'00000100100010010000000000000001',
+            'raddr3_r':'00000011001010010000000000000000',
+            'raddr4_r':'00000100001010010000000000000000',
             '39_w':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + write_bit,
             '39_r':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + read_bit,
             '57_w':"0" + registers['57'] + str(format(3,'08b')) + zeros8 + write_bit,
@@ -142,15 +142,15 @@ except KeyboardInterrupt:
     pass
 
 #%% Reset FIFOs ##
-FIFO_wire = 0x02
-dev.SetWireInValue(FIFO_wire, 1); #Reset FIFOs and counter
-dev.UpdateWireIns();  
-dev.SetWireInValue(FIFO_wire, 0); #Release reset signal
-dev.UpdateWireIns();  
+# FIFO_wire = 0x02
+# dev.SetWireInValue(FIFO_wire, 1);       #Reset FIFOs and counter
+# dev.UpdateWireIns();  
+# dev.SetWireInValue(FIFO_wire, 0);       #Release reset signal
+# dev.UpdateWireIns();  
+# time.sleep(.001)                        # delay for sys reset
 
 #%% Ask for system reset    ##
 sys_reset_wire = 0x03
-Frm_req = 1
 dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
 dev.UpdateWireIns();  
 time.sleep(.001)                       # make sure sys is reset by waiting for stable signal
@@ -160,8 +160,10 @@ dev.UpdateWireIns();
 time.sleep(.001)                       # delay for frame req
 #%% Ask for frame requst    ##
 Frm_req_wire = 0x04
-dev.SetWireInValue(Frm_req_wire, 1); # Ask for frame req
+dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
 dev.UpdateWireIns();  
+dev.SetWireInValue(Frm_req_wire, 0);    # stop asking for frame req
+dev.UpdateWireIns(); 
 # set frame req to 0 in FSM to get exact clc cycle (want it to fall at falling clk (negedge))
 #%% Grab data ##
 
@@ -177,7 +179,7 @@ pix2 = 648
 Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
     # 64 or 1024?
 Block_size = int(Block_size_max/1024)*1024  # ask for 315392 pixels
-#ignore 812 pixels of the full 316224 pixels to obtain a full 1024 array
+#ignore 812 pixels of the full 316224 pixels to obtain a full 1024 multiple array
 
 buf = bytearray(Block_size*2)                     # make sure buf is bigger than the amount of data coming in
 dev.ReadFromBlockPipeOut(0x20, Block_size, buf);  # Read data from BT PipeOut
@@ -185,11 +187,11 @@ dev.ReadFromBlockPipeOut(0x20, Block_size, buf);  # Read data from BT PipeOut
 #%% Set array to image array ##
 image = []
 
-counter = 0
+# counter = 0
 for i in range(0, Block_size, 4):   
     image.append( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
-    counter = counter + 1
-#    print (buf[i])
+    # counter = counter + 1
+    # print (buf[i])
 
 #%% show image ##
 image = np.array(image)                         # convert list to array
