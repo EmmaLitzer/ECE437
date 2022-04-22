@@ -1,0 +1,81 @@
+runfile('U:/Documents/ECE437/Lab9/Lab9.py', wdir='U:/Documents/ECE437/Lab9')
+0
+----------------------------------------------------
+FrontPanel host interface was successfully initialized.
+Your bit file is successfully loaded in the FPGA.
+----------------------------------------------------
+----------------------------------------------------
+regaddr: raddr3 0
+regaddr: raddr4 0
+regaddr: 39     0
+regaddr: 57     0
+regaddr: 58     0
+regaddr: 59     0
+regaddr: 60     0
+regaddr: 69     0
+regaddr: 80     0
+regaddr: 83     0
+regaddr: 97     0
+regaddr: 98     0
+regaddr: 100    0
+regaddr: 101    0
+regaddr: 102    0
+regaddr: 103    0
+regaddr: 106    0
+regaddr: 107    0
+regaddr: 108    0
+regaddr: 109    0
+regaddr: 110    0
+regaddr: 117    0
+Traceback (most recent call last):
+
+  File "<ipython-input-5-98071c5e496d>", line 1, in <module>
+    runfile('U:/Documents/ECE437/Lab9/Lab9.py', wdir='U:/Documents/ECE437/Lab9')
+
+  File "C:\ProgramData\Anaconda3\lib\site-packages\spyder\utils\site\sitecustomize.py", line 705, in runfile
+    execfile(filename, namespace)
+
+  File "C:\ProgramData\Anaconda3\lib\site-packages\spyder\utils\site\sitecustomize.py", line 102, in execfile
+    exec(compile(f.read(), filename, 'exec'), namespace)
+
+  File "U:/Documents/ECE437/Lab9/Lab9.py", line 200, in <module>
+    im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
+
+ValueError: cannot reshape array of size 78848 into shape (488,648)
+
+
+
+
+np.size(buf)
+Out[6]: 630784
+
+image.size()
+Traceback (most recent call last):
+
+  File "<ipython-input-7-bbdb6521895d>", line 1, in <module>
+    image.size()
+
+TypeError: 'int' object is not callable
+
+
+
+
+np.size(image)
+Out[8]: 78848
+
+np.size(image)*4
+Out[9]: 315392
+
+img = np.array(buf).reshape(488,648)
+Traceback (most recent call last):
+
+  File "<ipython-input-10-169479ab825e>", line 1, in <module>
+    img = np.array(buf).reshape(488,648)
+
+ValueError: cannot reshape array of size 630784 into shape (488,648)
+
+
+
+
+np.max(buf)
+Out[11]: 0
