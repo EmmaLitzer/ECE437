@@ -9,7 +9,6 @@ module BTPipeExample(
     output [7:0] led,
     input sys_clkn,
     input sys_clkp,
-    
     input [9:0] CVM300_D, //data_out (data to read)
     input CVM300_Data_valid, //DVAL
     input CVM300_Line_valid, //LVAL
@@ -20,8 +19,8 @@ module BTPipeExample(
     output CVM300_SPI_EN,
     output CVM300_SPI_IN,
     output CVM300_SPI_CLK,
-    input CVM300_SPI_OUT,
-    
+    input CVM300_SPI_OUT
+    /*
     output [31:0] PC_control,
     output [31:0] PC_data,
     output [31:0] return,
@@ -30,7 +29,7 @@ module BTPipeExample(
     output [31:0] grabimg,
     output wire [7:0] State_r,
     output reg [7:0] State
-    
+    */
     );
     
 
@@ -50,18 +49,24 @@ module BTPipeExample(
     localparam STATE_DELAY               = 8'd2;
     localparam STATE_RESET_FINISHED      = 8'd3;
     localparam FREM_REQ_START            = 8'd4;
-    localparam FREM_REQ_END               = 8'd5;
+    localparam FREM_REQ_END              = 8'd5;
     localparam STATE_FINISH              = 8'd6;
    
     reg [31:0] counter = 8'd0;
     reg [15:0] counter_delay = 16'd0;
+    wire [7:0] State_r;
+    reg [7:0] State;
     reg framereqreg;
 
     reg [7:0] led_register = 0;
     reg [3:0] button_reg, write_enable_counter;  
     reg write_reset, read_reset, DVAL;
-    wire [31:0] Reset_Counter;
-    wire [31:0] DATA_Counter;    
+    wire [31:0] PC_control;
+    wire [31:0] PC_data;
+    wire [31:0] return;    
+    wire [31:0] RST_FIFO;
+    wire [31:0] SYS_RST;
+    wire [31:0] grabimg;
     wire FIFO_read_enable, FIFO_BT_BlockSize_Full, FIFO_full, FIFO_empty, BT_Strobe;
     wire [31:0] FIFO_data_out;
     
@@ -91,7 +96,7 @@ module BTPipeExample(
             STATE_INIT:   begin                              
                 write_reset <= 1'b1;
                 read_reset <= 1'b1;
-                if (Reset_Counter[0] == 1'b1) State <= STATE_RESET;                
+                if (grabimg[0] == 1'b1) State <= STATE_RESET;                
             end
             
             STATE_RESET:   begin
@@ -221,7 +226,7 @@ module BTPipeExample(
                    .ep_dataout(grabimg)); 
                        
     okWireOut wire21 (  .okHE(okHE), 
-                   .okEH(okEHx[ 0*65 +: 65 ]),
+                   .okEH(okEHx[ 1*65 +: 65 ]),
                    .ep_addr(8'h21), 
                    .ep_datain(return));  //return returns data of registers we are reading from                    
                         
