@@ -15,6 +15,7 @@ SerialStatus=dev.OpenBySerial("");      # open USB communicaiton with the OK boa
 ConfigStatus=dev.ConfigureFPGA("U:\Documents\ECE437\Lab9\BTPipeExample.bit"); # Configure the FPGA with this bit file
 print(ConfigStatus)
 
+
 # Check if FrontPanel is initialized correctly and if the bit file is loaded. Otherwise terminate the program
 print("----------------------------------------------------")
 if SerialStatus == 0:
@@ -32,6 +33,7 @@ else:
     sys.exit ()
 print("----------------------------------------------------")
 print("----------------------------------------------------")
+
 
 #%% 
 # Need to set SPI settings and start with FSM matching CMV300 data sheet
@@ -136,7 +138,7 @@ try:
         Write_Grab_FSM(key) 
         if key[-1] !='w':
             dev.UpdateWireOuts()                                
-            output = dev.GetWireOutValue(0x21)                  
+            output = dev.GetWireOutValue(0x20)                  
             print('regaddr:', key[:-2] +'\t'+str(output))       
 except KeyboardInterrupt:
     pass
