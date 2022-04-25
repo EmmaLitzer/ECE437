@@ -1,0 +1,64 @@
+`timescale 1ns / 1ps
+
+module JTEG_Test_File(   
+    output [7:0] led,
+    input sys_clkn,
+    input sys_clkp,  
+    input [9:0] CVM300_D, //d
+    input CVM300_Data_valid, 
+    input CVM300_Line_valid, 
+    input CVM300_CLK_OUT, //C
+    output CVM300_CLK_IN, //1
+    output CVM300_SYS_RES_N, 
+    output CVM300_FRAME_REQ, 
+    output CVM300_SPI_EN,    
+    output CVM300_SPI_IN,    
+    output CVM300_SPI_CLK,   
+    input CVM300_SPI_OUT,    
+
+    input  [4:0] okUH,
+    output [2:0] okHU,
+    inout  [31:0] okUHU,
+    inout  okAA      
+);
+
+    wire  ILA_Clk, ACK_bit, FSM_Clk, TrigerEvent;    
+    wire [23:0] ClkDivThreshold = 1_000;   
+    wire SCL, SDA; 
+    wire [7:0] State;
+    wire [31:0] PC_control;
+    
+    assign TrigerEvent = ~CVM300_SYS_RES_N;   
+
+    //Instantiate the module that we like to test
+    BTPipeExample I2C_Test1 (        
+        .led(led),
+        .sys_clkn(sys_clkn),
+        .sys_clkp(sys_clkp),
+        .CVM300_D(CVM300_D),
+        .CVM300_Data_valid(CVM300_Data_valid), 
+        .CVM300_Line_valid(CVM300_Line_valid), 
+        .CVM300_CLK_OUT(CVM300_CLK_OUT), //C
+        . CVM300_CLK_IN(CVM300_CLK_IN), //1
+        . CVM300_SYS_RES_N(CVM300_SYS_RES_N), 
+        . CVM300_FRAME_REQ(CVM300_FRAME_REQ), 
+        . CVM300_SPI_EN(CVM300_SPI_EN),    
+        . CVM300_SPI_IN(CVM300_SPI_IN),    
+        . CVM300_SPI_CLK(CVM300_SPI_CLK),   
+        .CVM300_SPI_OUT(CVM300_SPI_OUT),            
+        .FSM_Clk(FSM_Clk),        
+        .ILA_Clk(ILA_Clk),
+        .okUH(okUH),
+        .okHU(okHU),
+        .okUHU(okUHU),
+        .okAA(okAA),
+        .PC_control(PC_control)
+        );
+    
+    //Instantiate the ILA module
+    ila_0 ila_sample12 ( 
+        .clk(ILA_Clk),
+        .probe0({CVM300_CLK_IN, CVM300_FRAME_REQ, CVM300_SPI_CLK, CVM300_SPI_EN, CVM300_SPI_IN, CVM300_SYS_RES_N, FSM_Clk, ILA_Clk}),                             
+        .probe1({CVM300_CLK_OUT, TrigerEvent})
+        );                        
+endmodule
