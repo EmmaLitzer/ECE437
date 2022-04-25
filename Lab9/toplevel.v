@@ -19,7 +19,9 @@ module BTPipeExample(
     output CVM300_SPI_EN,
     output CVM300_SPI_IN,
     output CVM300_SPI_CLK,
-    input CVM300_SPI_OUT
+    input CVM300_SPI_OUT    
+    //output wire FSM_Clk,
+    //output wire ILA_Clk        
     /*
     output [31:0] PC_control,
     output [31:0] PC_data,
@@ -81,6 +83,7 @@ module BTPipeExample(
     assign led[6] = ~write_reset;
     
     assign CVM300_FRAME_REQ = framereqreg; 
+    assign CVM300_SYS_RES_N = SYS_RST;
     
     initial begin
         write_reset <= 1'b0;
