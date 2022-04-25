@@ -19,11 +19,11 @@ module BTPipeExample(
     output CVM300_SPI_EN,
     output CVM300_SPI_IN,
     output CVM300_SPI_CLK,
-    input CVM300_SPI_OUT    
-    //output wire FSM_Clk,
-    //output wire ILA_Clk        
+    input CVM300_SPI_OUT,    
+    output wire FSM_Clk,
+    output wire ILA_Clk,        
+    output [31:0] PC_control
     /*
-    output [31:0] PC_control,
     output [31:0] PC_data,
     output [31:0] return,
     //output [31:0] RST_FIFO,
@@ -38,7 +38,8 @@ module BTPipeExample(
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
     wire [23:0] ClkDivThreshold = 1;   
-    wire FSM_Clk, ILA_Clk; 
+    //*************uncomment if not use jteg************************//
+    //wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
                                       .sys_clkp(sys_clkp),                                      
                                       .ClkDivThreshold(ClkDivThreshold),
@@ -63,7 +64,8 @@ module BTPipeExample(
     reg [7:0] led_register = 0;
     reg [3:0] button_reg, write_enable_counter;  
     reg write_reset, read_reset, DVAL;
-    wire [31:0] PC_control;
+    //*************uncomment if not use jteg************************//
+    //wire [31:0] PC_control;
     wire [31:0] PC_data;
     wire [31:0] return;    
     wire [31:0] RST_FIFO;
@@ -83,7 +85,7 @@ module BTPipeExample(
     assign led[6] = ~write_reset;
     
     assign CVM300_FRAME_REQ = framereqreg; 
-    assign CVM300_SYS_RES_N = SYS_RST;
+    assign CVM300_SYS_RES_N = SYS_RST[0];
     
     initial begin
         write_reset <= 1'b0;
