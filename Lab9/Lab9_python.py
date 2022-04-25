@@ -53,6 +53,7 @@ registers = {
             '58':str(format(58,'07b')),
             '59':str(format(59,'07b')),
             '60':str(format(60,'07b')),
+            '68':str(format(68,'07b')),
             '69':str(format(69,'07b')),
             '80':str(format(80,'07b')),
             '83':str(format(83,'07b')),
@@ -84,6 +85,8 @@ read_write = {
             '59_r':"0" + registers['59'] + str(format(240,'08b')) + zeros8 + read_bit,
             '60_w':"0" + registers['60'] + str(format(10,'08b')) + zeros8 + write_bit,
             '60_r':"0" + registers['60'] + str(format(10,'08b')) + zeros8 + read_bit,
+            '68_w':"0" + registers['68'] + str(format(2,'08b')) + zeros8 + write_bit,
+            '68_r':"0" + registers['68'] + str(format(2,'08b')) + zeros8 + read_bit,
             '69_w':"0" + registers['69'] + str(format(9,'08b')) + zeros8 + write_bit,
             '69_r':"0" + registers['69'] + str(format(9,'08b')) + zeros8 + read_bit,
             '80_w':"0" + registers['80'] + str(format(2,'08b')) + zeros8 + write_bit,
@@ -131,6 +134,19 @@ def Write_Grab_FSM(rw):
     dev. UpdateWireIns()                                # Send wirein value to FSM 
 	
 
+#%% Ask for system reset    ##
+sys_reset_wire = 0x03
+dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
+dev.UpdateWireIns();  
+time.sleep(.001)                       # make sure sys is reset by waiting for stable signal
+dev.SetWireInValue(sys_reset_wire, 1); # Turn sys back on
+dev.UpdateWireIns();  
+
+time.sleep(.001)  
+
+#%%
+
+
 # Send SPI settings to FSM
 try:                                                       
     reg_key = read_write.keys()
@@ -138,10 +154,12 @@ try:
         Write_Grab_FSM(key) 
         if key[-1] !='w':
             dev.UpdateWireOuts()                                
-            output = dev.GetWireOutValue(0x20)                  
+            output = dev.GetWireOutValue(0x21)                  
             print('regaddr:', key[:-2] +'\t'+str(output))       
 except KeyboardInterrupt:
     pass
+
+time.sleep(.001)                       # delay for frame req
 
 #%% Reset FIFOs ##
 # FIFO_wire = 0x02
@@ -151,15 +169,7 @@ except KeyboardInterrupt:
 # dev.UpdateWireIns();  
 # time.sleep(.001)                        # delay for sys reset
 
-#%% Ask for system reset    ##
-sys_reset_wire = 0x03
-dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
-dev.UpdateWireIns();  
-time.sleep(.001)                       # make sure sys is reset by waiting for stable signal
-dev.SetWireInValue(sys_reset_wire, 1); # Turn sys back on
-dev.UpdateWireIns();  
 
-time.sleep(.001)                       # delay for frame req
 #%% Ask for frame requst    ##
 Frm_req_wire = 0x04
 dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
@@ -179,26 +189,31 @@ transfer_length = 1 #16
 pix1 = 488
 pix2 = 648
 Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
-    # 64 or 1024?
 Block_size = int(Block_size_max/1024)*1024  # ask for 315392 pixels
+print('Block size:', Block_size)
 #ignore 812 pixels of the full 316224 pixels to obtain a full 1024 multiple array
 
-buf = bytearray(Block_size*2)                     # make sure buf is bigger than the amount of data coming in
-dev.ReadFromBlockPipeOut(0x20, Block_size, buf);  # Read data from BT PipeOut
+buf = bytearray(Block_size*4)                     # make sure buf is bigger than the amount of data coming in
+dev.ReadFromBlockPipeOut(0xa0, Block_size, buf);  # Read data from BT PipeOut
+print(buf)
 
 #%% Set array to image array ##
-image = []
+image = np.zeros(pix1*pix2)
 
 # counter = 0
-for i in range(0, Block_size, 4):   
-    image.append( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
+for i in range(0, Block_size, 1):
+    # print(( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ))
+    image[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
     # counter = counter + 1
     # print (buf[i])
 
 #%% show image ##
 image = np.array(image)                         # convert list to array
+print(np.max(image))
+image= image/np.max(image)
 im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
 pic = plt.imshow(im_array, cmap='jet',origin='lower')            # plot image with origin in lower left
+plt.colorbar()
 plt.savefig("pic.png")
 
 dev.Close()
