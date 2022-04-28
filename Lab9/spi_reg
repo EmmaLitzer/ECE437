@@ -24,16 +24,16 @@ module SPI_FSM(
         output [7:0] led,
         input  sys_clkn,
         input  sys_clkp,
-        output reg FSM_Clk_reg,        
-        output reg ILA_Clk_reg,
+        input FSM_Clk,        
+        //output reg ILA_Clk_reg,
         output reg [7:0] State,
         output wire SPI_EN, 
         output wire SPI_CLK, 
         output wire SPI_IN, 
         input wire SPI_OUT, 
         //change to input using testbench//
-        output wire [31:0] PC_control, 
-        output wire [31:0] PC_data, //data sent in from PC with specified register address, read/write mode, and value to be written
+        input wire [31:0] PC_control, 
+        input wire [31:0] PC_data, //data sent in from PC with specified register address, read/write mode, and value to be written
         //*********************************//
         output wire [31:0] return, //data to send back to PC after reading
         input  wire    [4:0] okUH,
@@ -52,6 +52,7 @@ module SPI_FSM(
     wire [6:0] regaddr = PC_data[30:24];
     wire [7:0] wdata = PC_data[23:16];
     
+    /*
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
     wire [23:0] ClkDivThreshold = 1;   
@@ -66,6 +67,7 @@ module SPI_FSM(
         FSM_Clk_reg = FSM_Clk;
         ILA_Clk_reg = ILA_Clk;   
     end  
+    */
     
     localparam STATE_INIT       = 8'd0;    
     assign SPI_EN = sen;
@@ -275,40 +277,7 @@ module SPI_FSM(
     end               
   
     
- // OK Interface
-    wire [112:0]    okHE;  //These are FrontPanel wires needed to IO communication    
-    wire [64:0]     okEH;  //These are FrontPanel wires needed to IO communication 
-        //Depending on the number of outgoing endpoints, adjust endPt_count accordingly.
-    //In this example, we have 2 output endpoints, hence endPt_count = 2.
-    localparam  endPt_count = 1;
-    wire [endPt_count*65-1:0] okEHx;  
-    okWireOR # (.N(endPt_count)) wireOR (okEH, okEHx);
-    wire okClk;
-    
-    //This is the OK host that allows data to be sent or recived    
-    okHost hostIF (
-        .okUH(okUH),
-        .okHU(okHU),
-        .okUHU(okUHU),
-        .okClk(okClk),
-        .okAA(okAA),
-        .okHE(okHE),
-        .okEH(okEH)
-    );
-    
-    
-     okWireIn wire10 (   .okHE(okHE), 
-                       .ep_addr(8'h00), 
-                       .ep_dataout(PC_control)); //signal to tell FSM to start
-                       
-    okWireIn wire11 (   .okHE(okHE), 
-                       .ep_addr(8'h01), 
-                       .ep_dataout(PC_data)); //data to tell FSM to read/write, which registers, and what data
-                       
-    okWireOut wire20 (  .okHE(okHE), 
-                   .okEH(okEHx[ 0*65 +: 65 ]),
-                   .ep_addr(8'h20), 
-                   .ep_datain(return));    
+   
     
 
     
