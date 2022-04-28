@@ -54,18 +54,21 @@ module BTPipeExample(
     localparam FREM_REQ_START            = 8'd4;
     localparam FREM_REQ_END              = 8'd5;
     localparam STATE_FINISH              = 8'd6;
+    localparam STATE_SYSRESN             = 8'd7;
+    localparam STATE_GRABIMG             = 8'd8;
    
     reg [31:0] counter = 8'd0;
     reg [15:0] counter_delay = 16'd0;
     wire [7:0] State_r;
     reg [7:0] State;
     reg framereqreg;
+    reg sysresnreg;
 
     reg [7:0] led_register = 0;
     reg [3:0] button_reg, write_enable_counter;  
     reg write_reset, read_reset, DVAL;
     //*************uncomment if not use jteg************************//
-    //wire [31:0] PC_control;
+   //wire [31:0] PC_control;
     wire [31:0] PC_data;
     wire [31:0] return;    
     wire [31:0] RST_FIFO;
@@ -85,12 +88,13 @@ module BTPipeExample(
     assign led[6] = ~write_reset;
     
     assign CVM300_FRAME_REQ = framereqreg; 
-    assign CVM300_SYS_RES_N = SYS_RST[0];
+    assign CVM300_SYS_RES_N = sysresnreg;
     
     initial begin
         write_reset <= 1'b0;
         read_reset <= 1'b0;
         State <= STATE_INIT;
+        sysresnreg <= 1'b1;
     end
                                          
     always @(negedge FSM_Clk) begin     
@@ -99,9 +103,23 @@ module BTPipeExample(
         
         case (State)
             STATE_INIT:   begin                              
-                write_reset <= 1'b1;
-                read_reset <= 1'b1;
-                if (grabimg[0] == 1'b1) State <= STATE_RESET;                
+                if (SYS_RST[0] == 1'b0) begin
+                    sysresnreg <= 1'b0;
+                    State <= STATE_SYSRESN;
+                end  
+            end
+            
+            STATE_SYSRESN: begin
+                if (SYS_RST[0] == 1'b1) begin
+                    sysresnreg <= 1'b1;
+                    State <= STATE_GRABIMG;
+                end
+            end
+            
+            STATE_GRABIMG: begin
+                //write_reset <= 1'b1;
+                //read_reset <= 1'b1;
+                if (grabimg[0] == 1'b1) State <= STATE_RESET;              
             end
             
             STATE_RESET:   begin
@@ -130,13 +148,13 @@ module BTPipeExample(
              end
                                   
              FREM_REQ_END:   begin
-                counter <= counter + 1;             
-                framereqreg <= 1'b01;                
+                counter <= counter + 1;       //what is the point of the counter here?      
+                framereqreg <= 1'b0;                
                 if (counter == 1024)  State <= STATE_FINISH;         
              end
             
              STATE_FINISH:   begin                         
-                State <= STATE_INIT;                                                           
+                State <= STATE_GRABIMG;                                                           
             end
 
         endcase
