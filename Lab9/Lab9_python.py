@@ -7,6 +7,9 @@ import ok                       # OpalKelly library
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+
+
 #%% 
 # Define FrontPanel device variable, open USB communication and load the bit file in the FPGA
 dev = ok.okCFrontPanel();                                                     # define a device for FrontPanel communication
@@ -49,6 +52,8 @@ registers = {
             'raddr3':'0000011',
             'radar4':'0000100',
             '39':str(format(39,'07b')),
+            '43':str(format(43,'07b')),
+            '55':str(format(55,'07b')),
             '57':str(format(57,'07b')),
             '58':str(format(58,'07b')),
             '59':str(format(59,'07b')),
@@ -77,6 +82,10 @@ read_write = {
             'raddr4_r':'00000100001010010000000000000000',
             '39_w':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + write_bit,
             '39_r':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + read_bit,
+            '43_w':"0" + registers['43'] + str(format(15,'08b')) + zeros8 + write_bit,
+            '43_r':"0" + registers['43'] + str(format(15,'08b')) + zeros8 + read_bit,
+            '55_w':"0" + registers['55'] + str(format(1,'08b')) + zeros8 + write_bit,
+            '55_r':"0" + registers['55'] + str(format(1,'08b')) + zeros8 + read_bit,
             '57_w':"0" + registers['57'] + str(format(3,'08b')) + zeros8 + write_bit,
             '57_r':"0" + registers['57'] + str(format(3,'08b')) + zeros8 + read_bit,
             '58_w':"0" + registers['58'] + str(format(44,'08b')) + zeros8 + write_bit,
@@ -136,8 +145,10 @@ def Write_Grab_FSM(rw):
 
 #%% Ask for system reset    ##
 sys_reset_wire = 0x03
-dev.SetWireInValue(sys_reset_wire, 0); # Set sys to 0 (off for restart)
+dev.SetWireInValue(sys_reset_wire, 0); # trigger sys to 0 (off for restart)
+dev.SetWireInValue(0x04, 0); # make sure not grabbing an image
 dev.UpdateWireIns();  
+
 time.sleep(.001)                       # make sure sys is reset by waiting for stable signal
 dev.SetWireInValue(sys_reset_wire, 1); # Turn sys back on
 dev.UpdateWireIns();  
@@ -168,7 +179,15 @@ time.sleep(.001)                       # delay for frame req
 # dev.SetWireInValue(FIFO_wire, 0);       #Release reset signal
 # dev.UpdateWireIns();  
 # time.sleep(.001)                        # delay for sys reset
+transfer_length = 1 #16
+pix1 = 488
+pix2 = 648
+Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
+Block_size = int(Block_size_max/1024)*1024   # ask for 315392 pixels
+print('Block size:', Block_size)
+#ignore 812 pixels of the full 316224 pixels to obtain a full 1024 multiple array
 
+buf = bytearray(Block_size)  
 
 #%% Ask for frame requst    ##
 Frm_req_wire = 0x04
@@ -185,36 +204,43 @@ dev.UpdateWireIns();
 
 # 8 bit in, 32 out
 
-transfer_length = 1 #16
-pix1 = 488
-pix2 = 648
-Block_size_max = pix1*pix2*transfer_length  # 316224 Bytes
-Block_size = int(Block_size_max/1024)*1024  # ask for 315392 pixels
-print('Block size:', Block_size)
-#ignore 812 pixels of the full 316224 pixels to obtain a full 1024 multiple array
-
-buf = bytearray(Block_size*4)                     # make sure buf is bigger than the amount of data coming in
-dev.ReadFromBlockPipeOut(0xa0, Block_size, buf);  # Read data from BT PipeOut
-print(buf)
+                   # make sure buf is bigger than the amount of data coming in
+dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+#print(buf)
 
 #%% Set array to image array ##
 image = np.zeros(pix1*pix2)
+image2 = np.zeros(pix1*pix2)
 
 # counter = 0
-for i in range(0, Block_size, 1):
+for i in range(0, Block_size-2, 1):
     # print(( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ))
     image[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
     # counter = counter + 1
     # print (buf[i])
+
 
 #%% show image ##
 image = np.array(image)                         # convert list to array
 print(np.max(image))
 image= image/np.max(image)
 im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-pic = plt.imshow(im_array, cmap='jet',origin='lower')            # plot image with origin in lower left
+
+im_array_low = im_array[:215][:].flatten()
+im_array_high = im_array[216:][:].flatten()
+im_array2 = np.concatenate((im_array_high, im_array_low))
+for i in range(0, len(im_array2)):
+    image2[i] = im_array2[i]
+im_array2 = image2.reshape(pix1, pix2)
+
+
+#pic = plt.imshow(im_array, cmap='gray') #,origin='lower')           
+#plt.colorbar()
+#plt.savefig("pic.png")
+
+pic = plt.imshow(im_array2[:460][:], cmap='gray') #,origin='lower')           
 plt.colorbar()
-plt.savefig("pic.png")
+plt.savefig("pic2.png")
 
 dev.Close()
 #%%
