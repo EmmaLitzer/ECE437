@@ -148,13 +148,13 @@ module BTPipeExample(
              end
                                   
              FREM_REQ_END:   begin
-                counter <= counter + 1;       //what is the point of the counter here?      
+                //counter <= counter + 1;       //what is the point of the counter here?      
                 framereqreg <= 1'b0;                
-                if (counter == 1024)  State <= STATE_FINISH;         
+                //if (counter == 1024)
+                State <= STATE_FINISH;         
              end
             
-             STATE_FINISH:   begin                         
-                State <= STATE_GRABIMG;                                                           
+             STATE_FINISH:   begin                                                           
             end
 
         endcase
