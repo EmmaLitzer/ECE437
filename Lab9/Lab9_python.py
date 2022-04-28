@@ -217,7 +217,8 @@ for i in range(0, Block_size-2, 1):
     # print(( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ))
     image[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
     # counter = counter + 1
-    # print (buf[i])
+    if i<50:
+        print (buf[i])
 
 
 #%% show image ##
