@@ -19,10 +19,10 @@ module BTPipeExample(
     output CVM300_SPI_EN,
     output CVM300_SPI_IN,
     output CVM300_SPI_CLK,
-    input CVM300_SPI_OUT,    
-    output wire FSM_Clk,
-    output wire ILA_Clk,        
-    output [31:0] PC_control
+    input CVM300_SPI_OUT    
+    //output wire FSM_Clk,
+    //output wire ILA_Clk,        
+    //output [31:0] PC_control
     /*
     output [31:0] PC_data,
     output [31:0] return,
@@ -39,7 +39,7 @@ module BTPipeExample(
     //High speed CLK signal, Low speed FSM_Clk signal     
     wire [23:0] ClkDivThreshold = 1;   
     //*************uncomment if not use jteg************************//
-    //wire FSM_Clk, ILA_Clk; 
+    wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
                                       .sys_clkp(sys_clkp),                                      
                                       .ClkDivThreshold(ClkDivThreshold),
@@ -68,7 +68,7 @@ module BTPipeExample(
     reg [3:0] button_reg, write_enable_counter;  
     reg write_reset, read_reset, DVAL;
     //*************uncomment if not use jteg************************//
-   //wire [31:0] PC_control;
+    wire [31:0] PC_control;
     wire [31:0] PC_data;
     wire [31:0] return;    
     wire [31:0] RST_FIFO;
@@ -99,7 +99,7 @@ module BTPipeExample(
                                          
     always @(negedge FSM_Clk) begin     
         //button_reg <= ~button;   // Grab the values from the button, complement and store them in register                
-        if (grabimg[0] == 1'b1) State <= STATE_RESET;
+        //if (grabimg[0] == 1'b1) State <= STATE_RESET;
         
         case (State)
             STATE_INIT:   begin                              
