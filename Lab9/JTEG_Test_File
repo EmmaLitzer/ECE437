@@ -24,7 +24,6 @@ module JTEG_Test_File(
 
     wire  ILA_Clk, ACK_bit, FSM_Clk, TrigerEvent;    
     wire [23:0] ClkDivThreshold = 1_000;   
-    wire SCL, SDA; 
     wire [7:0] State;
     wire [31:0] PC_control;
     
@@ -39,12 +38,12 @@ module JTEG_Test_File(
         .CVM300_Data_valid(CVM300_Data_valid), 
         .CVM300_Line_valid(CVM300_Line_valid), 
         .CVM300_CLK_OUT(CVM300_CLK_OUT), //C
-        . CVM300_CLK_IN(CVM300_CLK_IN), //1
-        . CVM300_SYS_RES_N(CVM300_SYS_RES_N), 
-        . CVM300_FRAME_REQ(CVM300_FRAME_REQ), 
-        . CVM300_SPI_EN(CVM300_SPI_EN),    
-        . CVM300_SPI_IN(CVM300_SPI_IN),    
-        . CVM300_SPI_CLK(CVM300_SPI_CLK),   
+        .CVM300_CLK_IN(CVM300_CLK_IN), //1
+        .CVM300_SYS_RES_N(CVM300_SYS_RES_N), 
+        .CVM300_FRAME_REQ(CVM300_FRAME_REQ), 
+        .CVM300_SPI_EN(CVM300_SPI_EN),    
+        .CVM300_SPI_IN(CVM300_SPI_IN),    
+        .CVM300_SPI_CLK(CVM300_SPI_CLK),   
         .CVM300_SPI_OUT(CVM300_SPI_OUT),            
         .FSM_Clk(FSM_Clk),        
         .ILA_Clk(ILA_Clk),
