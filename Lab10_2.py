@@ -179,6 +179,49 @@ print('Block size:', Block_size)
 
 buf = bytearray(Block_size)  
 
+# ---------------------------------------------------------------------------------------------
+# TRY MULTITHREADING: MAKE CLASS
+from threading import Thread
+class Video:
+	def __init__(self):
+		Frm_req_wire = 0x04
+    		dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
+	    	dev.UpdateWireIns();  
+	    	dev.SetWireInValue(Frm_req_wire, 0);    # stop asking for frame req
+	    	dev.UpdateWireIns(); 
+		# Grab data from sensor
+	    	dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+
+	    	#Set array to image array ##
+	    	image = np.zeros(pix1*pix2)
+	    	image2 = np.zeros(pix1*pix2)
+
+	    	for i in range(0, Block_size-2, 1):
+			# Get image data from buf
+			image[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
+
+
+	    	#show image ##
+	   	image = np.array(image)                         # convert list to array
+	    	image= image/np.max(image)
+	    	im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
+
+			# Image is tearing or splitting in half: This reframes the image to the correct coordinates
+	    	im_array_low = im_array[:215][:].flatten()
+	    	im_array_high = im_array[216:][:].flatten()
+	    	im_array2 = np.concatenate((im_array_high, im_array_low))
+	    	#for i in range(0, len(im_array2)):
+	    	#    image2[i] = im_array2[i]
+		image2[:Block_size] = im_array2		# for loop takes too long
+	    	im_array2 = image2.reshape(pix1, pix2)
+		
+		self.frame = im_array2[:460][:]		# Get rid of oversaturated region
+
+
+
+
+# ---------------------------------------------------------------------------------------------
+
 #%% Ask for frame requst    ##
 #generate a video at 20fps
 counter = 0
