@@ -177,20 +177,42 @@ Block_size = int(Block_size_max/1024)*1024   # ask for 315392 pixels
 print('Block size:', Block_size)
 #ignore 812 pixels of the full 316224 pixels to obtain a full 1024 multiple array
 
-buf = bytearray(Block_size)  
+# buf = bytearray(315392)  #Block_size
 
 # ---------------------------------------------------------------------------------------------
 # TRY MULTITHREADING: MAKE CLASS
 from threading import Thread
-class Video:
+class GrabData:
 	def __init__(self):
-		Frm_req_wire = 0x04
-    		dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
-	    	dev.UpdateWireIns();  
-	    	dev.SetWireInValue(Frm_req_wire, 0);    # stop asking for frame req
-	    	dev.UpdateWireIns(); 
-		# Grab data from sensor
-	    	dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+		
+		self.t = Thread(target=self.update, args=())
+		self.t.daemon = True				# daemon threads run in background
+	def start():
+		self.stopped = False
+		self.t.start()
+	def update():
+		while True:
+			buf = bytearray(315392)
+			dev.SetWireInValue(0x04, 1);    # Ask for frame req
+			dev.UpdateWireIns();  
+			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+			dev.UpdateWireIns(); 
+			# Grab data from sensor
+			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+			
+			self.frame = buf
+	def read():
+		return self.frame
+	def stop():
+		self.stopped = True
+	
+# 		Frm_req_wire = 0x04
+#     		dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
+# 	    	dev.UpdateWireIns();  
+# 	    	dev.SetWireInValue(Frm_req_wire, 0);    # stop asking for frame req
+# 	    	dev.UpdateWireIns(); 
+# 		# Grab data from sensor
+# 	    	dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
 
 	    	#Set array to image array ##
 	    	image = np.zeros(pix1*pix2)
@@ -218,6 +240,9 @@ class Video:
 		self.frame = im_array2[:460][:]		# Get rid of oversaturated region
 
 
+buf = GrabData.start()
+While True:
+	
 
 
 # ---------------------------------------------------------------------------------------------
