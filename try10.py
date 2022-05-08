@@ -182,30 +182,30 @@ print('Block size:', Block_size)
 # ---------------------------------------------------------------------------------------------
 # TRY MULTITHREADING: 
 # followed instructions from https://gvasu.medium.com/faster-real-time-video-processing-using-multi-threading-in-python-8902589e1055 
-# from threading import Thread
-# class buf_thread:
-# 	def __init__(self):
+from threading import Thread
+class buf_thread:
+	def __init__(self):
 		
-# 		self.t = Thread(target=self.update, args=())
-# 		self.t.daemon = True				# daemon threads run in background
-# 	def start(self):
-# 		self.stopped = False
-# 		self.t.start()
-# 	def update(self):
-# 		while True:
-# 			buf = bytearray(Block_size)
-# 			dev.SetWireInValue(0x04, 1);    # Ask for frame req
-# 			dev.UpdateWireIns();  
-# 			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
-# 			dev.UpdateWireIns(); 
-# 			# Grab data from sensor
-# 			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+		self.t = Thread(target=self.update, args=())
+		self.t.daemon = True				# daemon threads run in background
+	def start(self):
+		self.stopped = False
+		self.t.start()
+	def update(self):
+		while True:
+			buf = bytearray(Block_size)
+			dev.SetWireInValue(0x04, 1);    # Ask for frame req
+			dev.UpdateWireIns();  
+			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+			dev.UpdateWireIns(); 
+			# Grab data from sensor
+			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
 			
-# 			self.frame = buf
-# 	def read(self):
-# 		return self.frame
-# 	def stop(self):
-# 		self.stopped = True
+			self.frame = buf
+	def read(self):
+		return self.frame
+	def stop(self):
+		self.stopped = True
     
 
 def buf_thread():
@@ -218,7 +218,9 @@ def buf_thread():
     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
     return buf
 
-buf = Thread(target=buf_thread)
+buf_t = Thread(target=buf_thread)
+buf_t.start()
+buf_t.join()
 
 
     
