@@ -49,7 +49,9 @@ registers = {
             'raddr3':'0000011',
             'radar4':'0000100',
             '39':str(format(39,'07b')),
+            '42':str(format(42, '07b')),
             '43':str(format(43,'07b')),
+            '45':str(format(45,'07b')),
             '55':str(format(55,'07b')),
             '57':str(format(57,'07b')),
             '58':str(format(58,'07b')),
@@ -79,10 +81,16 @@ read_write = {
             'raddr4_r':'00000100001010010000000000000000',
             '39_w':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + write_bit,
             '39_r':"0" + registers['39'] + str(format(1,'08b')) + zeros8 + read_bit,
-            '43_w':"0" + registers['43'] + str(format(15,'08b')) + zeros8 + write_bit,
-            '43_r':"0" + registers['43'] + str(format(15,'08b')) + zeros8 + read_bit,
-            '55_w':"0" + registers['55'] + str(format(1,'08b')) + zeros8 + write_bit,
-            '55_r':"0" + registers['55'] + str(format(1,'08b')) + zeros8 + read_bit,
+            '42_w':"0" + registers['42'] + str(format(12,'08b')) + zeros8 + write_bit, #originally 232 LSB
+            '42_r':"0" + registers['42'] + str(format(12,'08b')) + zeros8 + read_bit, # OG 0
+            '43_w':"0" + registers['43'] + str(format(232,'08b')) + zeros8 + write_bit, #originally 1 MSB
+            '43_r':"0" + registers['43'] + str(format(232,'08b')) + zeros8 + read_bit, # OG 10
+            '45_w':"0" + registers['45'] + str(format(0,'08b')) + zeros8 + write_bit, #originally 232
+            '45_r':"0" + registers['45'] + str(format(0,'08b')) + zeros8 + read_bit,
+            '46_w':"0" + registers['43'] + str(format(5,'08b')) + zeros8 + write_bit,
+            '46_r':"0" + registers['43'] + str(format(5,'08b')) + zeros8 + read_bit,
+            '55_w':"0" + registers['55'] + str(format(5,'08b')) + zeros8 + write_bit,
+            '55_r':"0" + registers['55'] + str(format(5,'08b')) + zeros8 + read_bit,
             '57_w':"0" + registers['57'] + str(format(3,'08b')) + zeros8 + write_bit,
             '57_r':"0" + registers['57'] + str(format(3,'08b')) + zeros8 + read_bit,
             '58_w':"0" + registers['58'] + str(format(44,'08b')) + zeros8 + write_bit,
@@ -97,8 +105,8 @@ read_write = {
             '69_r':"0" + registers['69'] + str(format(9,'08b')) + zeros8 + read_bit,
             '80_w':"0" + registers['80'] + str(format(2,'08b')) + zeros8 + write_bit,
             '80_r':"0" + registers['80'] + str(format(2,'08b')) + zeros8 + read_bit,
-            '83_w':"0" + registers['83'] + str(format(251,'08b')) + zeros8 + write_bit,
-            '83_r':"0" + registers['83'] + str(format(251,'08b')) + zeros8 + read_bit,
+            '83_w':"0" + registers['83'] + str(format(155,'08b')) + zeros8 + write_bit, #155 from 251, clk speed 38MHz
+            '83_r':"0" + registers['83'] + str(format(155,'08b')) + zeros8 + read_bit,
             '97_w':"0" + registers['97'] + str(format(240,'08b')) + zeros8 + write_bit,
             '97_r':"0" + registers['97'] + str(format(240,'08b')) + zeros8 + read_bit,
             '98_w':"0" + registers['98'] + str(format(10,'08b')) + zeros8 + write_bit,
@@ -183,29 +191,29 @@ print('Block size:', Block_size)
 # TRY MULTITHREADING: 
 # followed instructions from https://gvasu.medium.com/faster-real-time-video-processing-using-multi-threading-in-python-8902589e1055 
 from threading import Thread
-class buf_thread:
-	def __init__(self):
-		
-		self.t = Thread(target=self.update, args=())
-		self.t.daemon = True				# daemon threads run in background
-	def start(self):
-		self.stopped = False
-		self.t.start()
-	def update(self):
-		while True:
-			buf = bytearray(Block_size)
-			dev.SetWireInValue(0x04, 1);    # Ask for frame req
-			dev.UpdateWireIns();  
-			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
-			dev.UpdateWireIns(); 
-			# Grab data from sensor
-			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-			
-			self.frame = buf
-	def read(self):
-		return self.frame
-	def stop(self):
-		self.stopped = True
+#class buf_thread:
+#	def __init__(self):
+#		
+#		self.t = Thread(target=self.update, args=())
+#		self.t.daemon = True				# daemon threads run in background
+#	def start(self):
+#		self.stopped = False
+#		self.t.start()
+#	def update(self):
+#		while True:
+#			buf = bytearray(Block_size)
+#			dev.SetWireInValue(0x04, 1);    # Ask for frame req
+#			dev.UpdateWireIns();  
+#			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+#			dev.UpdateWireIns(); 
+#			# Grab data from sensor
+#			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+#			
+#			self.frame = buf
+#	def read(self):
+#		return self.frame
+#	def stop(self):
+#		self.stopped = True
     
 
 def buf_thread():
@@ -216,53 +224,86 @@ def buf_thread():
     dev.UpdateWireIns(); 
     # Grab data from sensor
     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+#    q.put(buf)
     return buf
 
-buf_t = Thread(target=buf_thread)
-buf_t.start()
-buf_t.join()
+
+#def return_Image(buf):
+#    preimage = np.zeros(pix1*pix2)
+#    postimage = np.zeros(pix1*pix2)
+#    for i in range(0, Block_size-2, 1):
+#        # Get image data from buf
+#        preimage[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
+#    #show image ##
+#    print(preimage)
+#    im_array = np.array(preimage).reshape(pix1, pix2)  # Reshape array into a 2D array like image
+#    # Image is tearing or splitting in half: This reframes the image to the correct coordinates
+#    im_array_low = im_array[:215][:].flatten()
+#    im_array_high = im_array[216:][:].flatten()
+#    im = np.concatenate((im_array_high, im_array_low))
+##    for i in range(0, len(preimage)):
+##        postimage[i] = preimage[i]
+##    print(im.shape)
+#    postimage[:Block_size] = im #np.concatenate((im_array_high, im_array_low)) 				# for loop takes too long
+##    print(postimage.shape)
+#    postimage = postimage.reshape(pix1, pix2)
+        
+def get_image(buf):
+    preimage = np.zeros(pix1*pix2)
+    postimage = np.zeros(pix1*pix2)
+    for i in range(0, Block_size-2, 1):
+        # Get image data from buf
+        preimage[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
+
+    for i in range(0, len(preimage)):
+        postimage[i] = preimage[i]
+
+    postimage = postimage.reshape(pix1, pix2)
+    return postimage
 
 
-    
+#buf_t = Thread(target=buf_thread)
+#buf_t.start()
+#buf_t.join()
+
+#from multiprocessing.pool import ThreadPool
+#from multiprocessing import Process, Queue
+#pool = ThreadPool(processes=2)
+#pool2 = ThreadPool(processes=2)
+#get_buf = pool.apply_async(buf_thread)
+#buf = get_buf.get()
+#print(buf)
     
 
 num_frames = 0
-buf_thread = buf_thread()
-buf_thread.start()
+#buf_thread = buf_thread()
+#buf_thread.start()
+counter=0
 start = time.time()
 try:
-	while True:
-		if buf_thread.stopped == True:
-			break
-		else:
-			buf = buf_thread.read()
-		# delay?
-		num_frames += 1
+    while True:
+        counter += 1
+#        get_buf = pool.apply_async(buf_thread)
+#        buf = get_buf.get()
+##        buf = buf_thread()
+#        get_postimage = pool2.apply_async(get_image, args=[buf])
+#        print(get_postimage.get())
+#        postimage = get_postimage.get()
+#        print(postimage)
+        
+        
+        
+        buf = buf_thread()
+        postimage = get_image(buf)
 
+        cv2.imshow('frame', postimage/np.max(postimage)) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
+        
+        if cv2.waitKey(1) & 0xFF == ord('s'):
+            break
+        print('fps = ', counter/(time.time()-start))
 
-		preimage = np.zeros(pix1*pix2)
-		postimage = np.zeros(pix1*pix2)
-
-		for i in range(0, Block_size-2, 1):
-			# Get image data from buf
-			preimage[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
-
-		#show image ##
-		im_array = np.array(preimage).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-
-		# Image is tearing or splitting in half: This reframes the image to the correct coordinates
-		im_array_low = im_array[:215][:].flatten()
-		im_array_high = im_array[216:][:].flatten()
-		#im_array2 = np.concatenate((im_array_high, im_array_low))
-		#for i in range(0, len(im_array2)):
-		#    image2[i] = im_array2[i]
-		postimage[:Block_size] = np.concatenate((im_array_high, im_array_low)) 				# for loop takes too long
-		postimage = postimage.reshape(pix1, pix2)
-		postimage = postimage[:460][:]									# Get rid of oversaturated region
-
-		cv2.imshow('frame', postimage) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
 except KeyboardInterrupt:
-	pass # press ^C to cancel loop
+    pass # press ^C to cancel loop
 
 
 # ---------------------------------------------------------------------------------------------
@@ -318,4 +359,5 @@ except KeyboardInterrupt:
 #     # pic=plt.imshow(printimg, cmap='gray') #,origin='lower')        
 
 dev.Close()
+
 #%%
