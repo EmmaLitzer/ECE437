@@ -37,7 +37,7 @@ module BTPipeExample(
 
     //Instantiate the ClockGenerator module, where three signals are generate:
     //High speed CLK signal, Low speed FSM_Clk signal     
-    wire [23:0] ClkDivThreshold = 1;   
+    wire [23:0] ClkDivThreshold = 4;   
     //*************uncomment if not use jteg************************//
     wire FSM_Clk, ILA_Clk; 
     ClockGenerator ClockGenerator1 (  .sys_clkn(sys_clkn),
@@ -58,7 +58,7 @@ module BTPipeExample(
     localparam STATE_GRABIMG             = 8'd8;
    
     reg [31:0] counter = 8'd0;
-    reg [31:0] counter_delay = 32'd0;
+    reg [15:0] counter_delay = 16'd0; //change to 32 bits if necessary
     wire [7:0] State_r;
     reg [7:0] State;
     reg framereqreg;
@@ -137,7 +137,7 @@ module BTPipeExample(
             end   
                           
             STATE_DELAY:   begin
-                if (counter_delay == 32'd500000)  State <= FREM_REQ_START; //b0000_1111_1111_1111
+                if (counter_delay == 16'b0000_0000_0000_1111)  State <= FREM_REQ_START; //b0000_1111_1111_1111 //32'd500000
                 else counter_delay <= counter_delay + 1;
             end
             
