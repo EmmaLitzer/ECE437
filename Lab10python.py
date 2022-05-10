@@ -195,107 +195,37 @@ print('Block size:', Block_size)
 # buf = bytearray(315392)  #Block_size
 
 # ---------------------------------------------------------------------------------------------
-# TRY MULTITHREADING: 
-# followed instructions from https://gvasu.medium.com/faster-real-time-video-processing-using-multi-threading-in-python-8902589e1055 
-#from threading import Thread
-#class buf_thread:
-#	def __init__(self):
-#		
-#		self.t = Thread(target=self.update, args=())
-#		self.t.daemon = True				# daemon threads run in background
-#	def start(self):
-#		self.stopped = False
-#		self.t.start()
-#	def update(self):
-#		while True:
-#			buf = bytearray(Block_size)
-#			dev.SetWireInValue(0x04, 1);    # Ask for frame req
-#			dev.UpdateWireIns();  
-#			dev.SetWireInValue(0x04, 0);    # stop asking for frame req
-#			dev.UpdateWireIns(); 
-#			# Grab data from sensor
-#			dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-#			
-#			self.frame = buf
-#	def read(self):
-#		return self.frame
-#	def stop(self):
-#		self.stopped = True
+
+# def buf_thread():
+#     buf = bytearray(Block_size)
+#     dev.SetWireInValue(0x04, 1);    # Ask for frame req
+#     dev.UpdateWireIns();  
+#     dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+#     dev.UpdateWireIns(); 
+#     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+#     return buf
+
+     
+# def get_image(buf):
+#     preimage = np.zeros(pix1*pix2)
+#     postimage = np.zeros(pix1*pix2)
     
-
-def buf_thread():
-    buf = bytearray(Block_size)
-    dev.SetWireInValue(0x04, 1);    # Ask for frame req
-    dev.UpdateWireIns();  
-    dev.SetWireInValue(0x04, 0);    # stop asking for frame req
-    dev.UpdateWireIns(); 
-    # Grab data from sensor
-    dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-#    q.put(buf)
-    return buf
-
-
-#def return_Image(buf):
-#    preimage = np.zeros(pix1*pix2)
-#    postimage = np.zeros(pix1*pix2)
-#    for i in range(0, Block_size-2, 1):
-#        # Get image data from buf
-#        preimage[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
-#    #show image ##
-#    print(preimage)
-#    im_array = np.array(preimage).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-#    # Image is tearing or splitting in half: This reframes the image to the correct coordinates
-#    im_array_low = im_array[:215][:].flatten()
-#    im_array_high = im_array[216:][:].flatten()
-#    im = np.concatenate((im_array_high, im_array_low))
-##    for i in range(0, len(preimage)):
-##        postimage[i] = preimage[i]
-##    print(im.shape)
-#    postimage[:Block_size] = im #np.concatenate((im_array_high, im_array_low)) 				# for loop takes too long
-##    print(postimage.shape)
-#    postimage = postimage.reshape(pix1, pix2)
-        
-def get_image(buf):
-    preimage = np.zeros(pix1*pix2)
-    postimage = np.zeros(pix1*pix2)
+#     preimage[:-832] = np.frombuffer(buf, dtype=np.uint8)
     
-    preimage[:-832] = np.frombuffer(buf, dtype=np.uint8)
+#     postimage = preimage
+#     postimage = postimage.reshape(pix1, pix2)
     
-    postimage = preimage
-#    time.sleep(0.037)
-    postimage = postimage.reshape(pix1, pix2)
-    
-    return postimage
+#     return postimage
 
 
-#buf_t = Thread(target=buf_thread)
-#buf_t.start()
-#buf_t.join()
-
-#from multiprocessing.pool import ThreadPool
-#from multiprocessing import Process, Queue
-#pool = ThreadPool(processes=2)
-#pool2 = ThreadPool(processes=2)
-#get_buf = pool.apply_async(buf_thread)
-#buf = get_buf.get()
-#print(buf)
     
 
 num_frames = 0
-#buf_thread = buf_thread()
-#buf_thread.start()
 counter=0
 start = time.time()
 try:
     while (counter<100):
         counter += 1
-#        get_buf = pool.apply_async(buf_thread)
-#        buf = get_buf.get()
-##        buf = buf_thread()
-#        get_postimage = pool2.apply_async(get_image, args=[buf])
-#        print(get_postimage.get())
-#        postimage = get_postimage.get()
-#        print(postimage)
         
         image2 = np.zeros((pix1,pix2))
         
@@ -307,76 +237,16 @@ try:
         image2[:-215] = im_array[215:]
         image2[-215:] = im_array[:215]
 
-        #im_array_low = im_array[:215][:].flatten()
-        #im_array_high = im_array[215:][:].flatten()
-        #im_array2 = np.concatenate((im_array_high, im_array_low)).reshape(pix1,pix2)
-        #print("shape is:", im_array2.shape)
-        #image2[:-832] = im_array2
-        #im_array2 = image2.reshape(pix1, pix2)
-        
 
         cv2.imshow('frame', image2) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
         
         if cv2.waitKey(1) & 0xFF == ord('s'):
             break
-#        print('fps = ', counter/(time.time()-start))
+	print('fps = ', counter/(time.time()-start))
         print('total time = ', time.time()-start)
 
 except KeyboardInterrupt:
-    pass # press ^C to cancel loop
-
-
-# ---------------------------------------------------------------------------------------------
-
-# #%% Ask for frame requst    ##
-# #generate a video at 20fps
-# counter = 0
-# while True: # (counter<10):
-#     counter = counter + 1
-
-# 		# Request frame
-#     Frm_req_wire = 0x04
-#     dev.SetWireInValue(Frm_req_wire, 1);    # Ask for frame req
-#     dev.UpdateWireIns();  
-#     dev.SetWireInValue(Frm_req_wire, 0);    # stop asking for frame req
-#     dev.UpdateWireIns(); 
-# 		# Grab data from sensor
-#     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-
-#     #Set array to image array ##
-#     image = np.zeros(pix1*pix2)
-#     image2 = np.zeros(pix1*pix2)
-    
-#     for i in range(0, Block_size-2, 1):
-# 				# Get image data from buf
-#         image[i] = ( buf[i] + (buf[i+1]<<8) + (buf[i+2]<<16) ) # transfer length is 16 bits
-
-
-#     #show image ##
-#     image = np.array(image)                         # convert list to array
-#     image= image/np.max(image)
-#     im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-    
-# 		# Image is tearing or splitting in half: This reframes the image to the correct coordinates
-#     im_array_low = im_array[:215][:].flatten()
-#     im_array_high = im_array[216:][:].flatten()
-#     im_array2 = np.concatenate((im_array_high, im_array_low))
-#     #for i in range(0, len(im_array2)):
-#     #    image2[i] = im_array2[i]
-# 		image2[:Block_size] = im_array2		# for loop takes too long
-#     im_array2 = image2.reshape(pix1, pix2)
-#     printimg = im_array2[:460][:]		# Get rid of oversaturated region
-    
-# 		# make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv 
-#     cv2.imshow('window', printimg)
-#     print(counter)
-		
-# 		if cv2.waitKey(1) & 0xFF==ord('q'): 
-# 			# break loop if q is pressed
-# 			break
-
-
-#     # pic=plt.imshow(printimg, cmap='gray') #,origin='lower')        
+    pass # press ^C to cancel loop     
 
 dev.Close()
 
