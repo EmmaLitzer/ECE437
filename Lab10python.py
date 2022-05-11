@@ -20,7 +20,7 @@ import cv2
 dev = ok.okCFrontPanel();                                                     # define a device for FrontPanel communication
 # FrontPanel MUST BE CLOSED FOR THIS STEP TO SUCCEED!!!
 SerialStatus=dev.OpenBySerial("");      # open USB communicaiton with the OK board
-ConfigStatus=dev.ConfigureFPGA("U:\Documents\ECE437\Lab9\BTPipeExample.bit"); # Configure the FPGA with this bit file
+ConfigStatus=dev.ConfigureFPGA("U:\Documents\ECE437\Lab9\TestingTopLevel.bit"); # Configure the FPGA with this bit file
 print(ConfigStatus)
 
 # Check if FrontPanel is initialized correctly and if the bit file is loaded. Otherwise terminate the program
@@ -233,69 +233,70 @@ def move_motor(dirinput):  # 0 is backwards ccw, 1 is forwards cw
 
 
 num_frames = 100
-Intensity_5050 = np.zeros((len(num_frames))) # create a empty array the size of the numer of frames to fill with intensity data from pix 50,50
-Int_time = '1ms' # '10ms'
+#Intensity_5050 = np.zeros((num_frames)) # create a empty array the size of the numer of frames to fill with intensity data from pix 50,50
+#Int_time = '1ms' # '10ms'
 
-num_frames = 0
-counter=0
+#num_frames = 0
+counter = 0
 start = time.time()
 image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
 diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
 motor_dict = {0: 'cw', 1: 'ccw'}
-try:
-    while (counter<num_frames):
-	image_F2 = image_F1 # save last frame as F2
+#try:
+while (counter<num_frames):
+    image_F2 = image_F1 # save last frame as F2
+    
+    counter += 1
+    print(counter)
+    # Get current frame and save as image_F1
+    image_F1 = np.zeros((pix1,pix2))
+    buf = buf_thread()
+    postimage = get_image(buf)
 	
-	counter += 1
-        # Get current frame and save as image_F1
-        image_F1 = np.zeros((pix1,pix2))
-        buf = buf_thread()
-        postimage = get_image(buf)
+    image = postimage/np.max(postimage)
+    im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
+    image_F1[:-215] = im_array[215:]
+    image_F1[-215:] = im_array[:215]
+    
+    # Find difference between F1 and F2
+    frame_diff = image_F1 - image_F2 						# image_F1 and image_F2 must be same shape
+    frame_diff_masked = frame_diff[frame_diff >= diff_threshold*np.max(frame_diff)] 	# mask to find maximum frame differences, NEED TO TUNE
+    x_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=0) # find x COM
+    y_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=1) # find y COM
+    print(x_avg) # [ 43.   44.5  45.  ... 566.  566.5 567. ]
+    if x_avg < pix1/2:
+        # if x COM is on left of image
+        motor_dir = 0 #ccw
+    else:
+        motor_dir = 1 #cw
+    # Write on image: # bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType
+    cv2.putText(image_F1,'fps:' + counter/(time.time()-start) + '\nmotor: ' + motor_dict[motor_dir],(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
+    cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
+#        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
+    
+    move_motor(motor_dir)
 	
-        image = postimage/np.max(postimage)
-        im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-        image_F1[:-215] = im_array[215:]
-        image_F1[-215:] = im_array[:215]
-	
-	# Find difference between F1 and F2
-	frame_diff = image_F1 - image_F2 						# image_F1 and image_F2 must be same shape
-	frame_diff_masked = frame_diff[frame_diff >= diff_threshold*np.max(frame_diff)] 	# mask to find maximum frame differences, NEED TO TUNE
-	x_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=0) # find x COM
-	y_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=1) # find y COM
-	
-	if x_avg < pix1/2:
-		# if x COM is on left of image
-		motor_dir = 0 #ccw
-	else:
-		motor_dir = 1 #cw
-	# Write on image: # bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType
-	cv2.putText(image_F1,'fps:' + counter/(time.time()-start) + '\nmotor: ' + motor_dict[motor_dir],(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
-        cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
-        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
-	
-	move_motor(motor_dir)
-	
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            break
+    if cv2.waitKey(1) & 0xFF == ord('s'):
+        break
 	
 	
-# 	print('fps = ', counter/(time.time()-start))
-#         print('total time = ', time.time()-start)
-# 	print('motor turning: ', motor_dict[motor_dir])
+    # 	print('fps = ', counter/(time.time()-start))
+    #         print('total time = ', time.time()-start)
+    # 	print('motor turning: ', motor_dict[motor_dir])
 
-except KeyboardInterrupt:
-    pass # press ^C to cancel loop     
+#except KeyboardInterrupt:
+#    pass # press ^C to cancel loop     
 
 dev.Close()
 
 # plot intensity of pix 5050
-frames = np.arrange(1, num_frames,1) # create a array of frame numbers
-plt.plot(frames, Intensity_5050)
-plt.title('Intensity of pixel (50, 50) \n Standard Deviation = ' + np.std(Intensity_5050))
-plt.ylabel('Intensity')
-plt.xlabel('Frame #')
-plt.tight_layout()
-plt.savefig("Intensity_pix5050_" + Int_time, dpi=300)
+#frames = np.arange(1, num_frames,1) # create a array of frame numbers
+#plt.plot(frames, Intensity_5050)
+#plt.title('Intensity of pixel (50, 50) \n Standard Deviation = ' + np.std(Intensity_5050))
+#plt.ylabel('Intensity')
+#plt.xlabel('Frame #')
+#plt.tight_layout()
+#plt.savefig("Intensity_pix5050_" + Int_time, dpi=300)
 
 
 
