@@ -201,9 +201,9 @@ def buf_thread(dirinput):
     dev.SetWireInValue(0x04, 1);        # Ask for frame req
     # Motor control
     dev.SetWireInValue(0x05, 1)         # motor control 1: Input data for Variable 1 using mamoery space 0x00
-	dev.SetWireInValue(0x06, 100)       # motor pulses
-	dev.SetWireInValue(0x02, dirinput)  # direction of motor (0 ccw, 1 cw) 
-	dev.SetWireInValue(0x08, 100)       # Motor dutycycle
+    dev.SetWireInValue(0x06, 20)       # motor pulses
+    dev.SetWireInValue(0x02, dirinput)  # direction of motor (0 ccw, 1 cw) 
+    dev.SetWireInValue(0x08, 100)       # Motor dutycycle
     
     dev.UpdateWireIns();  
     dev.SetWireInValue(0x04, 0);    # stop asking for frame req
@@ -239,6 +239,113 @@ def get_image(buf):
 # 	dev.UpdateWireIns()
 
 
+    
+# 0000000000000
+#acceleration data load:
+RW = 0
+dev.SetWireInValue(0x00,RW)             # Turn Read/Write off
+dev.UpdateWireIns()
+
+A_SAD = '0011001'
+M_SAD = '0011110'
+R = '1'
+W = '0'
+
+big = 32768
+inc = 65536
+
+
+Addresses = {'XLA':0x28,
+            'XHA':0x29,
+            'YLA':0x2A,
+            'YHA':0x2B,
+            'ZLA':0x2C,
+            'ZHA':0x2D,
+            'XLM':0x04,
+            'XHM':0x03,
+            'YLM':0x08,
+            'YHM':0x07,
+            'ZLM':0x06,
+            'ZHM':0x05}
+
+def grab_convert(PCDATA):
+    RW = 0
+    dev.SetWireInValue(0x00,RW)                  # Turn R/W off
+    dev.UpdateWireIns()
+    RW = 1
+    dev.SetWireInValue(0x00,RW)                 # Turn read on
+    dev.SetWireInValue(0x03,Addresses[PCDATA])               # Address
+    dev.UpdateWireIns()  
+    time.sleep(0.01)   
+    dev.UpdateWireOuts()
+    return dev.GetWireOutValue(0x20)            # Grab data from line 25 (Sens_data)
+
+#'''
+def twos_comp(data):
+    if data > big:
+        data = data - inc
+    return data
+
+#'''
+PC_Control = 1
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
+def accel():
+    # Write to acceleration sensor
+    dev.SetWireInValue(0x00,2)                 # Turn write on
+    dev.SetWireInValue(0x01,int(A_SAD + R,2))   # SAD + R: 51
+    dev.SetWireInValue(0x02,int(A_SAD + W,2))   # SAD + W: 50
+    dev.SetWireInValue(0x03,0x20)               # Write to CTRL REG
+    dev.SetWireInValue(0x04,0x27)         # Write TURN ON to CTRL
+    dev.UpdateWireIns()
+    dev.SetWireInValue(0x00,0)                  # Turn R/W off
+    dev.UpdateWireIns()
+    
+    # Write to 4A ctrl
+    dev.SetWireInValue(0x00,2) 
+    dev.SetWireInValue(0x01,int(A_SAD + W,2))
+    dev.SetWireInValue(0x02,int(A_SAD + R,2)) 
+    dev.SetWireInValue(0x03,0x23)             # Write to CRTL REG
+    dev.SetWireInValue(0x04,0x40)       # Write TURN ON to mag CTRL reg
+    dev.UpdateWireIns()
+    dev.SetWireInValue(0x00,0)
+    dev.UpdateWireIns()
+
+    # --------------------------------------------------------
+    # Read acceleration data
+    PCDATA = 'XLA'
+    XLA = grab_convert(PCDATA)
+    PCDATA = 'XHA'
+    XHA = grab_convert(PCDATA)
+    #XA_data = XHA<<8 + XLA
+    XA_data = (XHA<<8) + XLA
+
+    XA_data = twos_comp(XA_data)/16*0.001
+
+    PCDATA = 'YLA'
+    YLA = grab_convert(PCDATA)
+    PCDATA = 'YHA'
+    YHA = grab_convert(PCDATA)
+    YA_data = (YHA<<8) + YLA
+    YA_data = twos_comp(YA_data)/16*0.001
+
+    PCDATA = 'ZLA'
+    ZLA = grab_convert(PCDATA)
+    PCDATA = 'ZHA'
+    ZHA = grab_convert(PCDATA)
+    ZA_data = (ZHA<<8) + ZLA
+    ZA_data = twos_comp(ZA_data)/16*0.001
+
+    # -----------------------------------------------------------------------------------------
+    print('\nAccelerometer:\n\tX:{0:.2f}\tY:{1:.2f}\tZ:{2:.2f}'.format(XA_data, YA_data, ZA_data)) # Print data
+    #print("Compass heading:\t{0:.2f}".format((np.arccos(ZM_data/(np.sqrt(XM_data**2 + YM_data**2 + ZM_data**2)))-2)*360))
+    #print("Compass heading:\t{0:.2f}".format((np.arctan(YM_data/XM_data))*360))
+
+PC_Control = 0
+dev.SetWireInValue(0x07, PC_Control)
+dev.UpdateWireIns()
+# 0000000000000
+
 
 
 num_frames = 500
@@ -249,7 +356,7 @@ num_frames = 500
 counter = 0
 start = time.time()
 image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
-diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
+diff_threshold = .95 # Difference in image threshold is 95% of maximum differnce in value (THIS NEEDS TO BE TUNED)
 motor_dict = {0: 'cw', 1: 'ccw'}
 motor_dir = 1
 #try:
@@ -288,7 +395,7 @@ while (counter<num_frames):
 	
     if cv2.waitKey(1) & 0xFF == ord('s'):
         break
-#     print('fps = ', counter/(time.time()-start), '\ntotal time = ', time.time()-start, '\nmotor turning: ', motor_dict[motor_dir])
+    print('fps = ', counter/(time.time()-start), '\ntotal time = ', time.time()-start, '\nmotor turning: ', motor_dict[motor_dir])
 
 #except KeyboardInterrupt:
 #    pass # press ^C to cancel loop     
