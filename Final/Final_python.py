@@ -196,11 +196,20 @@ print('Block size:', Block_size)
 
 # ---------------------------------------------------------------------------------------------
 
-def buf_thread():
+def buf_thread(dirinput):
     buf = bytearray(Block_size)
-    dev.SetWireInValue(0x04, 1);    # Ask for frame req
+    dev.SetWireInValue(0x04, 1);        # Ask for frame req
+    # Motor control
+    dev.SetWireInValue(0x05, 1)         # motor control 1: Input data for Variable 1 using mamoery space 0x00
+	dev.SetWireInValue(0x06, 100)       # motor pulses
+	dev.SetWireInValue(0x02, dirinput)  # direction of motor (0 ccw, 1 cw) 
+	dev.SetWireInValue(0x08, 100)       # Motor dutycycle
+    
     dev.UpdateWireIns();  
     dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+    
+    dev.SetWireInValue(0x05, 0)     # Motor control turn motor off: motor control 0: Turn motor off
+
     dev.UpdateWireIns(); 
     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
     return buf
@@ -216,18 +225,18 @@ def get_image(buf):
     postimage = postimage.reshape(pix1, pix2)
     return postimage
 
-def move_motor(dirinput):  # 0 is backwards ccw, 1 is forwards cw
-	Pulses = 100
-	dutycyle = 100
+# def move_motor(dirinput):  # 0 is backwards ccw, 1 is forwards cw
+# 	Pulses = 100
+# 	dutycyle = 100
 
-	dev.SetWireInValue(0x00, 1) # motor control 1: Input data for Variable 1 using mamoery space 0x00
-	dev.SetWireInValue(0x01, Pulses) #Input data for Variable 2 using mamoery space 0x01
-	dev.SetWireInValue(0x02, dirinput) # direction of motor (0 ccw, 1 cw) Input data for Variable 2 using mamoery space 0x02
-	dev.SetWireInValue(0x03, dutycyle) #Input data for Variable 2 using mamoery space 0x03
-	dev.UpdateWireIns()  # Update the WireIns
+# 	dev.SetWireInValue(0x00, 1) # motor control 1: Input data for Variable 1 using mamoery space 0x00
+# 	dev.SetWireInValue(0x01, Pulses) #Input data for Variable 2 using mamoery space 0x01
+# 	dev.SetWireInValue(0x02, dirinput) # direction of motor (0 ccw, 1 cw) Input data for Variable 2 using mamoery space 0x02
+# 	dev.SetWireInValue(0x03, dutycyle) #Input data for Variable 2 using mamoery space 0x03
+# 	dev.UpdateWireIns()  # Update the WireIns
 
-	dev.SetWireInValue(0x00, 0) # motor control 0: Turn motor off
-	dev.UpdateWireIns()
+# 	dev.SetWireInValue(0x00, 0) # motor control 0: Turn motor off
+# 	dev.UpdateWireIns()
 
 
 
@@ -242,6 +251,7 @@ start = time.time()
 image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
 diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
 motor_dict = {0: 'cw', 1: 'ccw'}
+motor_dir = 1
 #try:
 while (counter<num_frames):
     image_F2 = image_F1 # save last frame as F2
@@ -250,7 +260,7 @@ while (counter<num_frames):
 #    print(counter)
     # Get current frame and save as image_F1
     image_F1 = np.zeros((pix1,pix2))
-    buf = buf_thread()
+    buf = buf_thread(motor_dir)
     postimage = get_image(buf)
 	
     image = postimage/np.max(postimage)
@@ -273,7 +283,7 @@ while (counter<num_frames):
     cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
 #        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
     
-    move_motor(motor_dir)
+#     move_motor(motor_dir)
 	
     if cv2.waitKey(1) & 0xFF == ord('s'):
         break
