@@ -216,6 +216,22 @@ def get_image(buf):
     postimage = postimage.reshape(pix1, pix2)
     return postimage
 
+def move_motor(dirinput):  # 0 is backwards ccw, 1 is forwards cw
+	Pulses = 100
+	dutycyle = 100
+
+	dev.SetWireInValue(0x00, 1) # motor control 1: Input data for Variable 1 using mamoery space 0x00
+	dev.SetWireInValue(0x01, Pulses) #Input data for Variable 2 using mamoery space 0x01
+	dev.SetWireInValue(0x02, dirinput) # direction of motor (0 ccw, 1 cw) Input data for Variable 2 using mamoery space 0x02
+	dev.SetWireInValue(0x03, dutycyle) #Input data for Variable 2 using mamoery space 0x03
+	dev.UpdateWireIns()  # Update the WireIns
+
+	dev.SetWireInValue(0x00, 0) # motor control 0: Turn motor off
+	dev.UpdateWireIns()
+
+
+
+
 num_frames = 100
 Intensity_5050 = np.zeros((len(num_frames))) # create a empty array the size of the numer of frames to fill with intensity data from pix 50,50
 Int_time = '1ms' # '10ms'
@@ -228,9 +244,9 @@ diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce
 motor_dict = {0: 'cw', 1: 'ccw'}
 try:
     while (counter<num_frames):
-	if counter
 	image_F2 = image_F1 # save last frame as F2
 	
+	counter += 1
         # Get current frame and save as image_F1
         image_F1 = np.zeros((pix1,pix2))
         buf = buf_thread()
@@ -249,22 +265,23 @@ try:
 	
 	if x_avg < pix1/2:
 		# if x COM is on left of image
-		motor_dir = 1 #ccw
+		motor_dir = 0 #ccw
 	else:
-		motor_dir = 0 #cw
-	
+		motor_dir = 1 #cw
+	# Write on image: # bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType
+	cv2.putText(image_F1,'fps:' + counter/(time.time()-start) + '\nmotor: ' + motor_dict[motor_dir],(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
         cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
         Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
-	## NEED TO PUT IN MOTOR TURING CODE
 	
+	move_motor(motor_dir)
 	
         if cv2.waitKey(1) & 0xFF == ord('s'):
             break
-	counter += 1
 	
-	print('fps = ', counter/(time.time()-start))
-        print('total time = ', time.time()-start)
-	print('motor turning: ', motor_dict[motor_dir])
+	
+# 	print('fps = ', counter/(time.time()-start))
+#         print('total time = ', time.time()-start)
+# 	print('motor turning: ', motor_dict[motor_dir])
 
 except KeyboardInterrupt:
     pass # press ^C to cancel loop     
