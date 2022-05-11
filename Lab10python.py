@@ -196,26 +196,25 @@ print('Block size:', Block_size)
 
 # ---------------------------------------------------------------------------------------------
 
-# def buf_thread():
-#     buf = bytearray(Block_size)
-#     dev.SetWireInValue(0x04, 1);    # Ask for frame req
-#     dev.UpdateWireIns();  
-#     dev.SetWireInValue(0x04, 0);    # stop asking for frame req
-#     dev.UpdateWireIns(); 
-#     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-#     return buf
+def buf_thread():
+    buf = bytearray(Block_size)
+    dev.SetWireInValue(0x04, 1);    # Ask for frame req
+    dev.UpdateWireIns();  
+    dev.SetWireInValue(0x04, 0);    # stop asking for frame req
+    dev.UpdateWireIns(); 
+    dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
+    return buf
 
      
-# def get_image(buf):
-#     preimage = np.zeros(pix1*pix2)
-#     postimage = np.zeros(pix1*pix2)
+def get_image(buf):
+    preimage = np.zeros(pix1*pix2)
+    postimage = np.zeros(pix1*pix2)
     
-#     preimage[:-832] = np.frombuffer(buf, dtype=np.uint8)
+    preimage[:-832] = np.frombuffer(buf, dtype=np.uint8)
     
-#     postimage = preimage
-#     postimage = postimage.reshape(pix1, pix2)
-    
-#     return postimage
+    postimage = preimage
+    postimage = postimage.reshape(pix1, pix2)
+    return postimage
 
 
     
@@ -223,27 +222,48 @@ print('Block size:', Block_size)
 num_frames = 0
 counter=0
 start = time.time()
+image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
+diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
+motor_dict = {0: 'cw', 1: 'ccw'}
 try:
     while (counter<100):
-        counter += 1
-        
-        image2 = np.zeros((pix1,pix2))
-        
+	if counter
+	image_F2 = image_F1 # save last frame as F2
+	
+        # Get current frame and save as image_F1
+        image_F1 = np.zeros((pix1,pix2))
         buf = buf_thread()
-        
         postimage = get_image(buf)
+	
         image = postimage/np.max(postimage)
         im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
-        image2[:-215] = im_array[215:]
-        image2[-215:] = im_array[:215]
-
-
-        cv2.imshow('frame', image2) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
+        image_F1[:-215] = im_array[215:]
+        image_F1[-215:] = im_array[:215]
+	
+	# Find difference between F1 and F2
+	frame_diff = image_F1 - image_F2 						# image_F1 and image_F2 must be same shape
+	frame_diff_masked = frame_diff[frame_diff >= diff_threshold*np.max(frame_diff)] 	# mask to find maximum frame differences, NEED TO TUNE
+	x_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=0) # find x COM
+	y_avg = np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=1) # find y COM
+	
+	if x_avg < pix1/2:
+		# if x COM is on left of image
+		motor_dir = 1 #ccw
+	else:
+		motor_dir = 0 #cw
+	
+        cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
         
+	## NEED TO PUT IN MOTOR TURING CODE
+	
+	
         if cv2.waitKey(1) & 0xFF == ord('s'):
             break
+	counter += 1
+	
 	print('fps = ', counter/(time.time()-start))
         print('total time = ', time.time()-start)
+	print('motor turning: ', motor_dict[motor_dir])
 
 except KeyboardInterrupt:
     pass # press ^C to cancel loop     
