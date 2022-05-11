@@ -196,20 +196,20 @@ def buf_thread():
     buf = bytearray(Block_size)
     dev.SetWireInValue(0x04, 1);        # Ask for frame req
     # Motor control
-    dev.SetWireInValue(0x05, 1)         # motor control 1: Input data for Variable 1 using mamoery space 0x00
-    dev.SetWireInValue(0x06, 100)       # motor pulses
-    dev.SetWireInValue(0x02, motorq.get())  # direction of motor (0 ccw, 1 cw) 
-    dev.SetWireInValue(0x08, 100)       # Motor dutycycle
+#    dev.SetWireInValue(0x05, 1)         # motor control 1: Input data for Variable 1 using mamoery space 0x00
+#    dev.SetWireInValue(0x06, 100)       # motor pulses
+#    dev.SetWireInValue(0x02, motorq.get())  # direction of motor (0 ccw, 1 cw) 
+#    dev.SetWireInValue(0x08, 100)       # Motor dutycycle
     
     dev.UpdateWireIns();  
     dev.SetWireInValue(0x04, 0);    # stop asking for frame req
     
-    dev.SetWireInValue(0x05, 0)     # Motor control turn motor off: motor control 0: Turn motor off
+#    dev.SetWireInValue(0x05, 0)     # Motor control turn motor off: motor control 0: Turn motor off
 
     dev.UpdateWireIns(); 
     dev.ReadFromBlockPipeOut(0xa0, 1024, buf);  # Read data from BT PipeOut
-    
-    q.put(buf)
+    print("buf")
+    bufq.put(buf)
 #     return buf
 
      
@@ -308,58 +308,66 @@ num_frames = 500
 
 #%%
 def get_vid():
+  print("Making vid")
   counter = 0
+  num_frames = 500
   start = time.time()
   image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
   diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
-  motor_dict = {0: 'cw', 1: 'ccw'}
+#  motor_dict = {0: 'cw', 1: 'ccw'}
   motor_dir = 1
   while counter<num_frames:
     image_F2 = image_F1
+    
     counter += 1
-
+    
+    print(counter)
+#    motorq.put(motor_dir)
     buf = bufq.get()
-#     postimage = get_image(buf)
-	
-    image = postimage/np.max(postimage)
+    preimage = np.zeros(pix1*pix2)
+    preimage[:-832] = np.frombuffer(buf, dtype=np.uint8)
+    postimage = preimage.reshape(pix1, pix2)
+    
+    image = postimage #/np.max(postimage)
     im_array = np.array(image).reshape(pix1, pix2)  # Reshape array into a 2D array like image
     image_F1[:-215] = im_array[215:]
     image_F1[-215:] = im_array[:215]
     
     # Find difference between F1 and F2
     frame_diff = image_F1 - image_F2 						# image_F1 and image_F2 must be same shape
-    frame_diff_masked = frame_diff[frame_diff >= diff_threshold*np.max(frame_diff)] 	# mask to find maximum frame differences, NEED TO TUNE
+#    frame_diff_masked = frame_diff[frame_diff >= diff_threshold*np.max(frame_diff)] 	# mask to find maximum frame differences, NEED TO TUNE
     x_avg = np.average(np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=0)) # find x COM
-    y_avg = np.average(np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=1)) # find y COM
+#    y_avg = np.average(np.average(np.where(frame_diff >=diff_threshold*np.max(frame_diff)), axis=1)) # find y COM
     if x_avg < pix1/2:
         # if x COM is on left of image
         motor_dir = 0 #ccw
-        motorq.put(0)
+#        motorq.put(0)
     else:
         motor_dir = 1 #cw
-        motorq.put(1)
+#        motorq.put(1)
     # Write on image: # bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType
 
-    cv2.putText(image_F1,'fps: {fps}\nmotordir: {motor}'.format(fps=counter/(time.time()-start), motor=motor_dict[motor_dir]),(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
+#    cv2.putText(image_F1,'fps: {fps}\nmotordir: {motor}'.format(fps=counter/(time.time()-start), motor=motor_dict[motor_dir]),(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
     cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
 #        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
     
 #     move_motor(motor_dir)
 	
-    if cv2.waitKey(1) & 0xFF == ord('s'):
-        break
+#    if cv2.waitKey(1) & 0xFF == ord('s'):
+#        break
 
 
-bufq = Queue(maxsize=0)
-motorq = Queue(maxsize=0)
+bufq = Queue()
+#motorq = Queue()
 # buf2q = Queue(maxsize=0)
-req_frame = threading.Thread(target=buf_thread, daemon=True)
+req_frame = threading.Thread(target=buf_thread) #, daemon=True)
 vid_show = threading.Thread(target=get_vid)
-accel_thread = threading.Thread(target=accelerometer)
+#accel_thread = threading.Thread(target=accelerometer)
 
 req_frame.start()
+
 vid_show.start()
-accel_thread.start()
+#accel_thread.start()
 
 
 
