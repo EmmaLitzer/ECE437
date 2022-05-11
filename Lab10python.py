@@ -216,8 +216,9 @@ def get_image(buf):
     postimage = postimage.reshape(pix1, pix2)
     return postimage
 
-
-    
+num_frames = 100
+Intensity_5050 = np.zeros((len(num_frames))) # create a empty array the size of the numer of frames to fill with intensity data from pix 50,50
+Int_time = '1ms' # '10ms'
 
 num_frames = 0
 counter=0
@@ -226,7 +227,7 @@ image_F1 = np.zeros((pix1,pix2)) # set F1 = 0 so first frame all pix will be new
 diff_threshold = .80 # Difference in image threshold is 80% of maximum differnce in value (THIS NEEDS TO BE TUNED)
 motor_dict = {0: 'cw', 1: 'ccw'}
 try:
-    while (counter<100):
+    while (counter<num_frames):
 	if counter
 	image_F2 = image_F1 # save last frame as F2
 	
@@ -253,7 +254,7 @@ try:
 		motor_dir = 0 #cw
 	
         cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
-        
+        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
 	## NEED TO PUT IN MOTOR TURING CODE
 	
 	
@@ -269,5 +270,18 @@ except KeyboardInterrupt:
     pass # press ^C to cancel loop     
 
 dev.Close()
+
+# plot intensity of pix 5050
+frames = np.arrange(1, num_frames,1) # create a array of frame numbers
+plt.plot(frames, Intensity_5050)
+plt.title('Intensity of pixel (50, 50) \n Standard Deviation = ' + np.std(Intensity_5050))
+plt.ylabel('Intensity')
+plt.xlabel('Frame #')
+plt.tight_layout()
+plt.savefig("Intensity_pix5050_" + Int_time, dpi=300)
+
+
+
+
 
 #%%
