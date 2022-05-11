@@ -279,7 +279,8 @@ while (counter<num_frames):
     else:
         motor_dir = 1 #cw
     # Write on image: # bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType
-#    cv2.putText(image_F1,'fps:' + counter/(time.time()-start) + '\nmotor: ' + motor_dict[motor_dir],(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
+
+    cv2.putText(image_F1,'fps: {fps}\nmotordir: {motor}'.format(fps=counter/(time.time()-start), motor=motor_dict[motor_dir]),(10, 500),cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,2)  				
     cv2.imshow('frame', image_F1) # make a movie window from https://www.educative.io/edpresso/how-to-capture-a-frame-from-real-time-camera-video-using-opencv
 #        Intensity_5050[counter] = image_F1[50][50]	# Get intensity of pixel 50, 50 (row 50, column 50) and add to array
     
@@ -287,7 +288,7 @@ while (counter<num_frames):
 	
     if cv2.waitKey(1) & 0xFF == ord('s'):
         break
-    print('fps = ', counter/(time.time()-start), '\ntotal time = ', time.time()-start, '\nmotor turning: ', motor_dict[motor_dir])
+#     print('fps = ', counter/(time.time()-start), '\ntotal time = ', time.time()-start, '\nmotor turning: ', motor_dict[motor_dir])
 
 #except KeyboardInterrupt:
 #    pass # press ^C to cancel loop     
